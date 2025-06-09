@@ -232,7 +232,7 @@
     .modal {
       background: white;
       border-radius: var(--border-radius);
-      max-width: 480px;
+      max-width: 520px;
       width: 90%;
       box-shadow: var(--shadow-light);
       padding: calc(var(--spacing)*2);
@@ -342,8 +342,25 @@
       user-select: none;
     }
 
+    /* New section styling */
+    fieldset.tutup-blacklist {
+      border: none;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      padding-bottom: 0;
+      border-top: 2px solid var(--color-border);
+      user-select: none;
+    }
+    fieldset.tutup-blacklist legend {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--color-primary);
+      user-select: none;
+    }
+
     .btn-submit {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       background-color: var(--color-accent);
       border: none;
       border-radius: var(--border-radius);
@@ -509,6 +526,19 @@
           </div>
         </fieldset>
 
+        <fieldset class="tutup-blacklist" aria-label="Tutup Blacklist Telco Section">
+          <legend>Tutup Blacklist TELCO</legend>
+          <label for="option-select">Option<span aria-hidden="true" style="color:#d00">*</span></label>
+          <select id="option-select" name="tutup-option" required aria-required="true" aria-describedby="option-desc">
+            <option value="" disabled selected>Select option</option>
+            <option>Kekal</option>
+            <option>Sementara</option>
+          </select>
+
+          <label for="ic-input">IC Number<span aria-hidden="true" style="color:#d00">*</span></label>
+          <input type="text" id="ic-input" name="ic-number" placeholder="Enter IC number" required aria-required="true" inputmode="text" autocomplete="off" />
+        </fieldset>
+
         <button type="submit" class="btn-submit" aria-label="Submit service request">Submit</button>
       </form>
     </div>
@@ -563,6 +593,8 @@
     const issue = form.issue.value.trim();
     const location = form.location.value.trim();
     const laptop = form.laptop.value;
+    const option = form['tutup-option'].value.trim();
+    const icNumber = form['ic-number'].value.trim();
     const caseNumber = caseNumberEl.textContent;
 
     // Construct WhatsApp message
@@ -571,7 +603,9 @@
     message += `Model: ${model}%0A`;
     message += `Issue: ${issue}%0A`;
     message += `Location: ${location}%0A`;
-    message += `Laptop/PC: ${laptop}`;
+    message += `Laptop/PC: ${laptop}%0A`;
+    message += `Tutup Blacklist TELCO - Option: ${option}%0A`;
+    message += `IC Number: ${icNumber}`;
 
     // Open WhatsApp chat with pre-filled message to +60178040403
     const phoneNumber = '60178040403';
@@ -585,4 +619,3 @@
 </script>
 </body>
 </html>
-
