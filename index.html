@@ -1,621 +1,254 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Unlock & Repair Services</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tutup Blacklist TELCO Service</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
-    :root {
-      --color-bg: #ffffff;
-      --color-primary: #111111;
-      --color-primary-contrast: #ffffff;
-      --color-accent: #0071e3;
-      --color-accent-hover: #005bb5;
-      --color-text-primary: #111317;
-      --color-text-secondary: #6b7280;
-      --color-border: #e5e7eb;
-      --color-bg-overlay: rgba(0,0,0,0.35);
+  :root {
+    --color-bg: #ffffff;
+    --color-primary: #111111;
+    --color-accent: #0071e3;
+    --color-accent-hover: #005bb5;
+    --color-text-primary: #111317;
+    --color-text-secondary: #6b7280;
+    --color-border: #e5e7eb;
+    --spacing: 1.5rem;
+    --border-radius: 0.75rem;
+    --shadow-light: 0 8px 24px rgba(0,0,0,0.06);
+    --transition-speed: 0.3s ease-out;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
 
-      --spacing: 1.5rem;
-      --border-radius: 12px;
-      --shadow-light: 0 8px 24px rgba(0,0,0,0.06);
-      --shadow-hover: 0 8px 24px rgba(0,113,227,0.20);
-      --transition-speed: 0.3s ease-out;
-      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
+  * {
+    box-sizing: border-box;
+  }
 
-    * {
-      box-sizing: border-box;
-    }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-    body {
-      margin: 0;
-      background: var(--color-bg);
-      font-family: var(--font-family);
-      color: var(--color-text-primary);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      line-height: 1.5;
-      user-select: none;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+  header {
+    position: sticky;
+    top: 0;
+    background: white;
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing);
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    user-select: none;
+  }
 
-    header {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: var(--spacing);
-      border-bottom: 1px solid var(--color-border);
-      display: flex;
-      justify-content: center;
-    }
+  header h1 {
+    font-weight: 700;
+    font-size: 3rem;
+    color: var(--color-primary);
+    margin: 0;
+  }
 
-    header h1 {
-      font-weight: 600;
-      font-size: 1.75rem;
-      color: var(--color-primary);
-      letter-spacing: 0.03em;
-      user-select: none;
-    }
+  nav a {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+    user-select: none;
+  }
+  nav a:hover,
+  nav a:focus {
+    background-color: var(--color-accent);
+    color: white;
+    outline: none;
+  }
 
-    main {
-      max-width: 960px;
-      margin: 2.5rem auto 4rem;
-      padding: 0 var(--spacing);
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
+  main {
+    flex-grow: 1;
+    max-width: 900px;
+    margin: 4rem auto 4rem;
+    padding: 0 var(--spacing);
+  }
 
-    .hero {
-      background: #f9fafb;
-      padding: calc(var(--spacing) * 2);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow-light);
-      text-align: center;
-      user-select: none;
-    }
+  .hero {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
 
+  .hero h2 {
+    font-weight: 800;
+    font-size: 4.5rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--color-primary);
+    line-height: 1.1;
+  }
+
+  .hero p {
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  form {
+    background: white;
+    padding: calc(var(--spacing)*3);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  label {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--color-primary);
+  }
+
+  select, input[type="text"] {
+    font-size: 1.125rem;
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: #fafafa;
+    color: var(--color-primary);
+    transition: border-color var(--transition-speed);
+  }
+  select:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    background: white;
+    box-shadow: 0 0 12px rgba(0,113,227,0.35);
+  }
+
+  .btn-submit {
+    background-color: var(--color-accent);
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    user-select: none;
+    box-shadow: 0 5px 16px rgba(0,113,227,0.5);
+    align-self: center;
+    width: 60%;
+    min-width: 200px;
+  }
+  .btn-submit:hover,
+  .btn-submit:focus {
+    background-color: var(--color-accent-hover);
+    outline: none;
+    transform: scale(1.07);
+    box-shadow: 0 8px 24px rgba(0,91,181,0.7);
+  }
+
+  /* Accessibility focus visible */
+  :focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  footer {
+    text-align: center;
+    padding: var(--spacing);
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    user-select: none;
+  }
+
+  @media (max-width: 640px) {
     .hero h2 {
-      margin: 0 0 1rem 0;
-      font-weight: 700;
-      font-size: 2.5rem;
-      color: var(--color-primary);
-      line-height: 1.2;
+      font-size: 3rem;
     }
-
-    .hero p {
-      margin: 0 0 2rem 0;
-      font-weight: 400;
-      font-size: 1.125rem;
-      color: var(--color-text-secondary);
-      max-width: 540px;
-      margin-left: auto;
-      margin-right: auto;
+    main {
+      margin: 2rem 1rem 3rem;
+      max-width: 100%;
     }
-
-    .btn-primary {
-      background-color: var(--color-accent);
-      border: none;
-      border-radius: var(--border-radius);
-      color: var(--color-primary-contrast);
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 1.125rem;
-      padding: 0.85rem 2.5rem;
-      transition: background-color var(--transition-speed), transform var(--transition-speed);
-      user-select: none;
-      box-shadow: 0 3px 8px rgba(0,113,227,0.40);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .btn-primary:hover,
-    .btn-primary:focus {
-      background-color: var(--color-accent-hover);
-      outline: none;
-      transform: scale(1.05);
-      box-shadow: var(--shadow-hover);
-    }
-
-    section.services {
-      background: #f9fafb;
-      padding: calc(var(--spacing) * 2);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow-light);
-      user-select: none;
-    }
-
-    section.services h3 {
-      font-weight: 700;
-      font-size: 1.75rem;
-      margin-bottom: 1.25rem;
-      color: var(--color-primary);
-      user-select: none;
-    }
-
-    ul.service-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap: 1.25rem;
-    }
-
-    ul.service-list li {
-      background: white;
-      border: 1px solid var(--color-border);
-      border-radius: var(--border-radius);
-      padding: 1rem 1.25rem;
-      font-weight: 600;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      color: var(--color-primary);
-      transition: box-shadow var(--transition-speed), transform var(--transition-speed), border-color var(--transition-speed);
-      cursor: default;
-      display: flex;
-      align-items: center;
-      user-select: none;
-    }
-
-    ul.service-list li:hover {
-      border-color: var(--color-accent);
-      box-shadow: var(--shadow-hover);
-      transform: translateY(-3px);
-    }
-
-    footer {
-      text-align: center;
-      color: var(--color-text-secondary);
-      font-size: 0.875rem;
-      padding: var(--spacing);
-      user-select: none;
-      margin-top: auto;
-    }
-
-    /* Floating WhatsApp button */
-    #whatsapp-float {
-      position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      background-color: #25D366;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: box-shadow var(--transition-speed), transform var(--transition-speed);
-      z-index: 9999;
-      user-select: none;
-    }
-    #whatsapp-float:hover,
-    #whatsapp-float:focus {
-      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.7);
-      transform: scale(1.1);
-      outline: none;
-    }
-
-    #whatsapp-float svg {
-      width: 28px;
-      height: 28px;
-      fill: white;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    /* Modal styles */
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: var(--color-bg-overlay);
-      z-index: 10000;
-      backdrop-filter: saturate(180%) blur(8px);
-      -webkit-backdrop-filter: saturate(180%) blur(8px);
-      align-items: center;
-      justify-content: center;
-      user-select: text;
-    }
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal {
-      background: white;
-      border-radius: var(--border-radius);
-      max-width: 520px;
-      width: 90%;
-      box-shadow: var(--shadow-light);
-      padding: calc(var(--spacing)*2);
-      position: relative;
-      user-select: auto;
-      animation: modal-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    @keyframes modal-in {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--spacing);
-    }
-
-    .modal-header h3 {
-      margin: 0;
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: var(--color-primary);
-    }
-
-    .btn-close {
-      background: transparent;
-      border: none;
-      font-size: 1.5rem;
-      font-weight: 700;
-      cursor: pointer;
-      color: var(--color-text-secondary);
-      line-height: 1;
-      user-select: none;
-    }
-    .btn-close:hover,
-    .btn-close:focus {
-      color: var(--color-primary);
-      outline: none;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    label {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--color-primary);
-      user-select: none;
-    }
-
-    select, input[type="text"], input[type="number"] {
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
-      border: 1.5px solid var(--color-border);
-      border-radius: var(--border-radius);
-      background: #fafafa;
-      color: var(--color-primary);
-      transition: border-color var(--transition-speed);
-      user-select: text;
-    }
-    select:focus, input[type="text"]:focus, input[type="number"]:focus {
-      border-color: var(--color-accent);
-      outline: none;
-      background: #fff;
-      box-shadow: 0 0 8px rgba(0,113,227,0.3);
-    }
-
-    .form-row-radio {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      user-select: none;
-    }
-    .form-row-radio input[type="radio"] {
-      cursor: pointer;
-    }
-    .form-row-radio label {
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--color-primary);
-    }
-
-    .case-number-display {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--color-text-secondary);
-      user-select: text;
-      padding: 0.5rem 1rem;
-      background: #f3f4f6;
-      border-radius: var(--border-radius);
-      border: 1px solid var(--color-border);
-      text-align: center;
-      user-select: none;
-    }
-
-    /* New section styling */
-    fieldset.tutup-blacklist {
-      border: none;
-      margin-top: 2rem;
-      padding-top: 1rem;
-      padding-bottom: 0;
-      border-top: 2px solid var(--color-border);
-      user-select: none;
-    }
-    fieldset.tutup-blacklist legend {
-      font-weight: 700;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: var(--color-primary);
-      user-select: none;
-    }
-
     .btn-submit {
-      margin-top: 1.5rem;
-      background-color: var(--color-accent);
-      border: none;
-      border-radius: var(--border-radius);
-      color: var(--color-primary-contrast);
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 1.125rem;
-      padding: 0.85rem 2.5rem;
-      transition: background-color var(--transition-speed), transform var(--transition-speed);
-      user-select: none;
-      box-shadow: 0 3px 8px rgba(0,113,227,0.45);
       width: 100%;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
     }
-    .btn-submit:hover,
-    .btn-submit:focus {
-      background-color: var(--color-accent-hover);
-      outline: none;
-      transform: scale(1.05);
-      box-shadow: var(--shadow-hover);
-    }
+  }
 
-    /* Accessibility focus visible */
-    :focus-visible {
-      outline: 2px solid var(--color-accent);
-      outline-offset: 2px;
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      transition: none !important;
     }
-
-    /* Responsive tweaks */
-    @media (max-width: 520px) {
-      .hero h2 {
-        font-size: 2rem;
-      }
-      section.services h3 {
-        font-size: 1.4rem;
-      }
-      ul.service-list {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        transition: none !important;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <header>
-    <h1>Unlock & Repair Services</h1>
+    <h1>Tutup Blacklist TELCO</h1>
+    <nav>
+      <a href="unlock-repair-service.html" aria-label="Back to main unlock and repair services page">Back to Services</a>
+    </nav>
   </header>
   <main>
-    <section class="hero" role="banner" aria-label="Introduction">
-      <h2>We Unlock & Repair Your Devices with Premium Service</h2>
-      <p>Specializing in unlocking phone passwords, bypassing locks, repairing screens, upgrading storage, building custom computers, and more.</p>
-      <button class="btn-primary" aria-label="Start service request" id="btn-get-started">Get Started</button>
+    <section class="hero" aria-labelledby="page-title">
+      <h2 id="page-title">Tutup Blacklist TELCO Service Request</h2>
+      <p>Fill out the form below to request blacklist closure service. We will contact you promptly via WhatsApp.</p>
     </section>
+    <form id="tutup-form" novalidate>
+      <label for="option-select">Option<span aria-hidden="true" style="color:#d00">*</span></label>
+      <select id="option-select" name="option" required aria-required="true">
+        <option value="" disabled selected>Select option</option>
+        <option>Kekal</option>
+        <option>Sementara</option>
+      </select>
 
-    <section class="services" aria-labelledby="phone-unlock">
-      <h3 id="phone-unlock">Phone Unlocking Services</h3>
-      <ul class="service-list">
-        <li>Samsung - Screen Lock</li>
-        <li>Google Lock</li>
-        <li>Network Lock</li>
-        <li>Bootloader Lock</li>
-        <li>iPhone ID Lock</li>
-        <li>iPhone Telco Lock</li>
-        <li>Honor Google Lock / FRP</li>
-      </ul>
-    </section>
+      <label for="ic-number">IC Number<span aria-hidden="true" style="color:#d00">*</span></label>
+      <input type="text" id="ic-number" name="icNumber" placeholder="Enter IC Number" required aria-required="true" autocomplete="off" inputmode="text" />
 
-    <section class="services" aria-labelledby="device-reset">
-      <h3 id="device-reset">FRP Bypass & Password Reset</h3>
-      <ul class="service-list">
-        <li>FRP Bypass & Password Reset</li>
-        <li>Forget Apple ID</li>
-        <li>iPad Bypass</li>
-      </ul>
-    </section>
-
-    <section class="services" aria-labelledby="upgrade-storage">
-      <h3 id="upgrade-storage">Upgrade & Repair Services</h3>
-      <ul class="service-list">
-        <li>Upgrade Storage</li>
-        <li>Screen Replacement</li>
-        <li>Glass Replacement</li>
-      </ul>
-    </section>
-
-    <section class="services" aria-labelledby="computer-service">
-      <h3 id="computer-service">Computer Service</h3>
-      <ul class="service-list">
-        <li>Built Custom Computer</li>
-        <li>Laptop Service</li>
-      </ul>
-    </section>
+      <button type="submit" class="btn-submit" aria-label="Submit blacklisting service request">Submit</button>
+    </form>
   </main>
   <footer>
     &copy; 2024 Unlock & Repair Services. All rights reserved.
   </footer>
 
-  <a href="https://wa.me/60178040403" target="_blank" rel="noopener" id="whatsapp-float" aria-label="Chat with us on WhatsApp" tabindex="0">
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path d="M20.52 3.48A11.775 11.775 0 0012 0C5.372 0 0 5.372 0 12a11.64 11.64 0 001.73 6.02L0 24l5.84-1.53a11.625 11.625 0 006.161 1.677C18.627 24 24 18.627 24 12a11.78 11.78 0 00-3.48-8.52zm-8.52 17.52a9.452 9.452 0 01-4.844-1.438l-.35-.22-3.42.833.842-3.333-.234-.357a9.414 9.414 0 1118.3 2.796 6.23 6.23 0 01-3.994 3.62zm5.932-7.104c-.29-.145-1.712-.845-1.978-.94-.267-.097-.462-.145-.658.146-.197.29-.758.94-.93 1.133-.17.197-.34.221-.63.074a8.23 8.23 0 01-2.414-1.49 9.148 9.148 0 01-1.69-2.1c-.18-.31 0-.484.135-.63.14-.145.318-.38.476-.573.156-.195.208-.328.31-.547.1-.22 0-.403-.01-.56-.016-.158-.66-1.59-.908-2.18-.237-.577-.48-.5-.658-.51a3.63 3.63 0 00-.68-.057 2.67 2.67 0 00-.63.094c-.204.09-.623.61-.623 1.492 0 .882.637 1.73.726 1.85.09.124 1.252 1.91 3.038 2.677a10.81 10.81 0 002.765 1.38c.366.155.65.132.89.08.275-.063.84-.343.96-.68.117-.34.117-.627.083-.68-.03-.053-.262-.09-.55-.235z"/>
-    </svg>
-  </a>
-
-  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
-    <div class="modal" role="document">
-      <div class="modal-header">
-        <h3 id="modal-title">Service Request Form</h3>
-        <button class="btn-close" aria-label="Close form" id="modal-close">&times;</button>
-      </div>
-      <form id="service-form" novalidate>
-        <label for="model-select">Model<span aria-hidden="true" style="color:#d00">*</span></label>
-        <select id="model-select" name="model" required aria-required="true" aria-describedby="model-desc">
-          <option value="" disabled selected>Select model</option>
-          <option>OPPO</option>
-          <option>REALME</option>
-          <option>HONOR</option>
-          <option>VIVO</option>
-          <option>SAMSUNG</option>
-          <option>XIAOMI</option>
-          <option>TECHNO</option>
-          <option>INFINIX</option>
-          <option>REDMI</option>
-          <option>ONEPLUS</option>
-          <option>PIXEL</option>
-        </select>
-
-        <label for="issue-select">Issue<span aria-hidden="true" style="color:#d00">*</span></label>
-        <select id="issue-select" name="issue" required aria-required="true" aria-describedby="issue-desc">
-          <option value="" disabled selected>Select issue</option>
-          <option>TELCO</option>
-          <option>SOFTWARE BRICK</option>
-          <option>FRP</option>
-          <option>GOOGLE LOCK</option>
-          <option>HUAWEI ID</option>
-          <option>HONOR ID</option>
-          <option>XIAOMI ACCOUNT</option>
-          <option>XIAOMI FRP</option>
-          <option>NETWORK UNLOCK</option>
-        </select>
-
-        <label for="location-input">Your Location<span aria-hidden="true" style="color:#d00">*</span></label>
-        <input type="text" id="location-input" name="location" placeholder="Enter your location" required aria-required="true" autocomplete="street-address" />
-
-        <label>Case Number</label>
-        <div aria-live="polite" aria-atomic="true" class="case-number-display" id="case-number">----</div>
-
-        <fieldset>
-          <legend>Laptop or PC?<span aria-hidden="true" style="color:#d00">*</span></legend>
-          <div class="form-row-radio">
-            <input type="radio" id="laptop-yes" name="laptop" value="Yes" required />
-            <label for="laptop-yes">Yes</label>
-          </div>
-          <div class="form-row-radio">
-            <input type="radio" id="laptop-no" name="laptop" value="No" required />
-            <label for="laptop-no">No</label>
-          </div>
-        </fieldset>
-
-        <fieldset class="tutup-blacklist" aria-label="Tutup Blacklist Telco Section">
-          <legend>Tutup Blacklist TELCO</legend>
-          <label for="option-select">Option<span aria-hidden="true" style="color:#d00">*</span></label>
-          <select id="option-select" name="tutup-option" required aria-required="true" aria-describedby="option-desc">
-            <option value="" disabled selected>Select option</option>
-            <option>Kekal</option>
-            <option>Sementara</option>
-          </select>
-
-          <label for="ic-input">IC Number<span aria-hidden="true" style="color:#d00">*</span></label>
-          <input type="text" id="ic-input" name="ic-number" placeholder="Enter IC number" required aria-required="true" inputmode="text" autocomplete="off" />
-        </fieldset>
-
-        <button type="submit" class="btn-submit" aria-label="Submit service request">Submit</button>
-      </form>
-    </div>
-  </div>
-
 <script>
-  const btnGetStarted = document.getElementById('btn-get-started');
-  const modalOverlay = document.getElementById('modal-overlay');
-  const modalClose = document.getElementById('modal-close');
-  const form = document.getElementById('service-form');
-  const caseNumberEl = document.getElementById('case-number');
+  const form = document.getElementById('tutup-form');
 
-  function generateCaseNumber() {
-    return Math.floor(1000 + Math.random() * 9000).toString();
-  }
-
-  function openModal() {
-    modalOverlay.classList.add('active');
-    // Generate and show case number
-    const caseNumber = generateCaseNumber();
-    caseNumberEl.textContent = caseNumber;
-    // Set focus to first field for accessibility
-    document.getElementById('model-select').focus();
-  }
-
-  function closeModal() {
-    modalOverlay.classList.remove('active');
-    btnGetStarted.focus();
-    form.reset();
-    caseNumberEl.textContent = '----';
-  }
-
-  btnGetStarted.addEventListener('click', openModal);
-  modalClose.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', e => {
-    if (e.target === modalOverlay) closeModal();
-  });
-  window.addEventListener('keydown', e => {
-    if(e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-      closeModal();
-    }
-  });
-
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
-    // Validation implicitly handled by required attributes; we add manual check here:
+
     if (!form.reportValidity()) {
       return;
     }
 
-    const model = form.model.value.trim();
-    const issue = form.issue.value.trim();
-    const location = form.location.value.trim();
-    const laptop = form.laptop.value;
-    const option = form['tutup-option'].value.trim();
-    const icNumber = form['ic-number'].value.trim();
-    const caseNumber = caseNumberEl.textContent;
+    const option = form.option.value.trim();
+    const icNumber = form.icNumber.value.trim();
 
-    // Construct WhatsApp message
-    let message = `Service Request:%0A`;
-    message += `Case Number: ${caseNumber}%0A`;
-    message += `Model: ${model}%0A`;
-    message += `Issue: ${issue}%0A`;
-    message += `Location: ${location}%0A`;
-    message += `Laptop/PC: ${laptop}%0A`;
-    message += `Tutup Blacklist TELCO - Option: ${option}%0A`;
+    let message = `Tutup Blacklist TELCO Service Request:%0A`;
+    message += `Option: ${option}%0A`;
     message += `IC Number: ${icNumber}`;
 
-    // Open WhatsApp chat with pre-filled message to +60178040403
     const phoneNumber = '60178040403';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
-    // Open in new tab/window
-    window.open(whatsappUrl, '_blank', 'noopener');
-
-    closeModal();
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   });
 </script>
 </body>
 </html>
+
