@@ -3,235 +3,586 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Samsung FRP</title>
+  <title>Unlock & Repair Services</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
     :root {
-      --color-primary: #2292ff;
-      --color-primary-light: rgba(34,146,255,0.15);
-      --color-gray-700: #6b7280;
-      --color-gray-900: #111827;
-      --bg-white: #fff;
-      --border-radius: 0.75rem;
-      --shadow-light: rgba(0,0,0,0.05);
-      --transition-speed: 0.3s;
-      --max-width: 1200px;
-      --font-base: 'Poppins', sans-serif;
-      --blink-colors: red, blue, green;
+      --color-bg: #ffffff;
+      --color-primary: #111111;
+      --color-primary-contrast: #ffffff;
+      --color-accent: #0071e3;
+      --color-accent-hover: #005bb5;
+      --color-text-primary: #111317;
+      --color-text-secondary: #6b7280;
+      --color-border: #e5e7eb;
+      --color-bg-overlay: rgba(0,0,0,0.35);
+
+      --spacing: 1.5rem;
+      --border-radius: 12px;
+      --shadow-light: 0 8px 24px rgba(0,0,0,0.06);
+      --shadow-hover: 0 8px 24px rgba(0,113,227,0.20);
+      --transition-speed: 0.3s ease-out;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
-    /* Reset & Base */
-    *, *::before, *::after {
+    * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
-      font-family: var(--font-base);
-      background-color: var(--bg-white);
-      color: var(--color-gray-900);
+      background: var(--color-bg);
+      font-family: var(--font-family);
+      color: var(--color-text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+      user-select: none;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-    }
-
-    /* Sticky header */
-    header {
-      position: sticky;
-      top: 0;
-      background: var(--bg-white);
-      box-shadow: 0 2px 8px var(--shadow-light);
-      z-index: 9999;
-    }
-
-    nav {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
       justify-content: space-between;
-      user-select: none;
     }
 
-    .logo {
-      font-weight: 700;
-      font-size: 2.75rem;
-      color: var(--color-primary);
-      cursor: default;
-      line-height: 1.1;
+    header {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: var(--spacing);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      justify-content: center;
     }
 
-    nav a {
+    header h1 {
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 1.75rem;
       color: var(--color-primary);
-      text-decoration: none;
-      border-radius: var(--border-radius);
-      padding: 0.5rem 1rem;
-      transition: background-color var(--transition-speed), color var(--transition-speed);
-    }
-
-    nav a:hover,
-    nav a:focus {
-      background-color: var(--color-primary);
-      color: white;
-      outline: none;
-      box-shadow: 0 4px 16px var(--color-primary-light);
+      letter-spacing: 0.03em;
+      user-select: none;
     }
 
     main {
-      max-width: var(--max-width);
-      width: 100%;
-      margin: 4rem auto 6rem;
-      padding: 0 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2.5rem;
-    }
-
-    h1 {
-      font-weight: 800;
-      font-size: 4rem;
-      margin: 0;
-      color: var(--color-primary);
-      user-select: none;
-      text-align: center;
-      line-height: 1.1;
-    }
-
-    form {
-      background: #f9fafb;
-      border-radius: var(--border-radius);
-      box-shadow: 0 8px 24px var(--color-primary-light);
-      padding: 3rem 4rem;
-      max-width: 600px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
+      max-width: 960px;
+      margin: 2.5rem auto 4rem;
+      padding: 0 var(--spacing);
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 2rem;
     }
 
-    label {
-      font-weight: 700;
-      font-size: 1.125rem;
-      color: var(--color-gray-900);
-      user-select: text;
-    }
-
-    input[type="text"] {
-      padding: 0.8rem 1.2rem;
-      font-size: 1.125rem;
+    .hero {
+      background: #f9fafb;
+      padding: calc(var(--spacing) * 2);
       border-radius: var(--border-radius);
-      border: 2px solid #ddd;
-      font-family: var(--font-base);
-      color: var(--color-gray-900);
-      outline-offset: 2px;
-      transition: border-color var(--transition-speed);
-      background: white;
-      width: 100%;
-    }
-
-    input[type="text"]:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px var(--color-primary-light);
-      outline: none;
-    }
-
-    .server-status {
-      font-weight: 800;
-      font-size: 1.5rem;
+      box-shadow: var(--shadow-light);
       text-align: center;
-      padding: 0.75rem 1rem;
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 14px var(--color-primary-light);
-      max-width: 240px;
-      margin: 0 auto;
-      animation: blink 3s linear infinite;
       user-select: none;
     }
 
-    @keyframes blink {
-      0%, 100% { color: red; }
-      33% { color: blue; }
-      66% { color: green; }
+    .hero h2 {
+      margin: 0 0 1rem 0;
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: var(--color-primary);
+      line-height: 1.2;
     }
 
-    button.submit-btn {
-      background-color: var(--color-primary);
-      color: white;
-      font-weight: 800;
-      font-size: 1.3rem;
-      padding: 1.1rem 2rem;
+    .hero p {
+      margin: 0 0 2rem 0;
+      font-weight: 400;
+      font-size: 1.125rem;
+      color: var(--color-text-secondary);
+      max-width: 540px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn-primary {
+      background-color: var(--color-accent);
       border: none;
       border-radius: var(--border-radius);
+      color: var(--color-primary-contrast);
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(34,146,255,0.45);
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 0.85rem 2.5rem;
       transition: background-color var(--transition-speed), transform var(--transition-speed);
-      max-width: 240px;
-      margin: 0 auto;
-      display: block;
+      user-select: none;
+      box-shadow: 0 3px 8px rgba(0,113,227,0.40);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background-color: var(--color-accent-hover);
+      outline: none;
+      transform: scale(1.05);
+      box-shadow: var(--shadow-hover);
+    }
+
+    section.services {
+      background: #f9fafb;
+      padding: calc(var(--spacing) * 2);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-light);
       user-select: none;
     }
 
-    button.submit-btn:hover,
-    button.submit-btn:focus {
-      background-color: rgba(34,146,255,0.85);
-      transform: scale(1.05);
+    section.services h3 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 1.25rem;
+      color: var(--color-primary);
+      user-select: none;
+    }
+
+    ul.service-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: 1.25rem;
+    }
+
+    ul.service-list li {
+      background: white;
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      padding: 1rem 1.25rem;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      color: var(--color-primary);
+      transition: box-shadow var(--transition-speed), transform var(--transition-speed), border-color var(--transition-speed);
+      cursor: default;
+      display: flex;
+      align-items: center;
+      user-select: none;
+    }
+
+    ul.service-list li:hover {
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-3px);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+      padding: var(--spacing);
+      user-select: none;
+      margin-top: auto;
+    }
+
+    /* Floating WhatsApp button */
+    #whatsapp-float {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background-color: #25D366;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+      z-index: 9999;
+      user-select: none;
+    }
+    #whatsapp-float:hover,
+    #whatsapp-float:focus {
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.7);
+      transform: scale(1.1);
       outline: none;
-      box-shadow: 0 9px 32px rgba(34,146,255,0.7);
+    }
+
+    #whatsapp-float svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Modal styles */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--color-bg-overlay);
+      z-index: 10000;
+      backdrop-filter: saturate(180%) blur(8px);
+      -webkit-backdrop-filter: saturate(180%) blur(8px);
+      align-items: center;
+      justify-content: center;
+      user-select: text;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--border-radius);
+      max-width: 480px;
+      width: 90%;
+      box-shadow: var(--shadow-light);
+      padding: calc(var(--spacing)*2);
+      position: relative;
+      user-select: auto;
+      animation: modal-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes modal-in {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing);
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--color-primary);
+    }
+
+    .btn-close {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--color-text-secondary);
+      line-height: 1;
+      user-select: none;
+    }
+    .btn-close:hover,
+    .btn-close:focus {
+      color: var(--color-primary);
+      outline: none;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--color-primary);
+      user-select: none;
+    }
+
+    select, input[type="text"], input[type="number"] {
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--border-radius);
+      background: #fafafa;
+      color: var(--color-primary);
+      transition: border-color var(--transition-speed);
+      user-select: text;
+    }
+    select:focus, input[type="text"]:focus, input[type="number"]:focus {
+      border-color: var(--color-accent);
+      outline: none;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(0,113,227,0.3);
+    }
+
+    .form-row-radio {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      user-select: none;
+    }
+    .form-row-radio input[type="radio"] {
+      cursor: pointer;
+    }
+    .form-row-radio label {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--color-primary);
+    }
+
+    .case-number-display {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      user-select: text;
+      padding: 0.5rem 1rem;
+      background: #f3f4f6;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--color-border);
+      text-align: center;
+      user-select: none;
+    }
+
+    .btn-submit {
+      margin-top: 1rem;
+      background-color: var(--color-accent);
+      border: none;
+      border-radius: var(--border-radius);
+      color: var(--color-primary-contrast);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.125rem;
+      padding: 0.85rem 2.5rem;
+      transition: background-color var(--transition-speed), transform var(--transition-speed);
+      user-select: none;
+      box-shadow: 0 3px 8px rgba(0,113,227,0.45);
+      width: 100%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .btn-submit:hover,
+    .btn-submit:focus {
+      background-color: var(--color-accent-hover);
+      outline: none;
+      transform: scale(1.05);
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* Accessibility focus visible */
+    :focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 520px) {
+      .hero h2 {
+        font-size: 2rem;
+      }
+      section.services h3 {
+        font-size: 1.4rem;
+      }
+      ul.service-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition: none !important;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <nav>
-      <div class="logo">unlock with zuu caster</div>
-      <a href="index.html" aria-label="Go to main unlock page">Home</a>
-    </nav>
+    <h1>Unlock & Repair Services</h1>
   </header>
-
   <main>
-    <h1>Samsung FRP</h1>
-    <form id="frpForm" aria-label="Samsung FRP form" autocomplete="off" spellcheck="false" novalidate>
-      <label for="imeiSn">IMEI / SN</label>
-      <input type="text" id="imeiSn" name="imeiSn" aria-required="true" required placeholder="Enter IMEI or SN" />
+    <section class="hero" role="banner" aria-label="Introduction">
+      <h2>We Unlock & Repair Your Devices with Premium Service</h2>
+      <p>Specializing in unlocking phone passwords, bypassing locks, repairing screens, upgrading storage, building custom computers, and more.</p>
+      <button class="btn-primary" aria-label="Start service request" id="btn-get-started">Get Started</button>
+    </section>
 
-      <div class="server-status" role="status" aria-live="polite" aria-atomic="true" tabindex="0">SERVER ONLINE</div>
+    <section class="services" aria-labelledby="phone-unlock">
+      <h3 id="phone-unlock">Phone Unlocking Services</h3>
+      <ul class="service-list">
+        <li>Samsung - Screen Lock</li>
+        <li>Google Lock</li>
+        <li>Network Lock</li>
+        <li>Bootloader Lock</li>
+        <li>iPhone ID Lock</li>
+        <li>iPhone Telco Lock</li>
+        <li>Honor Google Lock / FRP</li>
+      </ul>
+    </section>
 
-      <button type="submit" class="submit-btn" aria-label="Send IMEI or SN to WhatsApp">Send to WhatsApp</button>
-    </form>
+    <section class="services" aria-labelledby="device-reset">
+      <h3 id="device-reset">FRP Bypass & Password Reset</h3>
+      <ul class="service-list">
+        <li>FRP Bypass & Password Reset</li>
+        <li>Forget Apple ID</li>
+        <li>iPad Bypass</li>
+      </ul>
+    </section>
+
+    <section class="services" aria-labelledby="upgrade-storage">
+      <h3 id="upgrade-storage">Upgrade & Repair Services</h3>
+      <ul class="service-list">
+        <li>Upgrade Storage</li>
+        <li>Screen Replacement</li>
+        <li>Glass Replacement</li>
+      </ul>
+    </section>
+
+    <section class="services" aria-labelledby="computer-service">
+      <h3 id="computer-service">Computer Service</h3>
+      <ul class="service-list">
+        <li>Built Custom Computer</li>
+        <li>Laptop Service</li>
+      </ul>
+    </section>
   </main>
+  <footer>
+    &copy; 2024 Unlock & Repair Services. All rights reserved.
+  </footer>
 
-  <script>
-    (function() {
-      const form = document.getElementById('frpForm');
-      const phoneNumber = '60178040403';
+  <a href="https://wa.me/60178040403" target="_blank" rel="noopener" id="whatsapp-float" aria-label="Chat with us on WhatsApp" tabindex="0">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M20.52 3.48A11.775 11.775 0 0012 0C5.372 0 0 5.372 0 12a11.64 11.64 0 001.73 6.02L0 24l5.84-1.53a11.625 11.625 0 006.161 1.677C18.627 24 24 18.627 24 12a11.78 11.78 0 00-3.48-8.52zm-8.52 17.52a9.452 9.452 0 01-4.844-1.438l-.35-.22-3.42.833.842-3.333-.234-.357a9.414 9.414 0 1118.3 2.796 6.23 6.23 0 01-3.994 3.62zm5.932-7.104c-.29-.145-1.712-.845-1.978-.94-.267-.097-.462-.145-.658.146-.197.29-.758.94-.93 1.133-.17.197-.34.221-.63.074a8.23 8.23 0 01-2.414-1.49 9.148 9.148 0 01-1.69-2.1c-.18-.31 0-.484.135-.63.14-.145.318-.38.476-.573.156-.195.208-.328.31-.547.1-.22 0-.403-.01-.56-.016-.158-.66-1.59-.908-2.18-.237-.577-.48-.5-.658-.51a3.63 3.63 0 00-.68-.057 2.67 2.67 0 00-.63.094c-.204.09-.623.61-.623 1.492 0 .882.637 1.73.726 1.85.09.124 1.252 1.91 3.038 2.677a10.81 10.81 0 002.765 1.38c.366.155.65.132.89.08.275-.063.84-.343.96-.68.117-.34.117-.627.083-.68-.03-.053-.262-.09-.55-.235z"/>
+    </svg>
+  </a>
 
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+    <div class="modal" role="document">
+      <div class="modal-header">
+        <h3 id="modal-title">Service Request Form</h3>
+        <button class="btn-close" aria-label="Close form" id="modal-close">&times;</button>
+      </div>
+      <form id="service-form" novalidate>
+        <label for="model-select">Model<span aria-hidden="true" style="color:#d00">*</span></label>
+        <select id="model-select" name="model" required aria-required="true" aria-describedby="model-desc">
+          <option value="" disabled selected>Select model</option>
+          <option>OPPO</option>
+          <option>REALME</option>
+          <option>HONOR</option>
+          <option>VIVO</option>
+          <option>SAMSUNG</option>
+          <option>XIAOMI</option>
+          <option>TECHNO</option>
+          <option>INFINIX</option>
+          <option>REDMI</option>
+          <option>ONEPLUS</option>
+          <option>PIXEL</option>
+        </select>
 
-        const imeiSn = form.imeiSn.value.trim();
+        <label for="issue-select">Issue<span aria-hidden="true" style="color:#d00">*</span></label>
+        <select id="issue-select" name="issue" required aria-required="true" aria-describedby="issue-desc">
+          <option value="" disabled selected>Select issue</option>
+          <option>TELCO</option>
+          <option>SOFTWARE BRICK</option>
+          <option>FRP</option>
+          <option>GOOGLE LOCK</option>
+          <option>HUAWEI ID</option>
+          <option>HONOR ID</option>
+          <option>XIAOMI ACCOUNT</option>
+          <option>XIAOMI FRP</option>
+          <option>NETWORK UNLOCK</option>
+        </select>
 
-        if (!imeiSn) {
-          alert('Please enter your IMEI or SN.');
-          form.imeiSn.focus();
-          return;
-        }
+        <label for="location-input">Your Location<span aria-hidden="true" style="color:#d00">*</span></label>
+        <input type="text" id="location-input" name="location" placeholder="Enter your location" required aria-required="true" autocomplete="street-address" />
 
-        const messageLines = [
-          'Samsung FRP Request:',
-          `IMEI/SN: ${imeiSn}`,
-          'SERVER ONLINE'
-        ];
+        <label>Case Number</label>
+        <div aria-live="polite" aria-atomic="true" class="case-number-display" id="case-number">----</div>
 
-        const message = encodeURIComponent(messageLines.join('\n'));
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+        <fieldset>
+          <legend>Laptop or PC?<span aria-hidden="true" style="color:#d00">*</span></legend>
+          <div class="form-row-radio">
+            <input type="radio" id="laptop-yes" name="laptop" value="Yes" required />
+            <label for="laptop-yes">Yes</label>
+          </div>
+          <div class="form-row-radio">
+            <input type="radio" id="laptop-no" name="laptop" value="No" required />
+            <label for="laptop-no">No</label>
+          </div>
+        </fieldset>
 
-        window.open(whatsappURL, '_blank');
-      });
-    })();
-  </script>
+        <button type="submit" class="btn-submit" aria-label="Submit service request">Submit</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+  const btnGetStarted = document.getElementById('btn-get-started');
+  const modalOverlay = document.getElementById('modal-overlay');
+  const modalClose = document.getElementById('modal-close');
+  const form = document.getElementById('service-form');
+  const caseNumberEl = document.getElementById('case-number');
+
+  function generateCaseNumber() {
+    return Math.floor(1000 + Math.random() * 9000).toString();
+  }
+
+  function openModal() {
+    modalOverlay.classList.add('active');
+    // Generate and show case number
+    const caseNumber = generateCaseNumber();
+    caseNumberEl.textContent = caseNumber;
+    // Set focus to first field for accessibility
+    document.getElementById('model-select').focus();
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+    btnGetStarted.focus();
+    form.reset();
+    caseNumberEl.textContent = '----';
+  }
+
+  btnGetStarted.addEventListener('click', openModal);
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => {
+    if (e.target === modalOverlay) closeModal();
+  });
+  window.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    // Validation implicitly handled by required attributes; we add manual check here:
+    if (!form.reportValidity()) {
+      return;
+    }
+
+    const model = form.model.value.trim();
+    const issue = form.issue.value.trim();
+    const location = form.location.value.trim();
+    const laptop = form.laptop.value;
+    const caseNumber = caseNumberEl.textContent;
+
+    // Construct WhatsApp message
+    let message = `Service Request:%0A`;
+    message += `Case Number: ${caseNumber}%0A`;
+    message += `Model: ${model}%0A`;
+    message += `Issue: ${issue}%0A`;
+    message += `Location: ${location}%0A`;
+    message += `Laptop/PC: ${laptop}`;
+
+    // Open WhatsApp chat with pre-filled message to +60178040403
+    const phoneNumber = '60178040403';
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+
+    // Open in new tab/window
+    window.open(whatsappUrl, '_blank', 'noopener');
+
+    closeModal();
+  });
+</script>
 </body>
 </html>
+
