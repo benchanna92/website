@@ -1,417 +1,568 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Service Center - Unlock & Tool Rental</title>
-    <style>
-        /* Reset and base */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-        body {
-            margin: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-            Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background: #ffffff;
-            color: #374151; /* neutral gray 700 */
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-        button {
-            font-family: inherit;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 12px;
-            border: none;
-            padding: 14px 24px;
-            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-            user-select: none;
-        }
-        button:focus {
-            outline: 3px solid #2563eb;
-            outline-offset: 2px;
-        }
-        button:disabled {
-            background: #d1d5db;
-            color: #9ca3af;
-            cursor: default;
-            box-shadow: none;
-        }
-        h1 {
-            font-weight: 700;
-            font-size: 3rem;
-            color: #111827; /* neutral 900 */
-            margin-bottom: 0.25em;
-            line-height: 1.1;
-        }
-        p {
-            font-size: 1.125rem;
-            color: #6b7280; /* neutral gray 500 */
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-        }
-        input[type="text"], select, textarea {
-            width: 100%;
-            padding: 10px 16px;
-            border-radius: 12px;
-            border: 1.5px solid #d1d5db;
-            font-size: 1rem;
-            color: #374151;
-            transition: border-color 0.3s ease;
-            font-family: inherit;
-            resize: vertical;
-        }
-        input[type="text"]:focus, select:focus, textarea:focus {
-            border-color: #2563eb;
-            outline: none;
-            box-shadow: 0 0 0 3px #bfdbfe;
-        }
-        label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #111827;
-            user-select: none;
-        }
-        .container {
-            max-width: 1200px;
-            margin-inline: auto;
-            padding-left: 2rem;
-            padding-right: 2rem;
-            padding-top: 4rem;
-            padding-bottom: 5rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        header {
-            position: sticky;
-            top: 0;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            z-index: 50;
-            box-shadow: 0 1px 4px rgb(0 0 0 / 0.05);
-        }
-        .nav-wrapper {
-            max-width: 1200px;
-            margin-inline: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-        }
-        .logo {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: #111827;
-            user-select: none;
-        }
-        main {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-        .card {
-            background: #f9fafb;
-            padding: 3rem 3rem 4rem 3rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgb(0 0 0 / 0.05);
-            width: 100%;
-            max-width: 480px;
-            user-select: none;
-        }
-        .desc {
-            margin-bottom: 2rem;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-        .tab-button {
-            background: #e5e7eb;
-            color: #6b7280;
-            padding: 12px 18px;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            flex-grow: 1;
-            text-align: center;
-            user-select: none;
-        }
-        .tab-button[aria-selected="true"] {
-            background: #2563eb;
-            color: white;
-            cursor: default;
-            box-shadow: 0 4px 8px rgb(37 99 235 / 0.45);
-        }
-        .tab-button:hover:not([aria-selected="true"]),
-        .tab-button:focus-visible:not([aria-selected="true"]) {
-            background: #3b82f6;
-            color: white;
-            outline: none;
-        }
-
-        /* Option grids */
-        .option-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill,minmax(120px,1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .option-button {
-            background: white;
-            color: #374151;
-            border-radius: 12px;
-            padding: 12px;
-            font-weight: 600;
-            box-shadow: 0 1px 4px rgb(0 0 0 / 0.05);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            user-select: none;
-            border: none;
-            text-align: center;
-        }
-        .option-button:hover, .option-button:focus {
-            background-color: #2563eb;
-            color: white;
-            box-shadow: 0 8px 24px rgb(37 99 235 / 0.5);
-            outline: none;
-        }
-        .option-button.selected {
-            background-color: #1e40af;
-            color: white;
-            box-shadow: 0 8px 24px rgb(30 64 175 / 0.65);
-            cursor: default;
-        }
-
-        /* Forms and inputs */
-        .form-group {
-            margin-bottom: 1.75rem;
-        }
-        textarea {
-            font-family: inherit;
-            font-size: 1rem;
-            min-height: 100px;
-        }
-
-        /* Result display */
-        .result {
-            margin-top: 2.5rem;
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: #111827;
-            user-select: text;
-            line-height: 1.4;
-        }
-        .result small {
-            font-weight: 400;
-            font-size: 0.875rem;
-            color: #6b7280;
-            display: block;
-            margin-top: 0.3rem;
-        }
-
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Service Center - Unlock & Tool Rental</title>
+  <style>
+    /* Base and resets */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background: #ffffff;
+      color: #6b7280;
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-text-size-adjust: 100%;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    h1, h2 {
+      font-weight: 700;
+      color: #111827;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+    h1 {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    h2 {
+      font-size: 20px;
+    }
+    p {
+      margin-top: 0;
+      margin-bottom: 2rem;
+      color: #6b7280;
+      font-size: 17px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #374151;
+      user-select: none;
+    }
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid #e5e7eb;
+      font-size: 17px;
+      color: #111827;
+      font-family: inherit;
+      transition: border-color 0.2s ease;
+      resize: vertical;
+      box-shadow: none;
+      outline-offset: 2px;
+    }
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #111827;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
+    }
+    button {
+      background: #111827;
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      padding: 14px 28px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.25s ease, transform 0.15s ease;
+      user-select: none;
+      width: 100%;
+    }
+    button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      color: #9ca3af;
+      transform: none;
+    }
+    button:hover:not(:disabled), button:focus:not(:disabled) {
+      background: #374151;
+      transform: scale(1.03);
+      outline: none;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background: white;
+      border-bottom: 1px solid #f3f4f6;
+      backdrop-filter: saturate(180%) blur(7px);
+      z-index: 50;
+      box-shadow: 0 1px 4px rgb(0 0 0 / 0.05);
+    }
+    .nav-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: #111827;
+      user-select: none;
+    }
+    main {
+      width: 100%;
+      max-width: 600px;
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 3rem 3.5rem 4rem 3.5rem;
+      box-shadow: 0 12px 40px rgb(0 0 0 / 0.05);
+      user-select: none;
+    }
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 10px 16px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #6b7280;
+      cursor: pointer;
+      border-radius: 0.75rem;
+      border-bottom: 4px solid transparent;
+      transition: border-color 0.25s ease, color 0.25s ease;
+      user-select: none;
+    }
+    .tab-button[aria-selected="true"] {
+      color: #111827;
+      border-bottom-color: #111827;
+      cursor: default;
+    }
+    .tab-button:hover:not([aria-selected="true"]), .tab-button:focus:not([aria-selected="true"]) {
+      color: #111827;
+      outline-offset: 3px;
+      outline-color: #111827;
+      outline-style: solid;
+      outline-width: 2px;
+    }
+    .option-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(120px,1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .option-button {
+      background: white;
+      color: #111827;
+      border-radius: 0.75rem;
+      padding: 14px 0;
+      font-weight: 600;
+      font-size: 17px;
+      box-shadow: 0 4px 10px rgb(0 0 0 / 0.05);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      text-align: center;
+    }
+    .option-button:hover, .option-button:focus {
+      border-color: #111827;
+      background-color: #f3f4f6;
+      outline: none;
+    }
+    .option-button.selected {
+      border-color: #111827;
+      background-color: #e5e7eb;
+      cursor: default;
+      box-shadow: 0 6px 16px rgb(0 0 0 / 0.1);
+    }
+    label[for="frp-detail"], label[for="apple-model"], label[for="apple-status"], label[for="apple-imei"], label[for="rent-tool-select"], label[for="rent-time-select"], label[for="blist-ic"] {
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: block;
+      color: #374151;
+      user-select: none;
+    }
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 0.75rem;
+      border: 1.5px solid #e5e7eb;
+      box-shadow: none;
+      font-weight: 400;
+      font-size: 17px;
+      color: #111827;
+      font-family: inherit;
+      transition: border-color 0.2s ease;
+      resize: vertical;
+      outline-offset: 3px;
+    }
+    input[type="text"]:focus, select:focus, textarea:focus {
+      border-color: #111827;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
+    }
+    .form-group {
+      margin-bottom: 2rem;
+    }
+    .result {
+      margin-top: 2.5rem;
+      font-weight: 700;
+      font-size: 18px;
+      color: #111827;
+      user-select: text;
+      line-height: 1.4;
+    }
+    .result small {
+      font-weight: 400;
+      font-size: 0.9rem;
+      color: #6b7280;
+      display: block;
+      margin-top: 0.3rem;
+    }
+  </style>
 </head>
 <body>
-<header role="banner">
+  <header role="banner">
     <nav class="nav-wrapper" aria-label="Primary navigation">
-        <div class="logo" tabindex="0">Service Center</div>
+      <div class="logo" tabindex="0">Service Center</div>
     </nav>
-</header>
-<main>
-    <section class="card" aria-labelledby="main-title" aria-live="polite">
-        <h1 id="main-title">Unlock & Tool Rental Services</h1>
-        <p class="desc">Select a service below, provide any required details, then generate and send your code to WhatsApp.</p>
+  </header>
+  <main>
+    <section aria-labelledby="main-title" aria-live="polite">
+      <h1 id="main-title">Unlock & Tool Rental Services</h1>
+      <p>Select a service tab below, select or fill the necessary info, generate your 4-digit code, and it will be sent to WhatsApp automatically.</p>
 
-        <div role="tablist" aria-label="Service selection" class="tabs">
-            <button role="tab" aria-selected="true" aria-controls="telco" id="tab-telco" tabindex="0" class="tab-button">TELCO</button>
-            <button role="tab" aria-selected="false" aria-controls="frp-google" id="tab-frp-google" tabindex="-1" class="tab-button">FRP/GOOGLE</button>
-            <button role="tab" aria-selected="false" aria-controls="frp-unlock" id="tab-frp-unlock" tabindex="-1" class="tab-button">FRP UNLOCK</button>
-            <button role="tab" aria-selected="false" aria-controls="apple-id" id="tab-apple-id" tabindex="-1" class="tab-button">APPLE ID FORGET</button>
-            <button role="tab" aria-selected="false" aria-controls="rent-tool" id="tab-rent-tool" tabindex="-1" class="tab-button">RENT TOOL</button>
-            <button role="tab" aria-selected="false" aria-controls="blist-hide" id="tab-blist-hide" tabindex="-1" class="tab-button">B/LIST HIDE</button>
+      <div role="tablist" aria-label="Service selection" class="tabs">
+        <button role="tab" aria-selected="true" aria-controls="tab-telco" id="tab-button-telco" tabindex="0" class="tab-button">TELCO</button>
+        <button role="tab" aria-selected="false" aria-controls="tab-frpgoogle" id="tab-button-frpgoogle" tabindex="-1" class="tab-button">FRP/GOOGLE</button>
+        <button role="tab" aria-selected="false" aria-controls="tab-frpunlock" id="tab-button-frpunlock" tabindex="-1" class="tab-button">FRP UNLOCK</button>
+        <button role="tab" aria-selected="false" aria-controls="tab-appleid" id="tab-button-appleid" tabindex="-1" class="tab-button">APPLE ID FORGET</button>
+        <button role="tab" aria-selected="false" aria-controls="tab-renttool" id="tab-button-renttool" tabindex="-1" class="tab-button">RENT TOOL</button>
+        <button role="tab" aria-selected="false" aria-controls="tab-blisthide" id="tab-button-blisthide" tabindex="-1" class="tab-button">B/LIST HIDE</button>
+      </div>
+
+      <!-- TELCO -->
+      <section id="tab-telco" role="tabpanel" aria-labelledby="tab-button-telco">
+        <p><strong>Select Model</strong></p>
+        <div class="option-grid" id="telco-models">
+          <button class="option-button" data-model="SAMSUNG">SAMSUNG</button>
+          <button class="option-button" data-model="HONOR">HONOR</button>
+          <button class="option-button" data-model="REDMI">REDMI</button>
+          <button class="option-button" data-model="XIAOMI">XIAOMI</button>
+          <button class="option-button" data-model="VIVO">VIVO</button>
+          <button class="option-button" data-model="INFINIX">INFINIX</button>
+          <button class="option-button" data-model="TECNO">TECNO</button>
+          <button class="option-button" data-model="HUAWEI">HUAWEI</button>
+          <button class="option-button" data-model="OPPO">OPPO</button>
+          <button class="option-button" data-model="REALME">REALME</button>
         </div>
+        <button id="telco-generate" disabled>Generate 4-Digit Code & Send WhatsApp</button>
+      </section>
 
-        <!-- TELCO -->
-        <section id="telco" role="tabpanel" aria-labelledby="tab-telco">
-            <p><strong>Select Model</strong></p>
-            <div class="option-grid" id="telco-models">
-                <button class="option-button" data-model="SAMSUNG">SAMSUNG</button>
-                <button class="option-button" data-model="HONOR">HONOR</button>
-                <button class="option-button" data-model="REDMI">REDMI</button>
-                <button class="option-button" data-model="XIAOMI">XIAOMI</button>
-                <button class="option-button" data-model="VIVO">VIVO</button>
-                <button class="option-button" data-model="INFINIX">INFINIX</button>
-                <button class="option-button" data-model="TECNO">TECNO</button>
-                <button class="option-button" data-model="HUAWEI">HUAWEI</button>
-                <button class="option-button" data-model="OPPO">OPPO</button>
-                <button class="option-button" data-model="REALME">REALME</button>
-            </div>
-            <button id="telco-generate" disabled>Generate 4-Digit Code & Send to WhatsApp</button>
-        </section>
+      <!-- FRP/GOOGLE -->
+      <section id="tab-frpgoogle" role="tabpanel" aria-labelledby="tab-button-frpgoogle" hidden>
+        <p><strong>Select Model</strong></p>
+        <div class="option-grid" id="frpgoogle-models">
+          <button class="option-button" data-model="SAMSUNG">SAMSUNG</button>
+          <button class="option-button" data-model="HONOR">HONOR</button>
+          <button class="option-button" data-model="REDMI">REDMI</button>
+          <button class="option-button" data-model="XIAOMI">XIAOMI</button>
+          <button class="option-button" data-model="VIVO">VIVO</button>
+          <button class="option-button" data-model="INFINIX">INFINIX</button>
+          <button class="option-button" data-model="TECNO">TECNO</button>
+          <button class="option-button" data-model="HUAWEI">HUAWEI</button>
+          <button class="option-button" data-model="OPPO">OPPO</button>
+          <button class="option-button" data-model="REALME">REALME</button>
+        </div>
+        <button id="frpgoogle-generate" disabled>Generate 4-Digit Code & Send WhatsApp</button>
+      </section>
 
-        <!-- FRP/GOOGLE -->
-        <section id="frp-google" role="tabpanel" aria-labelledby="tab-frp-google" hidden>
-            <p><strong>Select Model</strong></p>
-            <div class="option-grid" id="frp-google-models">
-                <button class="option-button" data-model="SAMSUNG">SAMSUNG</button>
-                <button class="option-button" data-model="HONOR">HONOR</button>
-                <button class="option-button" data-model="REDMI">REDMI</button>
-                <button class="option-button" data-model="XIAOMI">XIAOMI</button>
-                <button class="option-button" data-model="VIVO">VIVO</button>
-                <button class="option-button" data-model="INFINIX">INFINIX</button>
-                <button class="option-button" data-model="TECNO">TECNO</button>
-                <button class="option-button" data-model="HUAWEI">HUAWEI</button>
-                <button class="option-button" data-model="OPPO">OPPO</button>
-                <button class="option-button" data-model="REALME">REALME</button>
-            </div>
-            <button id="frp-google-generate" disabled>Generate 4-Digit Code & Send to WhatsApp</button>
-        </section>
+      <!-- FRP UNLOCK -->
+      <section id="tab-frpunlock" role="tabpanel" aria-labelledby="tab-button-frpunlock" hidden>
+        <p><strong>Select Model</strong></p>
+        <div class="option-grid" id="frpunlock-models">
+          <button class="option-button" data-model="SAMSUNG">SAMSUNG</button>
+          <button class="option-button" data-model="REALME">REALME</button>
+          <button class="option-button" data-model="OPPO">OPPO</button>
+          <button class="option-button" data-model="XIAOMI">XIAOMI</button>
+          <button class="option-button" data-model="HONOR">HONOR</button>
+          <button class="option-button" data-model="VIVO">VIVO</button>
+        </div>
+        <div class="form-group">
+          <label for="frp-detail">Details</label>
+          <input type="text" id="frp-detail" placeholder="Enter device or lock details" />
+        </div>
+        <button id="frpunlock-generate" disabled>Generate 4-Digit Code & Send WhatsApp</button>
+      </section>
 
-        <!-- FRP UNLOCK -->
-        <section id="frp-unlock" role="tabpanel" aria-labelledby="tab-frp-unlock" hidden>
-            <p><strong>Select Model</strong></p>
-            <div class="option-grid" id="frp-unlock-models">
-                <button class="option-button" data-model="SAMSUNG">SAMSUNG</button>
-                <button class="option-button" data-model="REALME">REALME</button>
-                <button class="option-button" data-model="OPPO">OPPO</button>
-                <button class="option-button" data-model="XIAOMI">XIAOMI</button>
-                <button class="option-button" data-model="HONOR">HONOR</button>
-                <button class="option-button" data-model="VIVO">VIVO</button>
-            </div>
-            <div class="form-group">
-                <label for="frp-detail">Details (Fill in detail info):</label>
-                <input type="text" id="frp-detail" placeholder="Enter device/lock details" />
-            </div>
-            <button id="frp-unlock-generate" disabled>Generate 4-Digit Code & Send to WhatsApp</button>
-        </section>
+      <!-- APPLE ID FORGET -->
+      <section id="tab-appleid" role="tabpanel" aria-labelledby="tab-button-appleid" hidden>
+        <div class="form-group">
+          <label for="apple-model">Model</label>
+          <input type="text" id="apple-model" placeholder="Enter model" />
+        </div>
+        <div class="form-group">
+          <label for="apple-status">Status</label>
+          <select id="apple-status">
+            <option value="" disabled selected>Select status</option>
+            <option value="LOST">LOST</option>
+            <option value="CLEAN">CLEAN</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="apple-imei">IMEI</label>
+          <input type="text" id="apple-imei" placeholder="Enter IMEI" />
+        </div>
+        <button id="appleid-generate">Generate 4-Digit Code & Send WhatsApp</button>
+      </section>
 
-        <!-- APPLE ID FORGET -->
-        <section id="apple-id" role="tabpanel" aria-labelledby="tab-apple-id" hidden>
-            <div class="form-group">
-                <label for="apple-model">Model:</label>
-                <input type="text" id="apple-model" placeholder="Enter model" />
-            </div>
-            <div class="form-group">
-                <label for="apple-status">Status:</label>
-                <select id="apple-status">
-                    <option value="" selected disabled>Select status</option>
-                    <option value="LOST">LOST</option>
-                    <option value="CLEAN">CLEAN</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="apple-imei">IMEI:</label>
-                <input type="text" id="apple-imei" placeholder="Enter IMEI" />
-            </div>
-            <button id="apple-id-generate">Generate 4-Digit Code & Send to WhatsApp</button>
-        </section>
+      <!-- RENT TOOL -->
+      <section id="tab-renttool" role="tabpanel" aria-labelledby="tab-button-renttool" hidden>
+        <div class="form-group">
+          <label for="rent-tool-select">Select Tool</label>
+          <select id="rent-tool-select">
+            <option value="" disabled selected>Select tool</option>
+            <option value="UNLOCKTOOL">UNLOCKTOOL</option>
+            <option value="RTC">RTC</option>
+            <option value="PANDORA">PANDORA</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="rent-time-select">Select Time</label>
+          <select id="rent-time-select">
+            <option value="" disabled selected>Select duration</option>
+            <option value="6HR">6 HR</option>
+            <option value="12HR">12 HR</option>
+            <option value="1DAY">1 DAY</option>
+            <option value="1MONTH">1 MONTH</option>
+          </select>
+        </div>
+        <button id="renttool-generate">Generate 4-Digit Code & Send WhatsApp</button>
+      </section>
 
-        <!-- RENT TOOL -->
-        <section id="rent-tool" role="tabpanel" aria-labelledby="tab-rent-tool" hidden>
-            <div class="form-group">
-                <label for="rent-tool-select">Select Tool:</label>
-                <select id="rent-tool-select">
-                    <option value="" selected disabled>Select tool</option>
-                    <option value="UNLOCKTOOL">UNLOCKTOOL</option>
-                    <option value="RTC">RTC</option>
-                    <option value="PANDORA">PANDORA</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="rent-time-select">Select Time:</label>
-                <select id="rent-time-select">
-                    <option value="" selected disabled>Select duration</option>
-                    <option value="6HR">6 HR</option>
-                    <option value="12HR">12 HR</option>
-                    <option value="1DAY">1 DAY</option>
-                    <option value="1MONTH">1 MONTH</option>
-                </select>
-            </div>
-            <button id="rent-tool-generate">Generate 4-Digit Code & Send to WhatsApp</button>
-        </section>
+      <!-- B/LIST HIDE -->
+      <section id="tab-blisthide" role="tabpanel" aria-labelledby="tab-button-blisthide" hidden>
+        <div class="form-group">
+          <label for="blist-ic">IC/No</label>
+          <input type="text" id="blist-ic" placeholder="Enter IC/No" />
+        </div>
+        <button id="blisthide-generate">Generate 4-Digit Code & Send WhatsApp</button>
+      </section>
 
-        <!-- B/LIST HIDE PERMANENTLY -->
-        <section id="blist-hide" role="tabpanel" aria-labelledby="tab-blist-hide" hidden>
-            <div class="form-group">
-                <label for="blist-ic">IC/No:</label>
-                <input type="text" id="blist-ic" placeholder="Enter IC/No" />
-            </div>
-            <button id="blist-hide-generate">Generate 4-Digit Code & Send to WhatsApp</button>
-        </section>
-
-        <div class="result" id="result" role="alert" aria-live="polite" aria-relevant="additions"></div>
+      <div class="result" id="result" role="alert" aria-live="polite" aria-relevant="additions"></div>
     </section>
-</main>
-
-<script>
+  </main>
+  <script>
     (() => {
-        const whatsappNumber = '60178040403';
+      const whatsappNumber = '60178040403';
 
-        // Tabs and sections
-        const tabs = [...document.querySelectorAll('[role=tab]')];
-        const tabPanels = [...document.querySelectorAll('[role=tabpanel]')];
-        const resultEl = document.getElementById('result');
+      // Tabs and panels
+      const tabs = [...document.querySelectorAll('[role=tab]')];
+      const tabPanels = [...document.querySelectorAll('[role=tabpanel]')];
+      const resultEl = document.getElementById('result');
 
-        // Utility to generate 4-digit code padded with zeros
-        function generateCode() {
-            return Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        }
+      function generateCode() {
+        return Math.floor(Math.random()*10000).toString().padStart(4, '0');
+      }
 
-        // Reset and select tab by index or id
-        function selectTab(newTab) {
-            tabs.forEach(tab => {
-                const isSelected = tab === newTab;
-                tab.setAttribute('aria-selected', isSelected ? 'true' : 'false');
-                tab.tabIndex = isSelected ? 0 : -1;
-                if(isSelected) tab.focus();
-                const panelId = tab.getAttribute('aria-controls');
-                const panel = document.getElementById(panelId);
-                if(panel){
-                    panel.hidden = !isSelected;
-                }
-            });
-            clearResultsAndStates();
-        }
-
+      function selectTab(selectedTab) {
         tabs.forEach(tab => {
-            tab.addEventListener('click', () => selectTab(tab));
-            tab.addEventListener('keydown', (e) => {
-                let idx = tabs.indexOf(e.currentTarget);
-                if(e.key === 'ArrowRight') {
-                    e.preventDefault();
-                    selectTab(tabs[(idx + 1) % tabs.length]);
-                } else if(e.key === 'ArrowLeft') {
-                    e.preventDefault();
-                    selectTab(tabs[(idx - 1 + tabs.length) % tabs.length]);
-                }
-            });
+          const selected = tab === selectedTab;
+          tab.setAttribute('aria-selected', selected);
+          tab.tabIndex = selected ? 0 : -1;
+          const panelId = tab.getAttribute('aria-controls');
+          const panel = document.getElementById(panelId);
+          if(panel) panel.hidden = !selected;
         });
+        clearStateAndResult();
+      }
 
-        // TELCO elements
-        const telcoModelButtons = [...document.querySelectorAll('#telco-models .option-button')];
-        const telcoGenerateBtn = document.getElementById('telco-generate');
-        let telcoSelectedModel = null;
-
-        telcoModelButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                telcoModelButtons.forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-                telcoSelectedModel = btn.dataset.model;
-                telcoGenerateBtn.disabled = false;
-                resultEl.textContent = '';
-            });
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', (e) => {
+          let idx = tabs.indexOf(e.currentTarget);
+          if(e.key === 'ArrowRight'){
+            e.preventDefault();
+            selectTab(tabs[(idx + 1) % tabs.length]);
+          } else if(e.key === 'ArrowLeft'){
+            e.preventDefault();
+            selectTab(tabs[(idx - 1 + tabs.length) % tabs.length]);
+          }
         });
-        telcoGenerateBtn.addEventListener('click', () => {
-            if(!telcoSelectedModel) return
+      });
+
+      // CLEAR state and result
+      function clearStateAndResult(){
+        resultEl.textContent = '';
+        // deselect all option buttons
+        document.querySelectorAll('.option-button.selected').forEach(el => el.classList.remove('selected'));
+        // disable all buttons
+        document.querySelectorAll('button[id$="generate"]').forEach(btn => btn.disabled = true);
+        // clear inputs and selects
+        [...document.querySelectorAll('input[type=text], textarea')].forEach(inp => inp.value = '');
+        [...document.querySelectorAll('select')].forEach(sel => {sel.selectedIndex = 0});
+      }
+
+      // HELPER SEND TO WHATSAPP
+      function sendMessage(message) {
+        const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        window.open(url,'_blank','noopener,noreferrer');
+      }
+
+      // TELCO
+      const telcoModelButtons = [...document.querySelectorAll('#telco-models .option-button')];
+      const telcoGenerateBtn = document.getElementById('telco-generate');
+      let telcoSelectedModel = null;
+      telcoModelButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          telcoModelButtons.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          telcoSelectedModel = btn.dataset.model;
+          telcoGenerateBtn.disabled = false;
+          resultEl.textContent = '';
+        });
+      });
+      telcoGenerateBtn.addEventListener('click', () => {
+        if(!telcoSelectedModel) return;
+        const code = generateCode();
+        const msg = `TELCO Unlock for ${telcoSelectedModel}, Code: ${code}`;
+        sendMessage(msg);
+        resultEl.innerHTML = `Generated Code for <b>${telcoSelectedModel}</b>: <code>${code}</code><br/><small>WhatsApp opened to send code.</small>`;
+      });
+
+      // FRP/GOOGLE
+      const frpGoogleModelButtons = [...document.querySelectorAll('#frpgoogle-models .option-button')];
+      const frpGoogleGenerateBtn = document.getElementById('frpgoogle-generate');
+      let frpGoogleSelectedModel = null;
+      frpGoogleModelButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          frpGoogleModelButtons.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          frpGoogleSelectedModel = btn.dataset.model;
+          frpGoogleGenerateBtn.disabled = false;
+          resultEl.textContent = '';
+        });
+      });
+      frpGoogleGenerateBtn.addEventListener('click', () => {
+        if(!frpGoogleSelectedModel) return;
+        const code = generateCode();
+        const msg = `FRP/Google Unlock for ${frpGoogleSelectedModel}, Code: ${code}`;
+        sendMessage(msg);
+        resultEl.innerHTML = `Generated Code for <b>${frpGoogleSelectedModel}</b>: <code>${code}</code><br/><small>WhatsApp opened to send code.</small>`;
+      });
+
+      // FRP UNLOCK
+      const frpUnlockModelButtons = [...document.querySelectorAll('#frpunlock-models .option-button')];
+      const frpUnlockGenerateBtn = document.getElementById('frpunlock-generate');
+      const frpDetailInput = document.getElementById('frp-detail');
+      let frpUnlockSelectedModel = null;
+      function validateFrpUnlock() {
+        const detailsFilled = frpDetailInput.value.trim().length > 0;
+        frpUnlockGenerateBtn.disabled = !(frpUnlockSelectedModel && detailsFilled);
+      }
+      frpUnlockModelButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          frpUnlockModelButtons.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          frpUnlockSelectedModel = btn.dataset.model;
+          validateFrpUnlock();
+          resultEl.textContent = '';
+        });
+      });
+      frpDetailInput.addEventListener('input', validateFrpUnlock);
+      frpUnlockGenerateBtn.addEventListener('click', () => {
+        if(!frpUnlockSelectedModel) return;
+        if(frpfDetailInput.value.trim() === '') return;
+        const code = generateCode();
+        const details = frpDetailInput.value.trim();
+        const msg = `FRP Unlock for ${frpUnlockSelectedModel}, Code: ${code}, Details: ${details}`;
+        sendMessage(msg);
+        resultEl.innerHTML = `Generated Code for <b>${frpUnlockSelectedModel}</b>: <code>${code}</code><br/><small>WhatsApp opened to send code and details.</small>`;
+      });
+
+      // APPLE ID FORGET
+      const appleModelInput = document.getElementById('apple-model');
+      const appleStatusSelect = document.getElementById('apple-status');
+      const appleImeiInput = document.getElementById('apple-imei');
+      const appleIdGenerateBtn = document.getElementById('appleid-generate');
+      appleIdGenerateBtn.addEventListener('click', () => {
+        const model = appleModelInput.value.trim();
+        const status = appleStatusSelect.value;
+        const imei = appleImeiInput.value.trim();
+        if(!model || !status || !imei) {
+          alert('Please fill out model, status, and IMEI.');
+          return;
+        }
+        const code = generateCode();
+        const msg = `APPLE ID FORGET - Model: ${model}, Status: ${status}, IMEI: ${imei}, Code: ${code}`;
+        sendMessage(msg);
+        resultEl.innerHTML = `Generated Code: <code>${code}</code><br/><small>WhatsApp opened to send the code and info.</small>`;
+      });
+
+      // RENT TOOL
+      const rentToolSelect = document.getElementById('rent-tool-select');
+      const rentTimeSelect = document.getElementById('rent-time-select');
+      const rentToolGenerateBtn = document.getElementById('renttool-generate');
+      rentToolGenerateBtn.addEventListener('click', () => {
+        const tool = rentToolSelect.value;
+        const time = rentTimeSelect.value;
+        if(!tool || !time) {
+          alert('Please select a tool and time duration.');
+          return;
+        }
+        const code = generateCode();
+        const msg = `RENT TOOL - Tool: ${tool}, Duration: ${time}, Code: ${code}`;
+        sendMessage(msg);
+        resultEl.innerHTML = `Generated Code: <code>${code}</code><br/><small>WhatsApp opened to send the code and request.</small>`;
+      });
+
+      // B/LIST HIDE
+      const blistIcInput = document.getElementById('blist-ic');
+      const blistHideGenerateBtn = document.getElementById('blisthide-generate');
+      blistHideGenerateBtn.addEventListener('click', () => {
+        const ic = blistIcInput.value.trim();
+        if(!ic) {
+          alert('Please enter IC/No.');
+          return;
+        }
+        const code = generateCode();
+        const msg = `B/LIST HIDE - IC/No: ${ic}, Code: ${code}`;
+        sendMessage(msg);
+        resultEl.innerHTML = `Generated Code: <code>${code}</code><br/><small>WhatsApp opened to send the code and info.</small>`;
+      });
+
+      // Initialize first tab selected
+      selectTab(tabs[0]);
+    })();
+  </script>
+</body>
+</html>
