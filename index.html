@@ -1,571 +1,632 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Multiple Service Center</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-  :root {
-    --color-bg: #fafafa;
-    --color-bg-alt: #ffffff;
-    --color-primary: #007aff;
-    --color-primary-hover: #005ecb;
-    --color-text: #1c1c1e;
-    --color-text-muted: #6e6e73;
-    --color-border: #d1d1d6;
-    --radius: 12px;
-    --shadow-subtle: 0 1px 3px rgba(0,0,0,0.1);
-    --transition-fast: 0.3s ease-out;
-  }
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--color-bg);
-    color: var(--color-text);
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 2rem 1rem;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  main {
-    max-width: 480px;
-    width: 100%;
-    background: var(--color-bg-alt);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow-subtle);
-    padding: 2rem 2.5rem 3rem;
-  }
-  h1 {
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    font-size: 1.75rem;
-    letter-spacing: -0.02em;
-    user-select: none;
-  }
-  .service-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  button.service-btn {
-    background: transparent;
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius);
-    color: var(--color-primary);
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.7rem 1.2rem;
-    cursor: pointer;
-    transition: background var(--transition-fast), color var(--transition-fast);
-    user-select: none;
-  }
-  button.service-btn:hover,
-  button.service-btn:focus {
-    background: var(--color-primary);
-    color: white;
-    outline: none;
-  }
-  form {
-    display: grid;
-    gap: 1.25rem;
-  }
-  label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    display: block;
-    margin-bottom: 0.3rem;
-    color: var(--color-text);
-  }
-  select, input[type="text"] {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--radius);
-    background: var(--color-bg-alt);
-    transition: border-color var(--transition-fast);
-    outline-offset: 2px;
-    outline-color: transparent;
-  }
-  select:focus, input[type="text"]:focus {
-    border-color: var(--color-primary);
-    outline-color: var(--color-primary);
-  }
-  .submit-btn {
-    background: var(--color-primary);
-    border: none;
-    border-radius: var(--radius);
-    color: white;
-    font-weight: 700;
-    font-size: 1.1rem;
-    padding: 0.75rem;
-    cursor: pointer;
-    transition: background var(--transition-fast);
-  }
-  .submit-btn:hover,
-  .submit-btn:focus {
-    background: var(--color-primary-hover);
-    outline: none;
-  }
-  .hidden {
-    display: none;
-  }
-</style>
-</head>
-<body>
-<main role="main" aria-label="Multiple Service Center">
-  <h1>Multiple Service Center</h1>
-  <nav class="service-buttons" role="tablist" aria-label="Service selection">
-    <button class="service-btn" role="tab" aria-selected="true" id="btn-frp" aria-controls="form-frp">FRP / GOOGLE</button>
-    <button class="service-btn" role="tab" aria-selected="false" id="btn-telco" aria-controls="form-telco">TELCO UNLOCK</button>
-    <button class="service-btn" role="tab" aria-selected="false" id="btn-apple" aria-controls="form-apple">APPLE ID FORGET</button>
-    <button class="service-btn" role="tab" aria-selected="false" id="btn-rent" aria-controls="form-rent">RENT TOOL</button>
-    <button class="service-btn" role="tab" aria-selected="false" id="btn-blist" aria-controls="form-blist">B/LIST HIDE</button>
-    <button class="service-btn" role="tab" aria-selected="false" id="btn-check" aria-controls="form-check">CHECK TELCO</button>
-    <button class="service-btn" role="tab" aria-selected="false" id="btn-file" aria-controls="form-file">FILE REQUEST</button>
-  </nav>
-
-  <!-- FRP / GOOGLE FORM -->
-  <form id="form-frp" aria-labelledby="btn-frp">
-    <label for="frp-model">Select Model</label>
-    <select id="frp-model" name="frp-model" required>
-      <option value="" disabled selected>Select model</option>
-      <option value="Samsung">Samsung</option>
-      <option value="Honor">Honor</option>
-      <option value="Redmi">Redmi</option>
-      <option value="Xiaomi">Xiaomi</option>
-      <option value="Vivo">Vivo</option>
-      <option value="Infinix">Infinix</option>
-      <option value="Tecno">Tecno</option>
-      <option value="Huawei">Huawei</option>
-      <option value="Oppo">Oppo</option>
-      <option value="Realme">Realme</option>
-    </select>
-    <button type="submit" class="submit-btn" aria-label="Submit FRP Google service form">Generate Code & Send WhatsApp</button>
-  </form>
-
-  <!-- TELCO UNLOCK FORM -->
-  <form id="form-telco" class="hidden" aria-labelledby="btn-telco">
-    <label for="telco-model">Select Model</label>
-    <select id="telco-model" name="telco-model" required>
-      <option value="" disabled selected>Select model</option>
-      <option value="Samsung">Samsung</option>
-      <option value="Realme">Realme</option>
-      <option value="Oppo">Oppo</option>
-      <option value="Xiaomi">Xiaomi</option>
-      <option value="Honor">Honor</option>
-      <option value="Vivo">Vivo</option>
-    </select>
-
-    <label for="telco-detail">Details</label>
-    <input type="text" id="telco-detail" name="telco-detail" placeholder="Enter details" required autocomplete="off" />
-    <button type="submit" class="submit-btn" aria-label="Submit Telco Unlock service form">Generate Code & Send WhatsApp</button>
-  </form>
-
-  <!-- APPLE ID FORGET FORM -->
-  <form id="form-apple" class="hidden" aria-labelledby="btn-apple">
-    <label for="apple-model">Model</label>
-    <input type="text" id="apple-model" name="apple-model" placeholder="Enter model" required autocomplete="off" />
-
-    <label for="apple-status">Status</label>
-    <select id="apple-status" name="apple-status" required>
-      <option value="" disabled selected>Select status</option>
-      <option value="Lost">Lost</option>
-      <option value="Clean">Clean</option>
-    </select>
-
-    <label for="apple-imei">IMEI</label>
-    <input type="text" id="apple-imei" name="apple-imei" placeholder="Enter IMEI" required autocomplete="off" />
-
-    <button type="submit" class="submit-btn" aria-label="Submit Apple ID Forget service form">Generate Code & Send WhatsApp</button>
-  </form>
-
-  <!-- RENT TOOL FORM -->
-  <form id="form-rent" class="hidden" aria-labelledby="btn-rent">
-    <label for="rent-tool">Select Tool</label>
-    <select id="rent-tool" name="rent-tool" required>
-      <option value="" disabled selected>Select tool</option>
-      <option value="UnlockTool">UnlockTool</option>
-      <option value="RTC">RTC</option>
-      <option value="Pandora">Pandora</option>
-    </select>
-
-    <label for="rent-time">Select Time</label>
-    <select id="rent-time" name="rent-time" required>
-      <option value="" disabled selected>Select time</option>
-      <option value="6hr">6 Hours</option>
-      <option value="12hr">12 Hours</option>
-      <option value="1day">1 Day</option>
-      <option value="1month">1 Month</option>
-    </select>
-
-    <button type="submit" class="submit-btn" aria-label="Submit Rent Tool service form">Generate Code & Send WhatsApp</button>
-  </form>
-
-  <!-- B/LIST HIDE PERMANENTLY FORM -->
-  <form id="form-blist" class="hidden" aria-labelledby="btn-blist">
-    <label for="blist-icno">IC / No</label>
-    <input type="text" id="blist-icno" name="blist-icno" placeholder="Enter IC or No" required autocomplete="off" />
-    <button type="submit" class="submit-btn" aria-label="Submit B/List Hide Permanently service form">Generate Code & Send WhatsApp</button>
-  </form>
-
-  <!-- CHECK TELCO FORM -->
-  <form id="form-check" class="hidden" aria-labelledby="btn-check">
-    <label for="check-model">Select Model</label>
-    <select id="check-model" name="check-model" required>
-      <option value="" disabled selected>Select model</option>
-      <option value="Apple">Apple</option>
-      <option value="Oppo">Oppo</option>
-      <option value="Samsung">Samsung</option>
-      <option value="Realme">Realme</option>
-    </select>
-    <button type="submit" class="submit-btn" aria-label="Submit Check Telco service form">Generate Code & Send WhatsApp</button>
-  </form>
-
-  <!-- FILE REQUEST FORM -->
-  <form id="form-file" class="hidden" aria-labelledby="btn-file">
-    <label for="file-model">Select Model</label>
-    <select id="file-model" name="file-model" required>
-      <option value="" disabled selected>Select model</option>
-      <option value="Oppo">Oppo</option>
-      <option value="Realme">Realme</option>
-      <option value="Vivo">Vivo</option>
-      <option value="Samsung">Samsung</option>
-      <option value="OnePlus">OnePlus</option>
-      <option value="Tecno">Tecno</option>
-      <option value="Redmi">Redmi</option>
-      <option value="Infinix">Infinix</option>
-      <option value="Xiaomi">Xiaomi</option>
-      <option value="Nokia">Nokia</option>
-    </select>
-
-    <label for="file-other">Other Model</label>
-    <input type="text" id="file-other" name="file-other" placeholder="Enter other model" required autocomplete="off" />
-    <button type="submit" class="submit-btn" aria-label="Submit File Request service form">Generate Code & Send WhatsApp</button>
-  </form>
-</main>
-
-<script>
-  (() => {
-    const WHATSAPP_NUMBER = '60178040403';
-
-    // Elements
-    const serviceButtons = document.querySelectorAll('button.service-btn');
-    const forms = {
-      'btn-frp': document.getElementById('form-frp'),
-      'btn-telco': document.getElementById('form-telco'),
-      'btn-apple': document.getElementById('form-apple'),
-      'btn-rent': document.getElementById('form-rent'),
-      'btn-blist': document.getElementById('form-blist'),
-      'btn-check': document.getElementById('form-check'),
-      'btn-file': document.getElementById('form-file'),
-    };
-
-    let activeBtnId = 'btn-frp';
-
-    function switchForm(btnId) {
-      activeBtnId = btnId;
-      serviceButtons.forEach(btn => {
-        const selected = btn.id === btnId;
-        btn.setAttribute('aria-selected', selected ? 'true' : 'false');
-        forms[btn.id].classList.toggle('hidden', !selected);
-      });
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daily Sales Tracker</title>
+  <style>
+    :root {
+      --color-bg: #ffffff;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
+      --color-accent: #111827;
+      --color-accent-hover: #333c4a;
+      --color-card-bg: #f9fafb;
+      --font-heading: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --font-body: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --radius: 0.75rem;
+      --shadow-light: 0 8px 24px rgba(0,0,0,0.06);
+      --transition-default: 0.3s cubic-bezier(0.4,0,0.2,1);
+      --max-content-width: 1200px;
+      --spacing-lg: 4rem;
+      --spacing-md: 2.5rem;
+      --spacing-sm: 1.5rem;
     }
 
-    serviceButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        if(btn.id !== activeBtnId) switchForm(btn.id);
-      });
-    });
-
-    function generate4DigitCode() {
-      return Math.floor(1000 + Math.random() * 9000).toString();
+    /* Reset and base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    h1, h2 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      margin: 0;
+      color: var(--color-text-primary);
+      user-select: none;
+    }
+    h1 {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: var(--spacing-sm);
+    }
+    p {
+      color: var(--color-text-secondary);
+      font-size: 1.125rem;
+      margin: 0 0 var(--spacing-md);
+      max-width: 600px;
+      user-select: none;
     }
 
-    // Format message for WhatsApp based on service and form data
-    function formatMessage(serviceId, formData, code) {
-      let msg = `Case Code: ${code}%0A`;
-      switch(serviceId) {
-        case 'btn-frp':
-          msg += 'Service: FRP/Google Unlock%0A';
-          msg += `Model: ${formData.get('frp-model')}%0A`;
-          break;
-        case 'btn-telco':
-          msg += 'Service: Telco Unlock%0A';
-          msg += `Model: ${formData.get('telco-model')}%0A`;
-          msg += `Detail: ${formData.get('telco-detail')}%0A`;
-          break;
-        case 'btn-apple':
-          msg += 'Service: Apple ID Forget%0A';
-          msg += `Model: ${formData.get('apple-model')}%0A`;
-          msg += `Status: ${formData.get('apple-status')}%0A`;
-          msg += `IMEI: ${formData.get('apple-imei')}%0A`;
-          break;
-        case 'btn-rent':
-          msg += 'Service: Rent Tool%0A';
-          msg += `Tool: ${formData.get('rent-tool')}%0A`;
-          msg += `Time: ${formData.get('rent-time')}%0A`;
-          break;
-        case 'btn-blist':
-          msg += 'Service: B/List Hide Permanently%0A';
-          msg += `IC/No: ${formData.get('blist-icno')}%0A`;
-          break;
-        case 'btn-check':
-          msg += 'Service: Check Telco%0A';
-          msg += `Model: ${formData.get('check-model')}%0A`;
-          break;
-        case 'btn-file':
-          msg += 'Service: File Request/Auth Flash%0A';
-          msg += `Model: ${formData.get('file-model')}%0A`;
-          msg += `Other Model: ${formData.get('file-other')}%0A`;
-          break;
+    /* Layout */
+    .container {
+      max-width: var(--max-content-width);
+      margin: 0 auto;
+      padding-left: var(--spacing-sm);
+      padding-right: var(--spacing-sm);
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      padding-bottom: var(--spacing-lg);
+      margin-top: var(--spacing-lg);
+    }
+
+    /* Header */
+    header {
+      background: var(--color-bg);
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: var(--spacing-sm) var(--spacing-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    header h1 {
+      cursor: default;
+      font-weight: 800;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      user-select: none;
+    }
+    .header-actions span.username {
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    button {
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: var(--radius);
+      border: none;
+      padding: 0.625rem 1.5rem;
+      background-color: var(--color-accent);
+      color: #fff;
+      transition: background-color var(--transition-default);
+      font-size: 1rem;
+      user-select: none;
+    }
+    button:hover, button:focus {
+      background-color: var(--color-accent-hover);
+      outline: none;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Hero Section */
+    #hero {
+      text-align: center;
+      padding-top: var(--spacing-lg);
+      padding-bottom: var(--spacing-lg);
+      user-select: none;
+    }
+    #hero p {
+      margin-top: 1rem;
+      margin-bottom: 0;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+    }
+
+    /* Card */
+    .card {
+      background-color: var(--color-card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-light);
+      padding: 2.5rem 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Forms */
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      align-items: end;
+    }
+    label {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--color-text-primary);
+      display: block;
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="email"] {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border: 1.8px solid #d1d5db;
+      border-radius: 0.6rem;
+      transition: border-color var(--transition-default), box-shadow var(--transition-default);
+      font-family: inherit;
+      outline-offset: 1px;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    input[type="email"]:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 8px rgba(17,24,39,0.2);
+    }
+
+    /* Inputs for login form full width */
+    #login-form {
+      grid-template-columns: 1fr;
+    }
+
+    /* Summary list */
+    ul.summary-list {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    ul.summary-list li {
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 0.55rem 0;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #e5e7eb;
+      color: var(--color-text-primary);
+      user-select: none;
+    }
+    ul.summary-list li:last-child {
+      border-bottom: none;
+    }
+
+    /* Chart container */
+    #sales-chart {
+      width: 100% !important;
+      height: 360px !important;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      user-select: none;
+    }
+
+    /* Hide */
+    .hidden {
+      display: none !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.8rem;
       }
-      msg += 'Thank you!';
-      return msg;
+      h2 {
+        font-size: 1.65rem;
+      }
+      form {
+        grid-template-columns: 1fr !important;
+      }
+      button {
+        width: 100%;
+      }
+      #hero {
+        padding: 3rem 1.5rem;
+      }
     }
-
-    // On form submit: generate code, build message, open WhatsApp chat url
-    Object.entries(forms).forEach(([btnId, form]) => {
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const code = generate4DigitCode();
-        const message = formatMessage(btnId, formData, code);
-        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-        window.open(url, '_blank', 'noopener');
-        form.reset();
-      });
-    });
-
-    // Initialize default form
-    switchForm(activeBtnId);
-  })();
-</script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Small Alert Note with Modal</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
-
-  :root {
-    --color-bg: #ffffff;
-    --color-text-primary: #111827;
-    --color-text-secondary: #6b7280;
-    --color-alert-red: #dc2626;
-    --color-card-bg: #f9fafb;
-    --color-shadow-light: rgba(0, 0, 0, 0.05);
-    --color-shadow-dark: rgba(0, 0, 0, 0.1);
-    --radius-rounded: 0.75rem;
-    --spacing-padding: 2rem;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: var(--color-bg);
-    color: var(--color-text-primary);
-    line-height: 1.5;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: var(--spacing-padding);
-  }
-
-  .container {
-    max-width: 800px;
-    width: 100%;
-    text-align: center;
-    margin-top: 4rem;
-  }
-
-  h1 {
-    font-weight: 700;
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    user-select: none;
-  }
-
-  p {
-    font-weight: 500;
-    font-size: 1.125rem;
-    color: var(--color-text-secondary);
-  }
-
-  /* Small alert note - pill shaped */
-  .alert-note {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: var(--color-alert-red);
-    color: white;
-    padding: 0.5rem 1.25rem;
-    font-weight: 600;
-    font-size: 1rem;
-    border-radius: 9999px;
-    box-shadow: 0 4px 12px var(--color-shadow-dark);
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s ease;
-    z-index: 1001;
-  }
-
-  .alert-note:hover,
-  .alert-note:focus {
-    background-color: #b52626;
-    outline: none;
-  }
-
-  /* Modal background overlay */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(17, 24, 39, 0.6); /* darkish overlay */
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-
-  .modal-overlay.active {
-    display: flex;
-    animation: fadeInOverlay 0.3s ease forwards;
-  }
-
-  @keyframes fadeInOverlay {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-
-  /* Modal card */
-  .modal-card {
-    background: var(--color-card-bg);
-    padding: 2rem 2.5rem;
-    border-radius: var(--radius-rounded);
-    box-shadow: 0 10px 30px var(--color-shadow-dark);
-    max-width: 450px;
-    width: 90vw;
-    box-sizing: border-box;
-    text-align: center;
-    position: relative;
-    user-select: none;
-  }
-
-  .modal-card h2 {
-    font-weight: 700;
-    font-size: 2.5rem;
-    color: var(--color-alert-red);
-    margin: 0 0 1rem 0;
-  }
-
-  .modal-card p {
-    font-weight: 500;
-    font-size: 1.125rem;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  /* Close button */
-  .close-button {
-    position: absolute;
-    top: 0.75rem;
-    right: 1rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: color 0.2s ease;
-    user-select: none;
-    padding: 0;
-    line-height: 1;
-  }
-
-  .close-button:hover,
-  .close-button:focus {
-    color: var(--color-alert-red);
-    outline: none;
-  }
-
-</style>
+  </style>
 </head>
 <body>
-  <div class="container" role="main">
-    <h1>Welcome to the Memo Alert Example</h1>
-    <p>Click the red alert note at bottom-right to see the full message.</p>
-  </div>
-
-  <button class="alert-note" aria-haspopup="dialog" aria-controls="alert-modal" aria-expanded="false" id="alertNoteBtn">
-    Alert Note
-  </button>
-
-  <div class="modal-overlay" id="alert-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc" tabindex="-1">
-    <div class="modal-card">
-      <button class="close-button" aria-label="Close alert modal" id="closeModalBtn">&times;</button>
-      <h2 id="modalTitle">Alert</h2>
-      <p id="modalDesc">We do not do any lost, stolen, or found device and we cannot do without loss data sorry for inconvenient.</p>
+  <header class="container" role="banner" aria-label="Site header">
+    <h1>Daily Sales Tracker</h1>
+    <div class="header-actions" aria-live="polite" aria-atomic="true">
+      <span id="user-label" class="hidden" aria-hidden="false">Logged in as <strong id="username-display"></strong></span>
+      <button id="login-btn" type="button">Login</button>
+      <button id="logout-btn" type="button" class="hidden">Logout</button>
     </div>
-  </div>
+  </header>
 
-<script>
-  const alertNoteBtn = document.getElementById('alertNoteBtn');
-  const modalOverlay = document.getElementById('alert-modal');
-  const closeModalBtn = document.getElementById('closeModalBtn');
+  <section id="hero" class="container" aria-label="Introduction">
+    <h2>Track Your Daily Sales With Ease</h2>
+    <p>Quickly add your daily sales data and view monthly summaries and charts for better insights.</p>
+  </section>
 
-  function openModal() {
-    modalOverlay.classList.add('active');
-    alertNoteBtn.setAttribute('aria-expanded', 'true');
-    modalOverlay.focus();
-  }
+  <!-- Login modal dialog -->
+  <section id="login-section" class="card container hidden" aria-modal="true" role="dialog" aria-labelledby="login-title" aria-describedby="login-desc">
+    <h2 id="login-title">Login to your account</h2>
+    <p id="login-desc">Enter your username to access your sales data.</p>
+    <form id="login-form" novalidate>
+      <label for="login-username">Username</label>
+      <input id="login-username" name="username" type="text" autocomplete="username" required minlength="1" />
+      <button type="submit">Sign In</button>
+      <p id="login-error" style="color:#dc2626; font-weight:600; margin-top:1rem; display:none;" role="alert" aria-live="assertive"></p>
+    </form>
+  </section>
 
-  function closeModal() {
-    modalOverlay.classList.remove('active');
-    alertNoteBtn.setAttribute('aria-expanded', 'false');
-    alertNoteBtn.focus();
-  }
+  <main id="app" class="container hidden" role="main" aria-label="Sales tracking application">
+    <section class="card" aria-labelledby="form-header">
+      <h2 id="form-header">Add a New Sale</h2>
+      <form id="sales-form" novalidate>
+        <div>
+          <label for="service-input">Service</label>
+          <input id="service-input" name="service" type="text" placeholder="Service description" required autocomplete="off" />
+        </div>
+        <div>
+          <label for="price-input">Price ($)</label>
+          <input id="price-input" name="price" type="number" placeholder="0.00" min="0" step="0.01" required />
+        </div>
+        <div>
+          <label for="date-input">Date</label>
+          <input id="date-input" name="date" type="date" required />
+        </div>
+        <div>
+          <button type="submit">Add Sale</button>
+        </div>
+      </form>
+    </section>
 
-  alertNoteBtn.addEventListener('click', () => {
-    openModal();
-  });
+    <section class="card" aria-labelledby="summary-header">
+      <h2 id="summary-header">Monthly Sales Summary</h2>
+      <ul id="monthly-summary" class="summary-list" role="list" aria-live="polite" aria-relevant="additions removals">
+        <!-- monthly totals -->
+      </ul>
+    </section>
 
-  closeModalBtn.addEventListener('click', () => {
-    closeModal();
-  });
+    <section class="card" aria-labelledby="chart-header">
+      <h2 id="chart-header">Sales Chart</h2>
+      <canvas id="sales-chart" aria-label="Line chart showing sales over time" role="img"></canvas>
+    </section>
+  </main>
 
-  // Close modal with Escape key
-  document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-      closeModal();
-    }
-  });
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    (() => {
+      // Elements
+      const loginSection = document.getElementById('login-section');
+      const loginForm = document.getElementById('login-form');
+      const loginUsernameInput = document.getElementById('login-username');
+      const loginError = document.getElementById('login-error');
 
-  // Close modal if clicking outside the card
-  modalOverlay.addEventListener('click', (e) => {
-    if(e.target === modalOverlay) {
-      closeModal();
-    }
-  });
-</script>
+      const app = document.getElementById('app');
+      const salesForm = document.getElementById('sales-form');
+      const serviceInput = document.getElementById('service-input');
+      const priceInput = document.getElementById('price-input');
+      const dateInput = document.getElementById('date-input');
+      const monthlySummary = document.getElementById('monthly-summary');
+      const salesChartCanvas = document.getElementById('sales-chart');
+
+      const loginBtn = document.getElementById('login-btn');
+      const logoutBtn = document.getElementById('logout-btn');
+      const userLabel = document.getElementById('user-label');
+      const usernameDisplay = document.getElementById('username-display');
+
+      // Storage
+      const STORAGE_PREFIX = 'dailySales_';
+      const SESSION_KEY = 'dailySales_currentUser';
+
+      // State
+      let currentUser = null;
+      let salesData = [];
+      let salesChart = null;
+
+      // Format date YYYY-MM-DD
+      function formatDate(date) {
+        const d = new Date(date);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2,'0');
+        const day = String(d.getDate()).padStart(2,'0');
+        return `${y}-${m}-${day}`;
+      }
+
+      // Per user key
+      function userStorageKey(user) {
+        return STORAGE_PREFIX + user.toLowerCase();
+      }
+
+      // Save user session
+      function saveSession(user) {
+        localStorage.setItem(SESSION_KEY, user);
+      }
+      // Load user session
+      function loadSession() {
+        const user = localStorage.getItem(SESSION_KEY);
+        if (user && user.trim()) return user;
+        return null;
+      }
+      // Clear session
+      function clearSession() {
+        localStorage.removeItem(SESSION_KEY);
+      }
+
+      // Load sales data for current user
+      function loadSales() {
+        if (!currentUser) return [];
+        const raw = localStorage.getItem(userStorageKey(currentUser));
+        if (!raw) return [];
+        try {
+          const parsed = JSON.parse(raw);
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      // Save sales data for current user
+      function saveSales(data) {
+        if (!currentUser) return;
+        localStorage.setItem(userStorageKey(currentUser), JSON.stringify(data));
+      }
+
+      // Compute monthly totals
+      function computeMonthlyTotals(data) {
+        const totals = {};
+        for (const {date, price} of data) {
+          if (!date || typeof price !== 'number') continue;
+          const month = date.slice(0,7);
+          totals[month] = (totals[month] || 0) + price;
+        }
+        return totals;
+      }
+
+      // Update monthly summary UI
+      function updateMonthlySummary(totals) {
+        monthlySummary.innerHTML = '';
+        const months = Object.keys(totals).sort((a,b) => b.localeCompare(a));
+        if (months.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'No sales data available.';
+          monthlySummary.appendChild(li);
+          return;
+        }
+        months.forEach(month => {
+          const li = document.createElement('li');
+          const dateObj = new Date(month + '-01T00:00');
+          const monthName = dateObj.toLocaleString(undefined, {month: 'long', year: 'numeric'});
+          li.textContent = monthName;
+          const span = document.createElement('span');
+          span.textContent = '$' + totals[month].toFixed(2);
+          li.appendChild(span);
+          monthlySummary.appendChild(li);
+        });
+      }
+
+      // Prepare chart data
+      function prepareChartData(data) {
+        const dailyTotals = {};
+        for (const {date, price} of data) {
+          if (!date || typeof price !== 'number') continue;
+          dailyTotals[date] = (dailyTotals[date] || 0) + price;
+        }
+        const dates = Object.keys(dailyTotals).sort((a,b) => a.localeCompare(b));
+        const totals = dates.map(d => dailyTotals[d]);
+        return {dates, totals};
+      }
+
+      // Initialize chart
+      function initChart() {
+        const ctx = salesChartCanvas.getContext('2d');
+        salesChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: [],
+            datasets: [{
+              label: 'Daily Sales ($)',
+              data: [],
+              fill: true,
+              backgroundColor: 'rgba(17, 24, 39, 0.1)',
+              borderColor: 'rgba(17,24,39,0.8)',
+              borderWidth: 2,
+              tension: 0.25,
+              pointRadius: 3,
+              pointHoverRadius: 6,
+              hoverBorderWidth: 2,
+              hoverBackgroundColor: 'rgba(17,24,39,0.3)',
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {duration: 300},
+            interaction: {
+              mode: 'nearest',
+              intersect: false,
+            },
+            scales: {
+              x: {
+                type: 'time',
+                time: {
+                  parser: 'yyyy-MM-dd',
+                  unit: 'day',
+                  tooltipFormat: 'PP',
+                  displayFormats: {
+                    day: 'MMM d',
+                    month: 'MMM yyyy'
+                  }
+                },
+                title: {
+                  display: true,
+                  text: 'Date',
+                  color: 'rgba(17,24,39,0.7)',
+                  font: {weight: '600', size: 14}
+                },
+                ticks: {
+                  color: 'rgba(17,24,39,0.7)'
+                },
+                grid: {
+                  color: '#e5e7eb'
+                }
+              },
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Sales ($)',
+                  color: 'rgba(17,24,39,0.7)',
+                  font: {weight: '600', size: 14}
+                },
+                ticks: {
+                  color: 'rgba(17,24,39,0.7)'
+                },
+                grid: {
+                  color: '#e5e7eb'
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                labels: {color: 'rgba(17,24,39,0.8)', font: {weight: '600'}}
+              },
+              tooltip: {
+                mode: 'index',
+                intersect: false,
+                backgroundColor: 'rgba(17,24,39,0.85)',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                cornerRadius: 6,
+                padding: 8,
+              }
+            }
+          }
+        });
+      }
+
+      // Update chart with data
+      function updateChart(data) {
+        if (!salesChart) return;
+        const {dates, totals} = prepareChartData(data);
+        salesChart.data.labels = dates;
+        salesChart.data.datasets[0].data = totals;
+        salesChart.update();
+      }
+
+      // Show/hide UI states
+      function setLoggedIn(user) {
+        currentUser = user;
+        saveSession(user);
+        loginSection.classList.add('hidden');
+        app.classList.remove('hidden');
+        loginBtn.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+        userLabel.classList.remove('hidden');
+        usernameDisplay.textContent = user;
+        salesData = loadSales();
+        updateMonthlySummary(computeMonthlyTotals(salesData));
+        updateChart(salesData);
+        serviceInput.focus();
+      }
+      function setLoggedOut() {
+        currentUser = null;
+        clearSession();
+        salesData = [];
+        loginSection.classList.remove('hidden');
+        app.classList.add('hidden');
+        loginBtn.classList.remove('hidden');
+        logoutBtn.classList.add('hidden');
+        userLabel.classList.add('hidden');
+        usernameDisplay.textContent = '';
+        loginUsernameInput.value = '';
+        loginError.style.display = 'none';
+        loginUsernameInput.focus();
+      }
+
+      // Login form submit handler
+      loginForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const username = loginUsernameInput.value.trim();
+        if (!username) {
+          loginError.textContent = 'Username is required.';
+          loginError.style.display = 'block';
+          loginUsernameInput.focus();
+          return;
+        }
+        loginError.style.display = 'none';
+        setLoggedIn(username);
+      });
+
+      // Logout button click handler
+      logoutBtn.addEventListener('click', () => {
+        setLoggedOut();
+      });
+
+      // Sales form submit
+      salesForm.addEventListener('submit', e => {
+        e.preventDefault();
+        if (!currentUser) return; // Should not happen
+
+        const service = serviceInput.value.trim();
+        const priceRaw = priceInput.value.trim();
+        const date = dateInput.value;
+
+        if (!service) {
+          serviceInput.focus();
+          return;
+        }
+        const price = parseFloat(priceRaw);
+        if (isNaN(price) || price < 0) {
+          priceInput.focus();
+          return;
+        }
+        if (!date) {
+          dateInput.focus();
+          return;
+        }
+
+        salesData.push({ service, price, date });
+        saveSales(salesData);
+        updateMonthlySummary(computeMonthlyTotals(salesData));
+        updateChart(salesData);
+        salesForm.reset();
+        serviceInput.focus();
+      });
+
+      // Initialization
+      initChart();
+      const savedUser = loadSession();
+      if (savedUser) {
+        setLoggedIn(savedUser);
+      } else {
+        setLoggedOut();
+      }
+    })();
+  </script>
 </body>
 </html>
-
 
