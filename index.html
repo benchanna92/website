@@ -13,7 +13,7 @@
       --color-gray-light: #f9fafb;
       --color-gray-medium: #6b7280;
       --color-bg: #ffffff;
-      --radius: 12px;
+      --radius: 0.75rem;
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       --transition: 0.3s ease;
       --footer-bg: #f9fafb;
@@ -53,15 +53,15 @@
     nav {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0.75rem 1rem;
+      padding: 1rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
     .logo {
-      font-weight: 700;
-      font-size: 1.5rem;
+      font-weight: 800;
+      font-size: 48px;
       color: var(--color-primary);
       user-select: none;
       letter-spacing: 0.05em;
@@ -69,49 +69,53 @@
 
     main {
       max-width: 1200px;
-      margin: 2rem auto 0;
-      padding: 0 1rem;
+      margin: 4rem auto 4rem;
+      padding: 0 2rem;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 2rem;
     }
 
     h1 {
-      font-weight: 700;
-      font-size: 2.75rem;
-      margin-bottom: 0.25rem;
+      font-weight: 800;
+      font-size: 48px;
+      margin-bottom: 0.75rem;
       color: var(--color-primary);
       user-select: none;
     }
 
     h2 {
-      font-weight: 600;
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 24px;
+      margin-bottom: 1.25rem;
     }
 
     .text-muted {
       color: var(--color-gray-medium);
+      font-size: 18px;
+      margin-bottom: 1rem;
     }
 
     .tabs {
       display: flex;
-      gap: 1rem;
+      gap: 1.25rem;
       margin-bottom: 1rem;
       user-select: none;
     }
 
     .tab {
-      padding: 0.5rem 1.25rem;
-      font-weight: 600;
-      font-size: 1.1rem;
+      padding: 0.6rem 1.75rem;
+      font-weight: 700;
+      font-size: 18px;
       color: var(--color-gray-medium);
-      border-bottom: 2px solid transparent;
+      border-bottom: 3px solid transparent;
       cursor: pointer;
       transition: color var(--transition), border-color var(--transition);
       background: none;
       border-radius: var(--radius) var(--radius) 0 0;
+      user-select: none;
     }
 
     .tab[aria-selected="true"] {
@@ -124,16 +128,17 @@
       background: var(--color-gray-light);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 1.5rem 1.75rem;
-      margin-bottom: 2rem;
-      max-width: 400px;
+      padding: 1.75rem 2rem;
+      max-width: 480px;
       width: 100%;
+      font-size: 18px;
     }
 
     label {
       display: block;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      color: var(--color-primary);
     }
 
     input[type="text"],
@@ -141,35 +146,39 @@
     input[type="number"],
     input[type="date"] {
       width: 100%;
-      padding: 0.6rem 0.75rem;
-      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      font-size: 18px;
       border: 1.5px solid #d1d5db;
       border-radius: var(--radius);
       transition: border-color var(--transition);
       font-family: 'Inter', system-ui, sans-serif;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      color: var(--color-primary);
+      background-color: #fff;
     }
     input[type="text"]:focus,
     input[type="password"]:focus,
     input[type="number"]:focus,
     input[type="date"]:focus {
       outline: none;
-      border-color: #111827;
-      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.15);
+      background-color: #fff;
     }
 
     button {
       background-color: var(--button-bg-primary);
       color: white;
-      font-weight: 600;
+      font-weight: 700;
       border: none;
-      padding: 0.75rem 1.25rem;
+      padding: 1rem 1.5rem;
       border-radius: var(--radius);
-      font-size: 1rem;
+      font-size: 20px;
       cursor: pointer;
       transition: background-color var(--transition), transform var(--transition);
       user-select: none;
       width: 100%;
+      letter-spacing: 0.02em;
     }
     button:hover,
     button:focus {
@@ -185,7 +194,7 @@
       justify-content: flex-start;
       min-height: 70vh;
       width: 100%;
-      max-width: 420px;
+      max-width: 480px;
     }
 
     .dashboard {
@@ -197,9 +206,9 @@
 
     .summary {
       display: flex;
-      gap: 1.5rem;
+      gap: 2rem;
       flex-wrap: wrap;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       justify-content: center;
     }
 
@@ -207,26 +216,27 @@
       background: var(--color-gray-light);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 1rem 1.25rem;
+      padding: 1.25rem 1.75rem;
       flex: 1;
-      min-width: 150px;
-      max-width: 300px;
+      min-width: 180px;
+      max-width: 320px;
       color: var(--color-primary);
       text-align: center;
       user-select: none;
+      font-size: 20px;
     }
 
     .card h3 {
-      margin: 0 0 0.5rem 0;
-      font-weight: 700;
-      font-size: 1.25rem;
+      margin: 0 0 0.75rem 0;
+      font-weight: 800;
+      font-size: 24px;
     }
 
     .chart-section {
       background: var(--color-gray-light);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 1rem 1.25rem 2rem;
+      padding: 1.25rem 1.75rem 2rem;
       max-width: 800px;
       margin: 0 auto 3rem;
       width: 100%;
@@ -237,23 +247,24 @@
 
     .chart-tabs {
       display: flex;
-      gap: 1.5rem;
-      margin-bottom: 1.25rem;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
       user-select: none;
     }
 
     .chart-tab {
-      padding: 0.45rem 1.5rem;
-      font-weight: 600;
-      font-size: 1.15rem;
+      padding: 0.6rem 1.75rem;
+      font-weight: 700;
+      font-size: 20px;
       color: var(--color-gray-medium);
       border-bottom: 3px solid transparent;
       cursor: pointer;
       transition: color var(--transition), border-color var(--transition);
       background: none;
       border-radius: var(--radius) var(--radius) 0 0;
-      min-width: 90px;
+      min-width: 110px;
       text-align: center;
+      user-select: none;
     }
     .chart-tab[aria-selected="true"] {
       color: var(--color-primary);
@@ -270,16 +281,18 @@
 
     .logout-btn {
       align-self: flex-end;
-      margin-bottom: 1.5rem;
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      padding: 0.6rem 1.25rem;
+      font-size: 18px;
       background-color: var(--button-bg-error);
-      max-width: 120px;
+      max-width: 140px;
       user-select: none;
       border: none;
       border-radius: var(--radius);
       cursor: pointer;
       transition: background-color var(--transition), transform var(--transition);
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
     .logout-btn:hover,
     .logout-btn:focus {
@@ -293,28 +306,32 @@
       background: var(--color-gray-light);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 1rem 1.5rem;
+      padding: 1.25rem 2rem;
       max-width: 800px;
       width: 100%;
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
     }
 
     .sales-list-card h2 {
       margin-top: 0;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       user-select: none;
+      font-weight: 800;
+      font-size: 28px;
+      color: var(--color-primary);
     }
 
     table.sales-list {
       width: 100%;
       border-collapse: collapse;
-      font-size: 1rem;
+      font-size: 18px;
+      user-select: text;
     }
     table.sales-list thead {
       background-color: #e5e7eb;
     }
     table.sales-list th, table.sales-list td {
-      padding: 0.75rem 1rem;
+      padding: 1rem 1.25rem;
       text-align: left;
       border-bottom: 1px solid #d1d5db;
       vertical-align: middle;
@@ -329,13 +346,15 @@
       border: none;
       color: var(--action-color);
       cursor: pointer;
-      padding: 0.2rem 0.4rem;
-      margin-left: 0.4rem;
-      font-weight: 600;
-      font-size: 0.9rem;
+      padding: 0.3rem 0.6rem;
+      margin-left: 0.5rem;
+      font-weight: 700;
+      font-size: 16px;
       border-radius: var(--radius);
       transition: color var(--transition), background-color var(--transition);
       user-select: none;
+      vertical-align: middle;
+      line-height: 1;
     }
     .action-btn:hover,
     .action-btn:focus {
@@ -347,33 +366,34 @@
     /* Inline edit inputs */
     .edit-input {
       width: 100%;
-      font-size: 1rem;
+      font-size: 18px;
       font-family: inherit;
-      padding: 0.2rem 0.3rem;
+      padding: 0.3rem 0.5rem;
       border: 1.5px solid #d1d5db;
       border-radius: var(--radius);
       transition: border-color var(--transition);
     }
     .edit-input:focus {
       outline: none;
-      border-color: #111827;
-      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.15);
     }
 
     /* Edit actions container */
     .edit-actions {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.75rem;
       justify-content: flex-start;
     }
     .save-btn {
       background-color: var(--button-bg-primary);
       color: white;
       border: none;
-      padding: 0.3rem 0.7rem;
+      padding: 0.4rem 0.9rem;
       border-radius: var(--radius);
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 16px;
       transition: background-color var(--transition), transform var(--transition);
     }
     .save-btn:hover,
@@ -386,10 +406,11 @@
       background-color: #9ca3af; /* Gray-400 */
       color: white;
       border: none;
-      padding: 0.3rem 0.7rem;
+      padding: 0.4rem 0.9rem;
       border-radius: var(--radius);
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 16px;
       transition: background-color var(--transition), transform var(--transition);
     }
     .cancel-btn:hover,
@@ -401,7 +422,10 @@
 
     @media (max-width: 600px) {
       h1 {
-        font-size: 2rem;
+        font-size: 32px;
+      }
+      h2 {
+        font-size: 20px;
       }
       .summary {
         flex-direction: column;
@@ -409,19 +433,28 @@
       }
       .card {
         max-width: 100%;
+        font-size: 16px;
       }
       .chart-tab {
         min-width: 75px;
-        font-size: 1rem;
-        padding: 0.45rem 1rem;
+        font-size: 16px;
+        padding: 0.5rem 1rem;
       }
       table.sales-list th, table.sales-list td {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.875rem;
+        padding: 0.6rem 0.9rem;
+        font-size: 14px;
       }
       .action-btn {
-        font-size: 0.8rem;
-        padding: 0.15rem 0.3rem;
+        font-size: 14px;
+        padding: 0.2rem 0.5rem;
+      }
+      button {
+        font-size: 16px;
+        padding: 0.75rem 1rem;
+      }
+      .logout-btn {
+        max-width: 100px;
+        font-size: 16px;
       }
     }
   </style>
@@ -492,7 +525,7 @@
       <h2>Sales List</h2>
       <table class="sales-list" role="grid" aria-describedby="salesListDescription">
         <caption id="salesListDescription" class="text-muted" style="text-align:left; margin-bottom:0.5rem;">
-          List of all your sale transactions with edit and delete options.
+          List of all your sales transactions with edit and delete options.
         </caption>
         <thead>
           <tr>
@@ -1051,9 +1084,8 @@
 })();
 </script>
 <footer aria-label="Website footer">
-  &copy; 2024 v1.0
+  &copy; 2024 Developer Zuu Caster
 </footer>
 </body>
 </html>
-
 
