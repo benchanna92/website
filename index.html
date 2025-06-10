@@ -3,630 +3,651 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Daily Sales Tracker</title>
+  <title>Tracking Sales Monthly</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
     :root {
+      --color-primary: #111827;
+      --color-text: #374151;
+      --color-gray-light: #f9fafb;
+      --color-gray-medium: #6b7280;
       --color-bg: #ffffff;
-      --color-text-primary: #111827;
-      --color-text-secondary: #6b7280;
-      --color-accent: #111827;
-      --color-accent-hover: #333c4a;
-      --color-card-bg: #f9fafb;
-      --font-heading: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      --font-body: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      --radius: 0.75rem;
-      --shadow-light: 0 8px 24px rgba(0,0,0,0.06);
-      --transition-default: 0.3s cubic-bezier(0.4,0,0.2,1);
-      --max-content-width: 1200px;
-      --spacing-lg: 4rem;
-      --spacing-md: 2.5rem;
-      --spacing-sm: 1.5rem;
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --transition: 0.3s ease;
     }
 
-    /* Reset and base */
     *, *::before, *::after {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
-      font-family: var(--font-body);
+      font-family: 'Inter', system-ui, sans-serif;
       background-color: var(--color-bg);
-      color: var(--color-text-primary);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      color: var(--color-text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-    h1, h2 {
-      font-family: var(--font-heading);
-      font-weight: 700;
-      margin: 0;
-      color: var(--color-text-primary);
-      user-select: none;
-    }
-    h1 {
-      font-size: 3.5rem;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-    }
-    h2 {
-      font-size: 2rem;
-      margin-bottom: var(--spacing-sm);
-    }
-    p {
-      color: var(--color-text-secondary);
-      font-size: 1.125rem;
-      margin: 0 0 var(--spacing-md);
-      max-width: 600px;
-      user-select: none;
+
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--color-bg);
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: var(--shadow);
+      z-index: 100;
     }
 
-    /* Layout */
-    .container {
-      max-width: var(--max-content-width);
+    nav {
+      max-width: 1200px;
       margin: 0 auto;
-      padding-left: var(--spacing-sm);
-      padding-right: var(--spacing-sm);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--color-primary);
+      user-select: none;
+      letter-spacing: 0.05em;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2rem auto 4rem;
+      padding: 0 1rem;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-    }
-    main {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-md);
-      padding-bottom: var(--spacing-lg);
-      margin-top: var(--spacing-lg);
+      align-items: center;
     }
 
-    /* Header */
-    header {
-      background: var(--color-bg);
-      border-bottom: 1px solid #e5e7eb;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      padding: var(--spacing-sm) var(--spacing-md);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    h1 {
+      font-weight: 700;
+      font-size: 2.75rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-primary);
+      user-select: none;
     }
-    header h1 {
-      cursor: default;
-      font-weight: 800;
+
+    h2 {
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
     }
-    .header-actions {
+
+    .text-muted {
+      color: var(--color-gray-medium);
+    }
+
+    .tabs {
       display: flex;
-      align-items: center;
       gap: 1rem;
-      font-size: 1rem;
-      color: var(--color-text-secondary);
+      margin-bottom: 1.5rem;
       user-select: none;
     }
-    .header-actions span.username {
-      font-weight: 600;
-      color: var(--color-text-primary);
-    }
-    button {
-      cursor: pointer;
-      font-weight: 600;
-      border-radius: var(--radius);
-      border: none;
-      padding: 0.625rem 1.5rem;
-      background-color: var(--color-accent);
-      color: #fff;
-      transition: background-color var(--transition-default);
-      font-size: 1rem;
-      user-select: none;
-    }
-    button:hover, button:focus {
-      background-color: var(--color-accent-hover);
-      outline: none;
-    }
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
 
-    /* Hero Section */
-    #hero {
-      text-align: center;
-      padding-top: var(--spacing-lg);
-      padding-bottom: var(--spacing-lg);
-      user-select: none;
-    }
-    #hero p {
-      margin-top: 1rem;
-      margin-bottom: 0;
-      font-weight: 500;
-      color: var(--color-text-secondary);
-    }
-
-    /* Card */
-    .card {
-      background-color: var(--color-card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-light);
-      padding: 2.5rem 2rem;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* Forms */
-    form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      align-items: end;
-    }
-    label {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--color-text-primary);
-      display: block;
-      margin-bottom: 0.5rem;
-      user-select: none;
-    }
-    input[type="text"],
-    input[type="number"],
-    input[type="date"],
-    input[type="email"] {
-      width: 100%;
-      padding: 0.6rem 1rem;
-      font-size: 1rem;
-      border: 1.8px solid #d1d5db;
-      border-radius: 0.6rem;
-      transition: border-color var(--transition-default), box-shadow var(--transition-default);
-      font-family: inherit;
-      outline-offset: 1px;
-    }
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    input[type="date"]:focus,
-    input[type="email"]:focus {
-      outline: none;
-      border-color: var(--color-accent);
-      box-shadow: 0 0 8px rgba(17,24,39,0.2);
-    }
-
-    /* Inputs for login form full width */
-    #login-form {
-      grid-template-columns: 1fr;
-    }
-
-    /* Summary list */
-    ul.summary-list {
-      margin: 0;
-      padding-left: 0;
-      list-style: none;
-    }
-    ul.summary-list li {
+    .tab {
+      padding: 0.5rem 1.25rem;
       font-weight: 600;
       font-size: 1.1rem;
-      padding: 0.55rem 0;
+      color: var(--color-gray-medium);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color var(--transition), border-color var(--transition);
+      background: none;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .tab[aria-selected="true"] {
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+      cursor: default;
+    }
+
+    form {
+      background: var(--color-gray-light);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2rem;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"] {
+      width: 100%;
+      padding: 0.6rem 0.75rem;
+      font-size: 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: var(--radius);
+      transition: border-color var(--transition);
+      font-family: 'Inter', system-ui, sans-serif;
+      margin-bottom: 1rem;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus {
+      outline: none;
+      border-color: #111827;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
+    }
+
+    button {
+      background-color: var(--color-primary);
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color var(--transition), transform var(--transition);
+      user-select: none;
+      width: 100%;
+    }
+    button:hover,
+    button:focus {
+      background-color: #374151;
+      transform: scale(1.05);
+      outline: none;
+    }
+
+    .login-register-container {
       display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #e5e7eb;
-      color: var(--color-text-primary);
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 70vh;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .dashboard {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .summary {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    .card {
+      background: var(--color-gray-light);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem 1.25rem;
+      flex: 1;
+      min-width: 150px;
+      max-width: 300px;
+      color: var(--color-primary);
+      text-align: center;
       user-select: none;
     }
-    ul.summary-list li:last-child {
-      border-bottom: none;
+
+    .card h3 {
+      margin: 0 0 0.5rem 0;
+      font-weight: 700;
+      font-size: 1.25rem;
     }
 
-    /* Chart container */
-    #sales-chart {
-      width: 100% !important;
-      height: 360px !important;
-      max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
+    .chart-container {
+      background: var(--color-gray-light);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem 1.25rem;
+      max-width: 800px;
+      margin: 0 auto 3rem;
+    }
+
+    .logout-btn {
+      align-self: flex-end;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      background-color: #ef4444;
+      max-width: 120px;
       user-select: none;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+    .logout-btn:hover,
+    .logout-btn:focus {
+      background-color: #b91c1c;
+      transform: scale(1.05);
+      outline: none;
     }
 
-    /* Hide */
-    .hidden {
-      display: none !important;
-    }
-
-    /* Responsive */
     @media (max-width: 600px) {
       h1 {
-        font-size: 2.8rem;
+        font-size: 2rem;
       }
-      h2 {
-        font-size: 1.65rem;
+      .summary {
+        flex-direction: column;
+        align-items: center;
       }
-      form {
-        grid-template-columns: 1fr !important;
-      }
-      button {
-        width: 100%;
-      }
-      #hero {
-        padding: 3rem 1.5rem;
+      .card {
+        max-width: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <header class="container" role="banner" aria-label="Site header">
-    <h1>Daily Sales Tracker</h1>
-    <div class="header-actions" aria-live="polite" aria-atomic="true">
-      <span id="user-label" class="hidden" aria-hidden="false">Logged in as <strong id="username-display"></strong></span>
-      <button id="login-btn" type="button">Login</button>
-      <button id="logout-btn" type="button" class="hidden">Logout</button>
+<header>
+  <nav>
+    <div class="logo" tabindex="0">Tracking Sales Monthly</div>
+  </nav>
+</header>
+<main>
+  <section class="login-register-container" aria-label="User login and registration section">
+    <h1 id="authTitle">Login</h1>
+    <div role="tablist" aria-label="Authentication tabs" class="tabs">
+      <button role="tab" aria-selected="true" tabindex="0" id="loginTab" class="tab">Login</button>
+      <button role="tab" aria-selected="false" tabindex="-1" id="registerTab" class="tab">Register</button>
     </div>
-  </header>
-
-  <section id="hero" class="container" aria-label="Introduction">
-    <h2>Track Your Daily Sales With Ease</h2>
-    <p>Quickly add your daily sales data and view monthly summaries and charts for better insights.</p>
-  </section>
-
-  <!-- Login modal dialog -->
-  <section id="login-section" class="card container hidden" aria-modal="true" role="dialog" aria-labelledby="login-title" aria-describedby="login-desc">
-    <h2 id="login-title">Login to your account</h2>
-    <p id="login-desc">Enter your username to access your sales data.</p>
-    <form id="login-form" novalidate>
+    <form id="login-form" aria-label="Login form" novalidate>
       <label for="login-username">Username</label>
-      <input id="login-username" name="username" type="text" autocomplete="username" required minlength="1" />
-      <button type="submit">Sign In</button>
-      <p id="login-error" style="color:#dc2626; font-weight:600; margin-top:1rem; display:none;" role="alert" aria-live="assertive"></p>
+      <input type="text" id="login-username" name="username" required autocomplete="username" autofocus />
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" name="password" required autocomplete="current-password" />
+      <button type="submit" aria-label="Log in">Log In</button>
+    </form>
+
+    <form id="register-form" aria-label="Register form" style="display:none" novalidate>
+      <label for="register-username">Username</label>
+      <input type="text" id="register-username" name="username" required autocomplete="username" />
+      <label for="register-password">Password</label>
+      <input type="password" id="register-password" name="password" required autocomplete="new-password" />
+      <label for="register-password-confirm">Confirm Password</label>
+      <input type="password" id="register-password-confirm" name="passwordConfirm" required autocomplete="new-password" />
+      <button type="submit" aria-label="Register account">Register</button>
     </form>
   </section>
 
-  <main id="app" class="container hidden" role="main" aria-label="Sales tracking application">
-    <section class="card" aria-labelledby="form-header">
-      <h2 id="form-header">Add a New Sale</h2>
-      <form id="sales-form" novalidate>
-        <div>
-          <label for="service-input">Service</label>
-          <input id="service-input" name="service" type="text" placeholder="Service description" required autocomplete="off" />
-        </div>
-        <div>
-          <label for="price-input">Price ($)</label>
-          <input id="price-input" name="price" type="number" placeholder="0.00" min="0" step="0.01" required />
-        </div>
-        <div>
-          <label for="date-input">Date</label>
-          <input id="date-input" name="date" type="date" required />
-        </div>
-        <div>
-          <button type="submit">Add Sale</button>
-        </div>
-      </form>
+  <section class="dashboard" aria-label="Sales dashboard">
+    <button class="logout-btn" id="logoutBtn" aria-label="Log out">Logout</button>
+    <h2>Welcome, <span id="userDisplayName"></span>!</h2>
+    <form id="sales-form" aria-label="Add new sale" novalidate>
+      <h2>Add New Sale</h2>
+      <label for="product">Product</label>
+      <input type="text" id="product" name="product" required />
+      <label for="price">Price ($)</label>
+      <input type="number" id="price" name="price" min="0.01" step="0.01" required />
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required />
+      <button type="submit" aria-label="Add sale">Add Sale</button>
+    </form>
+
+    <section class="summary" aria-label="Monthly sales summary">
+      <div class="card">
+        <h3>Total Sales</h3>
+        <p id="totalSales">$0.00</p>
+      </div>
+      <div class="card">
+        <h3>Number of Transactions</h3>
+        <p id="numTransactions">0</p>
+      </div>
+      <div class="card">
+        <h3>Average Sale Price</h3>
+        <p id="avgPrice">$0.00</p>
+      </div>
     </section>
 
-    <section class="card" aria-labelledby="summary-header">
-      <h2 id="summary-header">Monthly Sales Summary</h2>
-      <ul id="monthly-summary" class="summary-list" role="list" aria-live="polite" aria-relevant="additions removals">
-        <!-- monthly totals -->
-      </ul>
+    <section class="chart-container" aria-label="Monthly sales chart">
+      <canvas id="salesChart" width="800" height="400" aria-label="Sales chart"></canvas>
     </section>
+  </section>
+</main>
 
-    <section class="card" aria-labelledby="chart-header">
-      <h2 id="chart-header">Sales Chart</h2>
-      <canvas id="sales-chart" aria-label="Line chart showing sales over time" role="img"></canvas>
-    </section>
-  </main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+<script>
+(() => {
+  const USERS_KEY = 'trackingSales_users';
+  const SALES_DATA_KEY = 'trackingSales_sales';
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    (() => {
-      // Elements
-      const loginSection = document.getElementById('login-section');
-      const loginForm = document.getElementById('login-form');
-      const loginUsernameInput = document.getElementById('login-username');
-      const loginError = document.getElementById('login-error');
+  // Elements
+  const loginRegisterContainer = document.querySelector('.login-register-container');
+  const loginForm = document.getElementById('login-form');
+  const registerForm = document.getElementById('register-form');
+  const loginTab = document.getElementById('loginTab');
+  const registerTab = document.getElementById('registerTab');
+  const authTitle = document.getElementById('authTitle');
 
-      const app = document.getElementById('app');
-      const salesForm = document.getElementById('sales-form');
-      const serviceInput = document.getElementById('service-input');
-      const priceInput = document.getElementById('price-input');
-      const dateInput = document.getElementById('date-input');
-      const monthlySummary = document.getElementById('monthly-summary');
-      const salesChartCanvas = document.getElementById('sales-chart');
+  const dashboard = document.querySelector('.dashboard');
+  const userDisplayName = document.getElementById('userDisplayName');
+  const logoutBtn = document.getElementById('logoutBtn');
 
-      const loginBtn = document.getElementById('login-btn');
-      const logoutBtn = document.getElementById('logout-btn');
-      const userLabel = document.getElementById('user-label');
-      const usernameDisplay = document.getElementById('username-display');
+  const salesForm = document.getElementById('sales-form');
+  const totalSalesEl = document.getElementById('totalSales');
+  const numTransactionsEl = document.getElementById('numTransactions');
+  const avgPriceEl = document.getElementById('avgPrice');
+  const salesChartCtx = document.getElementById('salesChart').getContext('2d');
 
-      // Storage
-      const STORAGE_PREFIX = 'dailySales_';
-      const SESSION_KEY = 'dailySales_currentUser';
+  let currentUser = null;
+  let salesData = [];
+  let chartInstance = null;
 
-      // State
-      let currentUser = null;
-      let salesData = [];
-      let salesChart = null;
+  // User storage functions
+  function loadUsers() {
+    const usersRaw = localStorage.getItem(USERS_KEY);
+    return usersRaw ? JSON.parse(usersRaw) : {};
+  }
+  function saveUsers(users) {
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  }
 
-      // Format date YYYY-MM-DD
-      function formatDate(date) {
-        const d = new Date(date);
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2,'0');
-        const day = String(d.getDate()).padStart(2,'0');
-        return `${y}-${m}-${day}`;
-      }
+  function loadSalesData() {
+    if (!currentUser) return [];
+    const allSalesRaw = localStorage.getItem(SALES_DATA_KEY);
+    if (!allSalesRaw) return [];
+    const allSales = JSON.parse(allSalesRaw);
+    return allSales[currentUser] || [];
+  }
+  function saveSalesData(sales) {
+    if (!currentUser) return;
+    const allSalesRaw = localStorage.getItem(SALES_DATA_KEY);
+    const allSales = allSalesRaw ? JSON.parse(allSalesRaw) : {};
+    allSales[currentUser] = sales;
+    localStorage.setItem(SALES_DATA_KEY, JSON.stringify(allSales));
+  }
 
-      // Per user key
-      function userStorageKey(user) {
-        return STORAGE_PREFIX + user.toLowerCase();
-      }
+  // Tab switching (login/register)
+  function switchToLogin() {
+    loginTab.setAttribute('aria-selected', 'true');
+    loginTab.tabIndex = 0;
+    registerTab.setAttribute('aria-selected', 'false');
+    registerTab.tabIndex = -1;
+    loginForm.style.display = 'block';
+    registerForm.style.display = 'none';
+    authTitle.textContent = 'Login';
+    clearRegisterFormErrors();
+  }
+  function switchToRegister() {
+    loginTab.setAttribute('aria-selected', 'false');
+    loginTab.tabIndex = -1;
+    registerTab.setAttribute('aria-selected', 'true');
+    registerTab.tabIndex = 0;
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+    authTitle.textContent = 'Register';
+    clearLoginFormErrors();
+  }
 
-      // Save user session
-      function saveSession(user) {
-        localStorage.setItem(SESSION_KEY, user);
-      }
-      // Load user session
-      function loadSession() {
-        const user = localStorage.getItem(SESSION_KEY);
-        if (user && user.trim()) return user;
-        return null;
-      }
-      // Clear session
-      function clearSession() {
-        localStorage.removeItem(SESSION_KEY);
-      }
+  loginTab.addEventListener('click', () => {
+    switchToLogin();
+  });
+  registerTab.addEventListener('click', () => {
+    switchToRegister();
+  });
 
-      // Load sales data for current user
-      function loadSales() {
-        if (!currentUser) return [];
-        const raw = localStorage.getItem(userStorageKey(currentUser));
-        if (!raw) return [];
-        try {
-          const parsed = JSON.parse(raw);
-          return Array.isArray(parsed) ? parsed : [];
-        } catch {
-          return [];
-        }
-      }
+  // Keyboard accessible tab switching
+  loginTab.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      registerTab.focus();
+      switchToRegister();
+    }
+  });
+  registerTab.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      loginTab.focus();
+      switchToLogin();
+    }
+  });
 
-      // Save sales data for current user
-      function saveSales(data) {
-        if (!currentUser) return;
-        localStorage.setItem(userStorageKey(currentUser), JSON.stringify(data));
-      }
+  // Login form submit
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    clearLoginFormErrors();
 
-      // Compute monthly totals
-      function computeMonthlyTotals(data) {
-        const totals = {};
-        for (const {date, price} of data) {
-          if (!date || typeof price !== 'number') continue;
-          const month = date.slice(0,7);
-          totals[month] = (totals[month] || 0) + price;
-        }
-        return totals;
-      }
+    const username = loginForm.username.value.trim();
+    const password = loginForm.password.value;
 
-      // Update monthly summary UI
-      function updateMonthlySummary(totals) {
-        monthlySummary.innerHTML = '';
-        const months = Object.keys(totals).sort((a,b) => b.localeCompare(a));
-        if (months.length === 0) {
-          const li = document.createElement('li');
-          li.textContent = 'No sales data available.';
-          monthlySummary.appendChild(li);
-          return;
-        }
-        months.forEach(month => {
-          const li = document.createElement('li');
-          const dateObj = new Date(month + '-01T00:00');
-          const monthName = dateObj.toLocaleString(undefined, {month: 'long', year: 'numeric'});
-          li.textContent = monthName;
-          const span = document.createElement('span');
-          span.textContent = '$' + totals[month].toFixed(2);
-          li.appendChild(span);
-          monthlySummary.appendChild(li);
-        });
-      }
+    if (!username || !password) {
+      alert('Please enter username and password.');
+      return;
+    }
 
-      // Prepare chart data
-      function prepareChartData(data) {
-        const dailyTotals = {};
-        for (const {date, price} of data) {
-          if (!date || typeof price !== 'number') continue;
-          dailyTotals[date] = (dailyTotals[date] || 0) + price;
-        }
-        const dates = Object.keys(dailyTotals).sort((a,b) => a.localeCompare(b));
-        const totals = dates.map(d => dailyTotals[d]);
-        return {dates, totals};
-      }
+    const users = loadUsers();
+    if (!users[username]) {
+      alert('User does not exist. Please register.');
+      return;
+    }
+    if (users[username] !== password) {
+      alert('Incorrect password.');
+      return;
+    }
 
-      // Initialize chart
-      function initChart() {
-        const ctx = salesChartCanvas.getContext('2d');
-        salesChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: [],
-            datasets: [{
-              label: 'Daily Sales ($)',
-              data: [],
-              fill: true,
-              backgroundColor: 'rgba(17, 24, 39, 0.1)',
-              borderColor: 'rgba(17,24,39,0.8)',
-              borderWidth: 2,
-              tension: 0.25,
-              pointRadius: 3,
-              pointHoverRadius: 6,
-              hoverBorderWidth: 2,
-              hoverBackgroundColor: 'rgba(17,24,39,0.3)',
-            }]
+    loginSuccess(username);
+  });
+
+  // Register form submit
+  registerForm.addEventListener('submit', e => {
+    e.preventDefault();
+    clearRegisterFormErrors();
+
+    const username = registerForm.username.value.trim();
+    const password = registerForm.password.value;
+    const passwordConfirm = registerForm.passwordConfirm.value;
+
+    if (!username || !password || !passwordConfirm) {
+      alert('Please fill all fields.');
+      return;
+    }
+    if (password !== passwordConfirm) {
+      alert('Passwords do not match.');
+      return;
+    }
+
+    const users = loadUsers();
+    if (users[username]) {
+      alert('Username already taken. Please choose another.');
+      return;
+    }
+
+    // Register user
+    users[username] = password;
+    saveUsers(users);
+    alert('Registration successful! Please log in.');
+    switchToLogin();
+    loginForm.username.value = username;
+    loginForm.password.value = '';
+    loginForm.username.focus();
+  });
+
+  // Helper clear form errors (here just placeholder for later expandability)
+  function clearLoginFormErrors() {}
+  function clearRegisterFormErrors() {}
+
+  // Login success handler
+  function loginSuccess(username) {
+    currentUser = username;
+    loginRegisterContainer.style.display = 'none';
+    dashboard.style.display = 'flex';
+    userDisplayName.textContent = username;
+    loadAndRenderSales();
+    saveCurrentUser();
+  }
+
+  // Logout handler
+  logoutBtn.addEventListener('click', () => {
+    logout();
+  });
+  function logout() {
+    currentUser = null;
+    salesData = [];
+    loginRegisterContainer.style.display = 'flex';
+    dashboard.style.display = 'none';
+    loginForm.reset();
+    registerForm.reset();
+    switchToLogin();
+    clearLoginFormErrors();
+    clearRegisterFormErrors();
+    saveCurrentUser();
+  }
+
+  // Sales form handling
+  salesForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const product = salesForm.product.value.trim();
+    const price = parseFloat(salesForm.price.value);
+    const date = salesForm.date.value;
+
+    if (!product || isNaN(price) || price <= 0 || !date) {
+      alert('Please enter valid product, price (> 0), and date.');
+      return;
+    }
+
+    const sale = { product, price, date };
+    salesData.push(sale);
+    saveSalesData(salesData);
+    salesForm.reset();
+
+    loadAndRenderSales();
+  });
+
+  // Load sales and update UI/chart
+  function loadAndRenderSales() {
+    salesData = loadSalesData();
+
+    updateSummary(salesData);
+    updateChart(salesData);
+  }
+
+  function updateSummary(sales) {
+    const total = sales.reduce((acc, s) => acc + s.price, 0);
+    const count = sales.length;
+    const avg = count ? total / count : 0;
+
+    totalSalesEl.textContent = `$${total.toFixed(2)}`;
+    numTransactionsEl.textContent = count.toString();
+    avgPriceEl.textContent = `$${avg.toFixed(2)}`;
+  }
+
+  function updateChart(sales) {
+    // Aggregate sales by month (YYYY-MM)
+    const monthlyData = {};
+
+    sales.forEach(({ price, date }) => {
+      const monthKey = date.slice(0, 7); // YYYY-MM
+      monthlyData[monthKey] = (monthlyData[monthKey] || 0) + price;
+    });
+
+    // Sort keys ascending
+    const months = Object.keys(monthlyData).sort();
+    const values = months.map(m => monthlyData[m]);
+
+    // Initialize or update Chart.js instance
+    if (chartInstance) {
+      chartInstance.data.labels = months;
+      chartInstance.data.datasets[0].data = values;
+      chartInstance.update();
+    } else {
+      chartInstance = new Chart(salesChartCtx, {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'Sales ($)',
+            data: values,
+            borderColor: '#111827',
+            backgroundColor: 'rgba(17, 24, 39, 0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+          }],
+        },
+        options: {
+          responsive: true,
+          interaction: {
+            mode: 'nearest',
+            intersect: false,
           },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: {duration: 300},
-            interaction: {
-              mode: 'nearest',
-              intersect: false,
-            },
-            scales: {
-              x: {
-                type: 'time',
-                time: {
-                  parser: 'yyyy-MM-dd',
-                  unit: 'day',
-                  tooltipFormat: 'PP',
-                  displayFormats: {
-                    day: 'MMM d',
-                    month: 'MMM yyyy'
-                  }
-                },
-                title: {
-                  display: true,
-                  text: 'Date',
-                  color: 'rgba(17,24,39,0.7)',
-                  font: {weight: '600', size: 14}
-                },
-                ticks: {
-                  color: 'rgba(17,24,39,0.7)'
-                },
-                grid: {
-                  color: '#e5e7eb'
-                }
+          scales: {
+            x: {
+              ticks: {
+                color: '#374151',
+                maxRotation: 45,
+                minRotation: 45,
               },
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Sales ($)',
-                  color: 'rgba(17,24,39,0.7)',
-                  font: {weight: '600', size: 14}
-                },
-                ticks: {
-                  color: 'rgba(17,24,39,0.7)'
-                },
-                grid: {
-                  color: '#e5e7eb'
-                }
-              }
             },
-            plugins: {
-              legend: {
-                labels: {color: 'rgba(17,24,39,0.8)', font: {weight: '600'}}
+            y: {
+              beginAtZero: true,
+              ticks: {
+                color: '#374151',
               },
-              tooltip: {
-                mode: 'index',
-                intersect: false,
-                backgroundColor: 'rgba(17,24,39,0.85)',
-                titleColor: '#fff',
-                bodyColor: '#fff',
-                cornerRadius: 6,
-                padding: 8,
-              }
-            }
-          }
-        });
-      }
-
-      // Update chart with data
-      function updateChart(data) {
-        if (!salesChart) return;
-        const {dates, totals} = prepareChartData(data);
-        salesChart.data.labels = dates;
-        salesChart.data.datasets[0].data = totals;
-        salesChart.update();
-      }
-
-      // Show/hide UI states
-      function setLoggedIn(user) {
-        currentUser = user;
-        saveSession(user);
-        loginSection.classList.add('hidden');
-        app.classList.remove('hidden');
-        loginBtn.classList.add('hidden');
-        logoutBtn.classList.remove('hidden');
-        userLabel.classList.remove('hidden');
-        usernameDisplay.textContent = user;
-        salesData = loadSales();
-        updateMonthlySummary(computeMonthlyTotals(salesData));
-        updateChart(salesData);
-        serviceInput.focus();
-      }
-      function setLoggedOut() {
-        currentUser = null;
-        clearSession();
-        salesData = [];
-        loginSection.classList.remove('hidden');
-        app.classList.add('hidden');
-        loginBtn.classList.remove('hidden');
-        logoutBtn.classList.add('hidden');
-        userLabel.classList.add('hidden');
-        usernameDisplay.textContent = '';
-        loginUsernameInput.value = '';
-        loginError.style.display = 'none';
-        loginUsernameInput.focus();
-      }
-
-      // Login form submit handler
-      loginForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const username = loginUsernameInput.value.trim();
-        if (!username) {
-          loginError.textContent = 'Username is required.';
-          loginError.style.display = 'block';
-          loginUsernameInput.focus();
-          return;
-        }
-        loginError.style.display = 'none';
-        setLoggedIn(username);
+            },
+          },
+          plugins: {
+            legend: {
+              display: true,
+              labels: {
+                color: '#374151',
+                font: {
+                  weight: '600',
+                  size: 14,
+                },
+              },
+            },
+            tooltip: {
+              enabled: true,
+            },
+          },
+        },
       });
+    }
+  }
 
-      // Logout button click handler
-      logoutBtn.addEventListener('click', () => {
-        setLoggedOut();
-      });
+  // On page load, if user is logged in from previous session (save in sessionStorage)
+  const storedUser = sessionStorage.getItem('trackingSales_currentUser');
+  if (storedUser) {
+    currentUser = storedUser;
+    loginRegisterContainer.style.display = 'none';
+    dashboard.style.display = 'flex';
+    userDisplayName.textContent = currentUser;
+    loadAndRenderSales();
+  } else {
+    switchToLogin();
+    loginRegisterContainer.style.display = 'flex';
+    dashboard.style.display = 'none';
+  }
 
-      // Sales form submit
-      salesForm.addEventListener('submit', e => {
-        e.preventDefault();
-        if (!currentUser) return; // Should not happen
-
-        const service = serviceInput.value.trim();
-        const priceRaw = priceInput.value.trim();
-        const date = dateInput.value;
-
-        if (!service) {
-          serviceInput.focus();
-          return;
-        }
-        const price = parseFloat(priceRaw);
-        if (isNaN(price) || price < 0) {
-          priceInput.focus();
-          return;
-        }
-        if (!date) {
-          dateInput.focus();
-          return;
-        }
-
-        salesData.push({ service, price, date });
-        saveSales(salesData);
-        updateMonthlySummary(computeMonthlyTotals(salesData));
-        updateChart(salesData);
-        salesForm.reset();
-        serviceInput.focus();
-      });
-
-      // Initialization
-      initChart();
-      const savedUser = loadSession();
-      if (savedUser) {
-        setLoggedIn(savedUser);
-      } else {
-        setLoggedOut();
-      }
-    })();
-  </script>
+  // Save current user in sessionStorage for page refresh persistence
+  function saveCurrentUser() {
+    if (currentUser) {
+      sessionStorage.setItem('trackingSales_currentUser', currentUser);
+    } else {
+      sessionStorage.removeItem('trackingSales_currentUser');
+    }
+  }
+})();
+</script>
 </body>
 </html>
 
