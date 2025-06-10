@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ms" >
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rekod Penjualan</title>
+  <title>Monthly Sales Tracking</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
@@ -18,6 +18,12 @@
       --transition: 0.3s ease;
       --footer-bg: #f9fafb;
       --footer-text: #6b7280;
+      --action-color: #6b7280;
+      --action-hover: #111827;
+      --button-bg-error: #ef4444;
+      --button-bg-error-hover: #b91c1c;
+      --button-bg-primary: var(--color-primary);
+      --button-bg-primary-hover: #374151;
     }
 
     *, *::before, *::after {
@@ -153,7 +159,7 @@
     }
 
     button {
-      background-color: var(--color-primary);
+      background-color: var(--button-bg-primary);
       color: white;
       font-weight: 600;
       border: none;
@@ -167,7 +173,7 @@
     }
     button:hover,
     button:focus {
-      background-color: #374151;
+      background-color: var(--button-bg-primary-hover);
       transform: scale(1.05);
       outline: none;
     }
@@ -267,7 +273,7 @@
       margin-bottom: 1.5rem;
       padding: 0.5rem 1rem;
       font-size: 0.9rem;
-      background-color: #ef4444;
+      background-color: var(--button-bg-error);
       max-width: 120px;
       user-select: none;
       border: none;
@@ -277,24 +283,120 @@
     }
     .logout-btn:hover,
     .logout-btn:focus {
-      background-color: #b91c1c;
+      background-color: var(--button-bg-error-hover);
       transform: scale(1.05);
       outline: none;
     }
 
-    footer {
-      background: var(--footer-bg);
-      border-top: 1px solid #e5e7eb;
-      padding: 1rem 0;
-      text-align: center;
-      color: var(--footer-text);
-      font-size: 0.9rem;
-      user-select: none;
+    /* Sales list table styling */
+    .sales-list-card {
+      background: var(--color-gray-light);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem 1.5rem;
+      max-width: 800px;
       width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      border-radius: 0 0 var(--radius) var(--radius);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+      margin-bottom: 2rem;
+    }
+
+    .sales-list-card h2 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+
+    table.sales-list {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+    }
+    table.sales-list thead {
+      background-color: #e5e7eb;
+    }
+    table.sales-list th, table.sales-list td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #d1d5db;
+      vertical-align: middle;
+    }
+    table.sales-list tbody tr:hover {
+      background-color: #f3f4f6;
+    }
+
+    /* Action buttons in table */
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--action-color);
+      cursor: pointer;
+      padding: 0.2rem 0.4rem;
+      margin-left: 0.4rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: var(--radius);
+      transition: color var(--transition), background-color var(--transition);
+      user-select: none;
+    }
+    .action-btn:hover,
+    .action-btn:focus {
+      color: var(--action-hover);
+      background-color: rgba(17, 24, 39, 0.1);
+      outline: none;
+    }
+
+    /* Inline edit inputs */
+    .edit-input {
+      width: 100%;
+      font-size: 1rem;
+      font-family: inherit;
+      padding: 0.2rem 0.3rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: var(--radius);
+      transition: border-color var(--transition);
+    }
+    .edit-input:focus {
+      outline: none;
+      border-color: #111827;
+      box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.15);
+    }
+
+    /* Edit actions container */
+    .edit-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-start;
+    }
+    .save-btn {
+      background-color: var(--button-bg-primary);
+      color: white;
+      border: none;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+    .save-btn:hover,
+    .save-btn:focus {
+      background-color: var(--button-bg-primary-hover);
+      outline: none;
+      transform: scale(1.05);
+    }
+    .cancel-btn {
+      background-color: #9ca3af; /* Gray-400 */
+      color: white;
+      border: none;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+    .cancel-btn:hover,
+    .cancel-btn:focus {
+      background-color: #6b7280; /* Gray-600 */
+      outline: none;
+      transform: scale(1.05);
     }
 
     @media (max-width: 600px) {
@@ -313,80 +415,112 @@
         font-size: 1rem;
         padding: 0.45rem 1rem;
       }
+      table.sales-list th, table.sales-list td {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      .action-btn {
+        font-size: 0.8rem;
+        padding: 0.15rem 0.3rem;
+      }
     }
   </style>
 </head>
 <body>
 <header>
   <nav>
-    <div class="logo" tabindex="0">Rekod Penjualan</div>
+    <div class="logo" tabindex="0">Monthly Sales Tracking</div>
   </nav>
 </header>
 <main>
-  <section class="login-register-container" aria-label="Bahagian log masuk dan pendaftaran pengguna">
-    <h1 id="authTitle">Log Masuk</h1>
-    <div role="tablist" aria-label="Tab pengesahan" class="tabs">
-      <button role="tab" aria-selected="true" tabindex="0" id="loginTab" class="tab">Log Masuk</button>
-      <button role="tab" aria-selected="false" tabindex="-1" id="registerTab" class="tab">Daftar</button>
+  <section class="login-register-container" aria-label="User login and registration section">
+    <h1 id="authTitle">Login</h1>
+    <div role="tablist" aria-label="Authentication tabs" class="tabs">
+      <button role="tab" aria-selected="true" tabindex="0" id="loginTab" class="tab">Login</button>
+      <button role="tab" aria-selected="false" tabindex="-1" id="registerTab" class="tab">Register</button>
     </div>
-    <form id="login-form" aria-label="Borang log masuk" novalidate>
-      <label for="login-username">Nama Pengguna</label>
+    <form id="login-form" aria-label="Login form" novalidate>
+      <label for="login-username">Username</label>
       <input type="text" id="login-username" name="username" required autocomplete="username" autofocus />
-      <label for="login-password">Kata Laluan</label>
+      <label for="login-password">Password</label>
       <input type="password" id="login-password" name="password" required autocomplete="current-password" />
-      <button type="submit" aria-label="Log masuk">Log Masuk</button>
+      <button type="submit" aria-label="Log in">Log In</button>
     </form>
 
-    <form id="register-form" aria-label="Borang pendaftaran" style="display:none" novalidate>
-      <label for="register-username">Nama Pengguna</label>
+    <form id="register-form" aria-label="Register form" style="display:none" novalidate>
+      <label for="register-username">Username</label>
       <input type="text" id="register-username" name="username" required autocomplete="username" />
-      <label for="register-password">Kata Laluan</label>
+      <label for="register-password">Password</label>
       <input type="password" id="register-password" name="password" required autocomplete="new-password" />
-      <label for="register-password-confirm">Sahkan Kata Laluan</label>
+      <label for="register-password-confirm">Confirm Password</label>
       <input type="password" id="register-password-confirm" name="passwordConfirm" required autocomplete="new-password" />
-      <button type="submit" aria-label="Daftar akaun">Daftar</button>
+      <button type="submit" aria-label="Register account">Register</button>
     </form>
   </section>
 
-  <section class="dashboard" aria-label="Papan pemuka jualan">
-    <button class="logout-btn" id="logoutBtn" aria-label="Log keluar">Log Keluar</button>
-    <h2>Selamat Datang, <span id="userDisplayName"></span>!</h2>
-    <form id="sales-form" aria-label="Tambah jualan baru" novalidate>
-      <h2>Tambah Jualan Baru</h2>
-      <label for="product">Produk</label>
+  <section class="dashboard" aria-label="Sales dashboard">
+    <button class="logout-btn" id="logoutBtn" aria-label="Log out">Log Out</button>
+    <h2>Welcome, <span id="userDisplayName"></span>!</h2>
+    <form id="sales-form" aria-label="Add new sale" novalidate>
+      <h2>Add New Sale</h2>
+      <label for="product">Product</label>
       <input type="text" id="product" name="product" required />
-      <label for="price">Harga (RM)</label>
+      <label for="price">Price (RM)</label>
       <input type="number" id="price" name="price" min="0.01" step="0.01" required />
-      <label for="date">Tarikh</label>
+      <label for="date">Date</label>
       <input type="date" id="date" name="date" required />
-      <button type="submit" aria-label="Tambah jualan">Tambah</button>
+      <button type="submit" aria-label="Add sale">Add</button>
     </form>
 
-    <section class="summary" aria-label="Ringkasan jualan bulanan">
+    <section class="summary" aria-label="Monthly sales summary">
       <div class="card">
-        <h3>Jumlah Jualan</h3>
+        <h3>Total Sales</h3>
         <p id="totalSales">RM&nbsp;0.00</p>
       </div>
       <div class="card">
-        <h3>Bilangan Transaksi</h3>
+        <h3>Number of Transactions</h3>
         <p id="numTransactions">0</p>
       </div>
       <div class="card">
-        <h3>Harga Purata Jualan</h3>
+        <h3>Average Sale Price</h3>
         <p id="avgPrice">RM&nbsp;0.00</p>
       </div>
     </section>
 
-    <section class="chart-section" aria-label="Bahagian carta jualan">
-      <div role="tablist" aria-label="Tab jenis carta" class="chart-tabs">
-        <button role="tab" aria-selected="true" tabindex="0" id="dailyTab" class="chart-tab">Harian</button>
-        <button role="tab" aria-selected="false" tabindex="-1" id="monthlyTab" class="chart-tab">Bulanan</button>
-        <button role="tab" aria-selected="false" tabindex="-1" id="yearlyTab" class="chart-tab">Tahunan</button>
+    <!-- Sales List Table for Edit/Delete -->
+    <section class="sales-list-card" aria-label="Sales list">
+      <h2>Sales List</h2>
+      <table class="sales-list" role="grid" aria-describedby="salesListDescription">
+        <caption id="salesListDescription" class="text-muted" style="text-align:left; margin-bottom:0.5rem;">
+          List of all your sale transactions with edit and delete options.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Price (RM)</th>
+            <th scope="col">Date</th>
+            <th scope="col" style="min-width:110px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="salesListBody">
+          <!-- Populated dynamically -->
+        </tbody>
+      </table>
+    </section>
+
+    <section class="chart-section" aria-label="Sales charts section">
+      <div role="tablist" aria-label="Chart type tabs" class="chart-tabs">
+        <button role="tab" aria-selected="true" tabindex="0" id="dailyTab" class="chart-tab">Daily</button>
+        <button role="tab" aria-selected="false" tabindex="-1" id="monthlyTab" class="chart-tab">Monthly</button>
+        <button role="tab" aria-selected="false" tabindex="-1" id="yearlyTab" class="chart-tab">Yearly</button>
       </div>
-      <canvas id="salesChart" aria-label="Carta jualan"></canvas>
+      <canvas id="salesChart" aria-label="Sales chart"></canvas>
     </section>
   </section>
 </main>
+<footer aria-label="Website footer">
+  &copy; 2024 Developer Zuu Caster
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 <script>
@@ -394,7 +528,6 @@
   const USERS_KEY = 'trackingSales_users';
   const SALES_DATA_KEY = 'trackingSales_sales';
 
-  // Elements
   const loginRegisterContainer = document.querySelector('.login-register-container');
   const loginForm = document.getElementById('login-form');
   const registerForm = document.getElementById('register-form');
@@ -417,12 +550,14 @@
   const yearlyTab = document.getElementById('yearlyTab');
   const chartTabs = [dailyTab, monthlyTab, yearlyTab];
 
+  const salesListBody = document.getElementById('salesListBody');
+
   let currentUser = null;
   let salesData = [];
   let chartInstance = null;
-  let currentChartType = 'daily'; // default chart type on login
+  let currentChartType = 'daily';
+  let editingId = null;
 
-  // User storage functions
   function loadUsers() {
     const usersRaw = localStorage.getItem(USERS_KEY);
     return usersRaw ? JSON.parse(usersRaw) : {};
@@ -446,7 +581,10 @@
     localStorage.setItem(SALES_DATA_KEY, JSON.stringify(allSales));
   }
 
-  // Tab switching (login/register)
+  function generateId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+  }
+
   function switchToLogin() {
     loginTab.setAttribute('aria-selected', 'true');
     loginTab.tabIndex = 0;
@@ -454,7 +592,7 @@
     registerTab.tabIndex = -1;
     loginForm.style.display = 'block';
     registerForm.style.display = 'none';
-    authTitle.textContent = 'Log Masuk';
+    authTitle.textContent = 'Login';
     clearRegisterFormErrors();
   }
   function switchToRegister() {
@@ -464,18 +602,13 @@
     registerTab.tabIndex = 0;
     loginForm.style.display = 'none';
     registerForm.style.display = 'block';
-    authTitle.textContent = 'Daftar';
+    authTitle.textContent = 'Register';
     clearLoginFormErrors();
   }
 
-  loginTab.addEventListener('click', () => {
-    switchToLogin();
-  });
-  registerTab.addEventListener('click', () => {
-    switchToRegister();
-  });
+  loginTab.addEventListener('click', () => { switchToLogin(); });
+  registerTab.addEventListener('click', () => { switchToRegister(); });
 
-  // Keyboard accessible tab switching
   loginTab.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
       e.preventDefault();
@@ -491,7 +624,6 @@
     }
   });
 
-  // Login form submit
   loginForm.addEventListener('submit', e => {
     e.preventDefault();
     clearLoginFormErrors();
@@ -500,24 +632,23 @@
     const password = loginForm.password.value;
 
     if (!username || !password) {
-      alert('Sila masukkan nama pengguna dan kata laluan.');
+      alert('Please enter username and password.');
       return;
     }
 
     const users = loadUsers();
     if (!users[username]) {
-      alert('Pengguna tidak wujud. Sila daftar.');
+      alert('User does not exist. Please register.');
       return;
     }
     if (users[username] !== password) {
-      alert('Kata laluan salah.');
+      alert('Incorrect password.');
       return;
     }
 
     loginSuccess(username);
   });
 
-  // Register form submit
   registerForm.addEventListener('submit', e => {
     e.preventDefault();
     clearRegisterFormErrors();
@@ -527,53 +658,48 @@
     const passwordConfirm = registerForm.passwordConfirm.value;
 
     if (!username || !password || !passwordConfirm) {
-      alert('Sila isi semua ruangan.');
+      alert('Please fill all fields.');
       return;
     }
     if (password !== passwordConfirm) {
-      alert('Kata laluan tidak sepadan.');
+      alert('Passwords do not match.');
       return;
     }
 
     const users = loadUsers();
     if (users[username]) {
-      alert('Nama pengguna telah diambil. Sila pilih yang lain.');
+      alert('Username already taken. Please choose another.');
       return;
     }
 
-    // Register user
     users[username] = password;
     saveUsers(users);
-    alert('Pendaftaran berjaya! Sila log masuk.');
+    alert('Registration successful! Please log in.');
     switchToLogin();
     loginForm.username.value = username;
     loginForm.password.value = '';
     loginForm.username.focus();
   });
 
-  // Helper clear form errors (placeholder)
   function clearLoginFormErrors() {}
   function clearRegisterFormErrors() {}
 
-  // Login success handler
   function loginSuccess(username) {
     currentUser = username;
     loginRegisterContainer.style.display = 'none';
     dashboard.style.display = 'flex';
     userDisplayName.textContent = username;
-    currentChartType = 'monthly'; // Papar carta bulanan secara default selepas log masuk
+    currentChartType = 'monthly';
     updateChartTabsSelection();
     loadAndRenderSales();
     saveCurrentUser();
   }
 
-  // Logout handler
-  logoutBtn.addEventListener('click', () => {
-    logout();
-  });
+  logoutBtn.addEventListener('click', () => { logout(); });
   function logout() {
     currentUser = null;
     salesData = [];
+    editingId = null;
     loginRegisterContainer.style.display = 'flex';
     dashboard.style.display = 'none';
     loginForm.reset();
@@ -584,19 +710,22 @@
     saveCurrentUser();
   }
 
-  // Sales form handling
   salesForm.addEventListener('submit', e => {
     e.preventDefault();
+    if(editingId !== null) {
+      alert('Please save or cancel the current edit first.');
+      return;
+    }
     const product = salesForm.product.value.trim();
     const price = parseFloat(salesForm.price.value);
     const date = salesForm.date.value;
 
     if (!product || isNaN(price) || price <= 0 || !date) {
-      alert('Sila masukkan produk, harga (> 0), dan tarikh yang sah.');
+      alert('Please enter valid product, price (> 0), and date.');
       return;
     }
 
-    const sale = { product, price, date };
+    const sale = { id: generateId(), product, price, date };
     salesData.push(sale);
     saveSalesData(salesData);
     salesForm.reset();
@@ -604,30 +733,10 @@
     loadAndRenderSales();
   });
 
-  // Chart tabs handlers
-  dailyTab.addEventListener('click', () => {
-    if (currentChartType !== 'daily') {
-      currentChartType = 'daily';
-      updateChartTabsSelection();
-      updateChart(salesData);
-    }
-  });
-  monthlyTab.addEventListener('click', () => {
-    if (currentChartType !== 'monthly') {
-      currentChartType = 'monthly';
-      updateChartTabsSelection();
-      updateChart(salesData);
-    }
-  });
-  yearlyTab.addEventListener('click', () => {
-    if (currentChartType !== 'yearly') {
-      currentChartType = 'yearly';
-      updateChartTabsSelection();
-      updateChart(salesData);
-    }
-  });
+  dailyTab.addEventListener('click', () => { setChartTab('daily'); });
+  monthlyTab.addEventListener('click', () => { setChartTab('monthly'); });
+  yearlyTab.addEventListener('click', () => { setChartTab('yearly'); });
 
-  // Keyboard navigation for chart tabs
   chartTabs.forEach((tab, i) => {
     tab.addEventListener('keydown', e => {
       if (['ArrowLeft', 'ArrowUp'].includes(e.key)) {
@@ -644,6 +753,13 @@
     });
   });
 
+  function setChartTab(type) {
+    if (currentChartType !== type) {
+      currentChartType = type;
+      updateChartTabsSelection();
+      updateChart(salesData);
+    }
+  }
   function updateChartTabsSelection() {
     chartTabs.forEach(tab => {
       tab.setAttribute('aria-selected', tab.id.startsWith(currentChartType) ? 'true' : 'false');
@@ -651,12 +767,12 @@
     });
   }
 
-  // Load sales and update UI/chart
   function loadAndRenderSales() {
     salesData = loadSalesData();
 
     updateSummary(salesData);
     updateChart(salesData);
+    renderSalesList();
   }
 
   function updateSummary(sales) {
@@ -670,7 +786,6 @@
   }
 
   function groupSalesBy(sales, period) {
-    // period: 'daily', 'monthly', 'yearly'
     const grouped = {};
     sales.forEach(({ price, date }) => {
       let key;
@@ -696,13 +811,13 @@
     if (period === 'daily') {
       labels = keys.map(k => {
         const d = new Date(k + 'T00:00:00');
-        return d.toLocaleDateString('ms-MY', { month: 'short', day: 'numeric' });
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
       });
     } else if (period === 'monthly') {
       labels = keys.map(k => {
         const [year, month] = k.split('-');
         const d = new Date(year, month - 1);
-        return d.toLocaleDateString('ms-MY', { year: 'numeric', month: 'short' });
+        return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
       });
     } else if (period === 'yearly') {
       labels = keys;
@@ -713,7 +828,7 @@
     if (chartInstance) {
       chartInstance.data.labels = labels;
       chartInstance.data.datasets[0].data = values;
-      chartInstance.data.datasets[0].label = `Jualan (${capitalize(period)}) (RM)`;
+      chartInstance.data.datasets[0].label = `Sales (${capitalize(period)}) (RM)`;
       chartInstance.update();
     } else {
       chartInstance = new Chart(salesChartCtx, {
@@ -721,7 +836,7 @@
         data: {
           labels: labels,
           datasets: [{
-            label: `Jualan (${capitalize(period)}) (RM)`,
+            label: `Sales (${capitalize(period)}) (RM)`,
             data: values,
             borderColor: '#111827',
             backgroundColor: 'rgba(17, 24, 39, 0.1)',
@@ -748,7 +863,7 @@
               },
               title: {
                 display: true,
-                text: period === "daily" ? 'Tarikh' : (period === 'monthly' ? 'Bulan' : 'Tahun'),
+                text: period === "daily" ? 'Date' : (period === 'monthly' ? 'Month' : 'Year'),
                 color: '#374151',
                 font: {weight: '600', size: 14}
               }
@@ -763,7 +878,7 @@
               },
               title: {
                 display: true,
-                text: 'Jualan (RM)',
+                text: 'Sales (RM)',
                 color: '#374151',
                 font: {weight: '600', size: 14}
               }
@@ -796,6 +911,121 @@
     return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
+  function renderSalesList() {
+    salesListBody.innerHTML = '';
+    salesData.forEach(sale => {
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-id', sale.id);
+
+      if(editingId === sale.id) {
+        tr.innerHTML = `
+          <td>
+            <input class="edit-input" type="text" value="${escapeHtml(sale.product)}" aria-label="Edit Product" />
+          </td>
+          <td>
+            <input class="edit-input" type="number" step="0.01" min="0.01" value="${sale.price.toFixed(2)}" aria-label="Edit Price (RM)" />
+          </td>
+          <td>
+            <input class="edit-input" type="date" value="${sale.date}" aria-label="Edit Date" />
+          </td>
+          <td class="edit-actions">
+            <button class="save-btn" aria-label="Save changes">Save</button>
+            <button class="cancel-btn" aria-label="Cancel edit">Cancel</button>
+          </td>
+        `;
+        const saveBtn = tr.querySelector('.save-btn');
+        const cancelBtn = tr.querySelector('.cancel-btn');
+        saveBtn.addEventListener('click', () => saveEdit(sale.id, tr));
+        cancelBtn.addEventListener('click', () => cancelEdit());
+      } else {
+        tr.innerHTML = `
+          <td>${escapeHtml(sale.product)}</td>
+          <td>RM&nbsp;${sale.price.toFixed(2)}</td>
+          <td>${sale.date}</td>
+          <td>
+            <button class="action-btn" aria-label="Edit this item" title="Edit">✏️</button>
+            <button class="action-btn" aria-label="Delete this item" title="Delete">🗑️</button>
+          </td>
+        `;
+        const editBtn = tr.querySelector('.action-btn[aria-label="Edit this item"]');
+        const deleteBtn = tr.querySelector('.action-btn[aria-label="Delete this item"]');
+
+        editBtn.addEventListener('click', () => startEdit(sale.id));
+        deleteBtn.addEventListener('click', () => deleteSale(sale.id));
+      }
+      salesListBody.appendChild(tr);
+    });
+  }
+
+  function escapeHtml(text) {
+    return text.replace(/[&<>"']/g, function(m) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+    });
+  }
+
+  function startEdit(id) {
+    if(editingId !== null) {
+      alert('Please save or cancel the current edit first.');
+      return;
+    }
+    editingId = id;
+    renderSalesList();
+    salesForm.querySelectorAll('input, button').forEach(el => el.disabled = true);
+  }
+
+  function cancelEdit() {
+    editingId = null;
+    renderSalesList();
+    salesForm.querySelectorAll('input, button').forEach(el => el.disabled = false);
+  }
+
+  function saveEdit(id, tr) {
+    const inputs = tr.querySelectorAll('input');
+    const newProduct = inputs[0].value.trim();
+    const newPrice = parseFloat(inputs[1].value);
+    const newDate = inputs[2].value;
+
+    if (!newProduct) {
+      alert('Please enter a product name.');
+      return;
+    }
+    if (isNaN(newPrice) || newPrice <= 0) {
+      alert('Please enter a valid price greater than 0.');
+      return;
+    }
+    if (!newDate) {
+      alert('Please enter a valid date.');
+      return;
+    }
+
+    const index = salesData.findIndex(s => s.id === id);
+    if (index !== -1) {
+      salesData[index].product = newProduct;
+      salesData[index].price = newPrice;
+      salesData[index].date = newDate;
+      saveSalesData(salesData);
+      editingId = null;
+      renderSalesList();
+      updateSummary(salesData);
+      updateChart(salesData);
+      salesForm.querySelectorAll('input, button').forEach(el => el.disabled = false);
+    }
+  }
+
+  function deleteSale(id) {
+    if(editingId !== null) {
+      alert('Please save or cancel the current edit first.');
+      return;
+    }
+    if(confirm('Are you sure you want to delete this sale?')) {
+      salesData = salesData.filter(s => s.id !== id);
+      saveSalesData(salesData);
+      renderSalesList();
+      updateSummary(salesData);
+      updateChart(salesData);
+    }
+  }
+
   const storedUser = sessionStorage.getItem('trackingSales_currentUser');
   if (storedUser) {
     currentUser = storedUser;
@@ -820,9 +1050,10 @@
   }
 })();
 </script>
-<footer aria-label="Kaki halaman laman web">
-  &copy; 2024 design Zuu Caster
+<footer aria-label="Website footer">
+  &copy; 2024 v1.0
 </footer>
 </body>
 </html>
+
 
