@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="ms" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tracking Sales Monthly</title>
+  <title>Jualan Bulanan</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
@@ -89,7 +89,7 @@
     .tabs {
       display: flex;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       user-select: none;
     }
 
@@ -213,13 +213,50 @@
       font-size: 1.25rem;
     }
 
-    .chart-container {
+    .chart-section {
       background: var(--color-gray-light);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 1rem 1.25rem;
+      padding: 1rem 1.25rem 2rem;
       max-width: 800px;
       margin: 0 auto 3rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .chart-tabs {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.25rem;
+      user-select: none;
+    }
+
+    .chart-tab {
+      padding: 0.45rem 1.5rem;
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: var(--color-gray-medium);
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: color var(--transition), border-color var(--transition);
+      background: none;
+      border-radius: var(--radius) var(--radius) 0 0;
+      min-width: 90px;
+      text-align: center;
+    }
+    .chart-tab[aria-selected="true"] {
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+      cursor: default;
+    }
+
+    canvas {
+      width: 100% !important;
+      max-width: 800px;
+      height: 400px !important;
+      user-select: none;
     }
 
     .logout-btn {
@@ -253,72 +290,82 @@
       .card {
         max-width: 100%;
       }
+      .chart-tab {
+        min-width: 75px;
+        font-size: 1rem;
+        padding: 0.45rem 1rem;
+      }
     }
   </style>
 </head>
 <body>
 <header>
   <nav>
-    <div class="logo" tabindex="0">Tracking Sales Monthly</div>
+    <div class="logo" tabindex="0">Penjejakan Jualan Bulanan</div>
   </nav>
 </header>
 <main>
-  <section class="login-register-container" aria-label="User login and registration section">
-    <h1 id="authTitle">Login</h1>
-    <div role="tablist" aria-label="Authentication tabs" class="tabs">
-      <button role="tab" aria-selected="true" tabindex="0" id="loginTab" class="tab">Login</button>
-      <button role="tab" aria-selected="false" tabindex="-1" id="registerTab" class="tab">Register</button>
+  <section class="login-register-container" aria-label="Bahagian log masuk dan pendaftaran pengguna">
+    <h1 id="authTitle">Log Masuk</h1>
+    <div role="tablist" aria-label="Tab pengesahan" class="tabs">
+      <button role="tab" aria-selected="true" tabindex="0" id="loginTab" class="tab">Log Masuk</button>
+      <button role="tab" aria-selected="false" tabindex="-1" id="registerTab" class="tab">Daftar</button>
     </div>
-    <form id="login-form" aria-label="Login form" novalidate>
-      <label for="login-username">Username</label>
+    <form id="login-form" aria-label="Borang log masuk" novalidate>
+      <label for="login-username">Nama Pengguna</label>
       <input type="text" id="login-username" name="username" required autocomplete="username" autofocus />
-      <label for="login-password">Password</label>
+      <label for="login-password">Kata Laluan</label>
       <input type="password" id="login-password" name="password" required autocomplete="current-password" />
-      <button type="submit" aria-label="Log in">Log In</button>
+      <button type="submit" aria-label="Log masuk">Log Masuk</button>
     </form>
 
-    <form id="register-form" aria-label="Register form" style="display:none" novalidate>
-      <label for="register-username">Username</label>
+    <form id="register-form" aria-label="Borang pendaftaran" style="display:none" novalidate>
+      <label for="register-username">Nama Pengguna</label>
       <input type="text" id="register-username" name="username" required autocomplete="username" />
-      <label for="register-password">Password</label>
+      <label for="register-password">Kata Laluan</label>
       <input type="password" id="register-password" name="password" required autocomplete="new-password" />
-      <label for="register-password-confirm">Confirm Password</label>
+      <label for="register-password-confirm">Sahkan Kata Laluan</label>
       <input type="password" id="register-password-confirm" name="passwordConfirm" required autocomplete="new-password" />
-      <button type="submit" aria-label="Register account">Register</button>
+      <button type="submit" aria-label="Daftar akaun">Daftar</button>
     </form>
   </section>
 
-  <section class="dashboard" aria-label="Sales dashboard">
-    <button class="logout-btn" id="logoutBtn" aria-label="Log out">Logout</button>
-    <h2>Welcome, <span id="userDisplayName"></span>!</h2>
-    <form id="sales-form" aria-label="Add new sale" novalidate>
-      <h2>Add New Sale</h2>
-      <label for="product">Product</label>
+  <section class="dashboard" aria-label="Papan pemuka jualan">
+    <button class="logout-btn" id="logoutBtn" aria-label="Log keluar">Log Keluar</button>
+    <h2>Selamat Datang, <span id="userDisplayName"></span>!</h2>
+    <form id="sales-form" aria-label="Tambah jualan baru" novalidate>
+      <h2>Tambah Jualan Baru</h2>
+      <label for="product">Produk</label>
       <input type="text" id="product" name="product" required />
-      <label for="price">Price ($)</label>
+      <label for="price">Harga (RM)</label>
       <input type="number" id="price" name="price" min="0.01" step="0.01" required />
-      <label for="date">Date</label>
+      <label for="date">Tarikh</label>
       <input type="date" id="date" name="date" required />
-      <button type="submit" aria-label="Add sale">Add Sale</button>
+      <button type="submit" aria-label="Tambah jualan">Tambah</button>
     </form>
 
-    <section class="summary" aria-label="Monthly sales summary">
+    <section class="summary" aria-label="Ringkasan jualan bulanan">
       <div class="card">
-        <h3>Total Sales</h3>
-        <p id="totalSales">$0.00</p>
+        <h3>Jumlah Jualan</h3>
+        <p id="totalSales">RM&nbsp;0.00</p>
       </div>
       <div class="card">
-        <h3>Number of Transactions</h3>
+        <h3>Bilangan Transaksi</h3>
         <p id="numTransactions">0</p>
       </div>
       <div class="card">
-        <h3>Average Sale Price</h3>
-        <p id="avgPrice">$0.00</p>
+        <h3>Harga Purata Jualan</h3>
+        <p id="avgPrice">RM&nbsp;0.00</p>
       </div>
     </section>
 
-    <section class="chart-container" aria-label="Monthly sales chart">
-      <canvas id="salesChart" width="800" height="400" aria-label="Sales chart"></canvas>
+    <section class="chart-section" aria-label="Bahagian carta jualan">
+      <div role="tablist" aria-label="Tab jenis carta" class="chart-tabs">
+        <button role="tab" aria-selected="true" tabindex="0" id="dailyTab" class="chart-tab">Harian</button>
+        <button role="tab" aria-selected="false" tabindex="-1" id="monthlyTab" class="chart-tab">Bulanan</button>
+        <button role="tab" aria-selected="false" tabindex="-1" id="yearlyTab" class="chart-tab">Tahunan</button>
+      </div>
+      <canvas id="salesChart" aria-label="Carta jualan"></canvas>
     </section>
   </section>
 </main>
@@ -347,9 +394,15 @@
   const avgPriceEl = document.getElementById('avgPrice');
   const salesChartCtx = document.getElementById('salesChart').getContext('2d');
 
+  const dailyTab = document.getElementById('dailyTab');
+  const monthlyTab = document.getElementById('monthlyTab');
+  const yearlyTab = document.getElementById('yearlyTab');
+  const chartTabs = [dailyTab, monthlyTab, yearlyTab];
+
   let currentUser = null;
   let salesData = [];
   let chartInstance = null;
+  let currentChartType = 'daily'; // default chart type on login
 
   // User storage functions
   function loadUsers() {
@@ -383,7 +436,7 @@
     registerTab.tabIndex = -1;
     loginForm.style.display = 'block';
     registerForm.style.display = 'none';
-    authTitle.textContent = 'Login';
+    authTitle.textContent = 'Log Masuk';
     clearRegisterFormErrors();
   }
   function switchToRegister() {
@@ -393,7 +446,7 @@
     registerTab.tabIndex = 0;
     loginForm.style.display = 'none';
     registerForm.style.display = 'block';
-    authTitle.textContent = 'Register';
+    authTitle.textContent = 'Daftar';
     clearLoginFormErrors();
   }
 
@@ -429,17 +482,17 @@
     const password = loginForm.password.value;
 
     if (!username || !password) {
-      alert('Please enter username and password.');
+      alert('Sila masukkan nama pengguna dan kata laluan.');
       return;
     }
 
     const users = loadUsers();
     if (!users[username]) {
-      alert('User does not exist. Please register.');
+      alert('Pengguna tidak wujud. Sila daftar.');
       return;
     }
     if (users[username] !== password) {
-      alert('Incorrect password.');
+      alert('Kata laluan salah.');
       return;
     }
 
@@ -456,31 +509,31 @@
     const passwordConfirm = registerForm.passwordConfirm.value;
 
     if (!username || !password || !passwordConfirm) {
-      alert('Please fill all fields.');
+      alert('Sila isi semua ruangan.');
       return;
     }
     if (password !== passwordConfirm) {
-      alert('Passwords do not match.');
+      alert('Kata laluan tidak sepadan.');
       return;
     }
 
     const users = loadUsers();
     if (users[username]) {
-      alert('Username already taken. Please choose another.');
+      alert('Nama pengguna telah diambil. Sila pilih yang lain.');
       return;
     }
 
     // Register user
     users[username] = password;
     saveUsers(users);
-    alert('Registration successful! Please log in.');
+    alert('Pendaftaran berjaya! Sila log masuk.');
     switchToLogin();
     loginForm.username.value = username;
     loginForm.password.value = '';
     loginForm.username.focus();
   });
 
-  // Helper clear form errors (here just placeholder for later expandability)
+  // Helper clear form errors (placeholder)
   function clearLoginFormErrors() {}
   function clearRegisterFormErrors() {}
 
@@ -490,6 +543,8 @@
     loginRegisterContainer.style.display = 'none';
     dashboard.style.display = 'flex';
     userDisplayName.textContent = username;
+    currentChartType = 'monthly'; // Papar carta bulanan secara default selepas log masuk
+    updateChartTabsSelection();
     loadAndRenderSales();
     saveCurrentUser();
   }
@@ -519,7 +574,7 @@
     const date = salesForm.date.value;
 
     if (!product || isNaN(price) || price <= 0 || !date) {
-      alert('Please enter valid product, price (> 0), and date.');
+      alert('Sila masukkan produk, harga (> 0), dan tarikh yang sah.');
       return;
     }
 
@@ -530,6 +585,53 @@
 
     loadAndRenderSales();
   });
+
+  // Chart tabs handlers
+  dailyTab.addEventListener('click', () => {
+    if (currentChartType !== 'daily') {
+      currentChartType = 'daily';
+      updateChartTabsSelection();
+      updateChart(salesData);
+    }
+  });
+  monthlyTab.addEventListener('click', () => {
+    if (currentChartType !== 'monthly') {
+      currentChartType = 'monthly';
+      updateChartTabsSelection();
+      updateChart(salesData);
+    }
+  });
+  yearlyTab.addEventListener('click', () => {
+    if (currentChartType !== 'yearly') {
+      currentChartType = 'yearly';
+      updateChartTabsSelection();
+      updateChart(salesData);
+    }
+  });
+
+  // Keyboard navigation for chart tabs
+  chartTabs.forEach((tab, i) => {
+    tab.addEventListener('keydown', e => {
+      if (['ArrowLeft', 'ArrowUp'].includes(e.key)) {
+        e.preventDefault();
+        const prevIndex = (i - 1 + chartTabs.length) % chartTabs.length;
+        chartTabs[prevIndex].focus();
+        chartTabs[prevIndex].click();
+      } else if (['ArrowRight', 'ArrowDown'].includes(e.key)) {
+        e.preventDefault();
+        const nextIndex = (i + 1) % chartTabs.length;
+        chartTabs[nextIndex].focus();
+        chartTabs[nextIndex].click();
+      }
+    });
+  });
+
+  function updateChartTabsSelection() {
+    chartTabs.forEach(tab => {
+      tab.setAttribute('aria-selected', tab.id.startsWith(currentChartType) ? 'true' : 'false');
+      tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+    });
+  }
 
   // Load sales and update UI/chart
   function loadAndRenderSales() {
@@ -544,36 +646,64 @@
     const count = sales.length;
     const avg = count ? total / count : 0;
 
-    totalSalesEl.textContent = `$${total.toFixed(2)}`;
+    totalSalesEl.textContent = `RM\u00A0${total.toFixed(2)}`;
     numTransactionsEl.textContent = count.toString();
-    avgPriceEl.textContent = `$${avg.toFixed(2)}`;
+    avgPriceEl.textContent = `RM\u00A0${avg.toFixed(2)}`;
+  }
+
+  function groupSalesBy(sales, period) {
+    // period: 'daily', 'monthly', 'yearly'
+    const grouped = {};
+    sales.forEach(({ price, date }) => {
+      let key;
+      if (period === 'daily') {
+        key = date;
+      } else if (period === 'monthly') {
+        key = date.slice(0,7);
+      } else if (period === 'yearly') {
+        key = date.slice(0,4);
+      }
+      grouped[key] = (grouped[key] || 0) + price;
+    });
+    return grouped;
   }
 
   function updateChart(sales) {
-    // Aggregate sales by month (YYYY-MM)
-    const monthlyData = {};
+    const period = currentChartType;
+    const groupedData = groupSalesBy(sales, period);
 
-    sales.forEach(({ price, date }) => {
-      const monthKey = date.slice(0, 7); // YYYY-MM
-      monthlyData[monthKey] = (monthlyData[monthKey] || 0) + price;
-    });
+    const keys = Object.keys(groupedData).sort();
 
-    // Sort keys ascending
-    const months = Object.keys(monthlyData).sort();
-    const values = months.map(m => monthlyData[m]);
+    let labels = [];
+    if (period === 'daily') {
+      labels = keys.map(k => {
+        const d = new Date(k + 'T00:00:00');
+        return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      });
+    } else if (period === 'monthly') {
+      labels = keys.map(k => {
+        const [year, month] = k.split('-');
+        const d = new Date(year, month - 1);
+        return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short' });
+      });
+    } else if (period === 'yearly') {
+      labels = keys;
+    }
 
-    // Initialize or update Chart.js instance
+    const values = keys.map(k => groupedData[k]);
+
     if (chartInstance) {
-      chartInstance.data.labels = months;
+      chartInstance.data.labels = labels;
       chartInstance.data.datasets[0].data = values;
+      chartInstance.data.datasets[0].label = `Jualan (${capitalize(period)}) (RM)`;
       chartInstance.update();
     } else {
       chartInstance = new Chart(salesChartCtx, {
         type: 'line',
         data: {
-          labels: months,
+          labels: labels,
           datasets: [{
-            label: 'Sales ($)',
+            label: `Jualan (${capitalize(period)}) (RM)`,
             data: values,
             borderColor: '#111827',
             backgroundColor: 'rgba(17, 24, 39, 0.1)',
@@ -595,13 +725,30 @@
                 color: '#374151',
                 maxRotation: 45,
                 minRotation: 45,
+                autoSkip: true,
+                maxTicksLimit: 12,
               },
+              title: {
+                display: true,
+                text: period === "daily" ? 'Tarikh' : (period === 'monthly' ? 'Bulan' : 'Tahun'),
+                color: '#374151',
+                font: {weight: '600', size: 14}
+              }
             },
             y: {
               beginAtZero: true,
               ticks: {
                 color: '#374151',
+                callback: function(value) {
+                  return 'RM ' + value.toFixed(2);
+                }
               },
+              title: {
+                display: true,
+                text: 'Jualan (RM)',
+                color: '#374151',
+                font: {weight: '600', size: 14}
+              }
             },
           },
           plugins: {
@@ -617,6 +764,9 @@
             },
             tooltip: {
               enabled: true,
+              callbacks: {
+                label: context => `RM ${context.parsed.y?.toFixed(2) ?? 0}`,
+              }
             },
           },
         },
@@ -624,13 +774,18 @@
     }
   }
 
-  // On page load, if user is logged in from previous session (save in sessionStorage)
+  function capitalize(s) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
   const storedUser = sessionStorage.getItem('trackingSales_currentUser');
   if (storedUser) {
     currentUser = storedUser;
     loginRegisterContainer.style.display = 'none';
     dashboard.style.display = 'flex';
     userDisplayName.textContent = currentUser;
+    currentChartType = 'monthly';
+    updateChartTabsSelection();
     loadAndRenderSales();
   } else {
     switchToLogin();
@@ -638,7 +793,6 @@
     dashboard.style.display = 'none';
   }
 
-  // Save current user in sessionStorage for page refresh persistence
   function saveCurrentUser() {
     if (currentUser) {
       sessionStorage.setItem('trackingSales_currentUser', currentUser);
@@ -650,4 +804,5 @@
 </script>
 </body>
 </html>
+
 
