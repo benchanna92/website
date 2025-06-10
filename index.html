@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jualan Bulanan</title>
+  <title>Laporan Jualan</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
@@ -16,6 +16,8 @@
       --radius: 12px;
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       --transition: 0.3s ease;
+      --footer-bg: #f9fafb;
+      --footer-text: #6b7280;
     }
 
     *, *::before, *::after {
@@ -30,6 +32,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
     }
 
     header {
@@ -60,7 +63,7 @@
 
     main {
       max-width: 1200px;
-      margin: 2rem auto 4rem;
+      margin: 2rem auto 0;
       padding: 0 1rem;
       flex-grow: 1;
       display: flex;
@@ -279,6 +282,21 @@
       outline: none;
     }
 
+    footer {
+      background: var(--footer-bg);
+      border-top: 1px solid #e5e7eb;
+      padding: 1rem 0;
+      text-align: center;
+      color: var(--footer-text);
+      font-size: 0.9rem;
+      user-select: none;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+
     @media (max-width: 600px) {
       h1 {
         font-size: 2rem;
@@ -369,6 +387,9 @@
     </section>
   </section>
 </main>
+<footer aria-label="Kaki halaman laman web">
+  &copy; 2024 Pembangun Zuu Caster
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
 <script>
@@ -678,13 +699,13 @@
     if (period === 'daily') {
       labels = keys.map(k => {
         const d = new Date(k + 'T00:00:00');
-        return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        return d.toLocaleDateString('ms-MY', { month: 'short', day: 'numeric' });
       });
     } else if (period === 'monthly') {
       labels = keys.map(k => {
         const [year, month] = k.split('-');
         const d = new Date(year, month - 1);
-        return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short' });
+        return d.toLocaleDateString('ms-MY', { year: 'numeric', month: 'short' });
       });
     } else if (period === 'yearly') {
       labels = keys;
@@ -802,7 +823,9 @@
   }
 })();
 </script>
+<footer aria-label="Kaki halaman laman web">
+  &copy; 2024 design developer by Zuu Caster
+</footer>
 </body>
 </html>
-
 
