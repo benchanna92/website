@@ -131,7 +131,6 @@
     font-weight: 700;
     margin-bottom: 6px;
   }
-
 </style>
 </head>
 <body>
@@ -141,16 +140,7 @@
   <div class="company-name" aria-label="Company name">ZUUCASTER GSM</div>
   <h1>Enter Encrypted Code</h1>
   <input id="code-input" type="text" placeholder="Enter encrypted code" aria-label="Encrypted code input" autocomplete="off" />
-  <div id="selector-area">
-    <!-- Dynamic content inserted here -->
-    <select id="model-select" aria-label="Select model" style="display:none; margin-bottom:16px;">
-      <option value="">Select Model</option>
-      <option value="OPPO">OPPO</option>
-      <option value="REALME">REALME</option>
-      <option value="VIVO">VIVO</option>
-      <option value="HONOR">HONOR</option>
-    </select>
-  </div>
+  <div id="selector-area"></div>
   <button id="submit-btn" type="button" aria-label="Submit code">Submit</button>
   <div id="error-msg" class="error" role="alert" aria-live="assertive"></div>
   <div id="price-list" class="price-list" hidden aria-live="polite"></div>
@@ -173,7 +163,6 @@
 
 <script>
   // Matrix Animation
-
   const canvas = document.getElementById('matrix');
   const ctx = canvas.getContext('2d');
 
@@ -294,14 +283,11 @@
     `
   };
 
-  // Elements
   const submitBtn = document.getElementById('submit-btn');
   const codeInput = document.getElementById('code-input');
   const selectorArea = document.getElementById('selector-area');
-  const modelSelect = document.getElementById('model-select');
   const priceListDiv = document.getElementById('price-list');
   const errorMsg = document.getElementById('error-msg');
-
   const serviceRequestForm = document.getElementById('service-request-form');
   const serviceSelect = document.getElementById('service-select');
   const imeiInput = document.getElementById('imei-input');
@@ -346,7 +332,6 @@
 
     if (code === '007') {
       showModelSelection();
-      // show price list on next submit
     } else if (code === '111') {
       serviceRequestForm.hidden = false;
     } else {
@@ -354,7 +339,7 @@
     }
   });
 
-  // Delegate: to handle showing price list after model selection when code=007
+  // Handle model selection submit for code 007
   selectorArea.addEventListener('change', e => {
     if (e.target && e.target.id === 'model-select') {
       priceListDiv.hidden = true;
@@ -363,6 +348,7 @@
     }
   });
 
+  // Handle second submit for displaying price list after selecting model
   submitBtn.addEventListener('click', () => {
     const code = codeInput.value.trim();
 
@@ -388,7 +374,7 @@
     }
   });
 
-  // Service request form handling for code '111'
+  // Handle service request form submission (code 111)
   serviceRequestForm.addEventListener('submit', e => {
     e.preventDefault();
     errorMsg.textContent = '';
@@ -405,8 +391,8 @@
       return;
     }
 
-    const phoneNumber = '60178040403'; // without + sign for WhatsApp link
-    const message = 
+    const phoneNumber = '60178040403'; // without + sign
+    const message =
       `Service Request from ZUUCASTER GSM\n` +
       `Service: ${service}\n` +
       `IC/IMEI Number: ${imei}`;
@@ -414,7 +400,6 @@
     const encodedMessage = encodeURIComponent(message);
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-    // Open WhatsApp link in new tab
     window.open(whatsappURL, '_blank');
   });
 
@@ -424,7 +409,7 @@
       submitBtn.click();
     }
   });
-
 </script>
 </body>
 </html>
+
