@@ -11,15 +11,15 @@
         }
 
         body, html {
-            height: 100%;
+            min-height: 100%;
             background-color: black;
-            overflow: hidden;
             font-family: 'Courier New', Courier, monospace;
             color: #00ff00;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow-y: auto; /* Allow vertical scrolling for long content */
         }
 
         /* Matrix Binary Animation Container */
@@ -35,9 +35,10 @@
         /* Content container */
         .container {
             position: relative;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.8);
             border-radius: 12px;
-            max-width: 600px;
+            max-width: 650px;
+            width: 100%;
             padding: 24px 32px;
             box-shadow: 0 8px 24px rgba(0,255,0,0.3);
         }
@@ -87,12 +88,16 @@
 
         .price-list {
             margin-top: 24px;
-            max-height: 60vh;
-            overflow-y: auto;
+            /* Remove fixed max height, let content expand naturally */
+            /* Users scroll the page if content overflows */
             font-size: 1rem;
             line-height: 1.5;
             border-top: 2px solid #00ff00;
             padding-top: 16px;
+            /* To keep scrollbar if inner scroll wanted - optional
+            max-height: 80vh;
+            overflow-y: auto; 
+            */
         }
 
         ul {
@@ -116,7 +121,8 @@
             font-weight: 700;
         }
 
-        /* Scrollbar styles for price list */
+        /* Scrollbar styles for price list - optional if using inner scroll */
+        /*
         .price-list::-webkit-scrollbar {
             width: 8px;
         }
@@ -124,6 +130,7 @@
             background: #004400;
             border-radius: 4px;
         }
+        */
 
     </style>
 </head>
@@ -258,10 +265,12 @@
                 <li>VIVO V23 - RM200</li>
                 <li>VIVO V40 LITE - RM350</li>
             </ul>
+            <p><strong>Note:</strong> HONOR and VIVO process need 1-14 days depending on available CPU to replace. No refund after processing. No cancelling after service in progress.</p>
         `,
         HONOR: `
             <h2>Price List for HONOR</h2>
-            <p>HONOR models are currently not available.</p>
+            <p><strong>Note:</strong> HONOR and VIVO process need 1-14 days depending on available CPU to replace. No refund after processing. No cancelling after service in progress.</p>
+            <p>Prices will be updated soon.</p>
         `
     };
 
@@ -282,11 +291,11 @@
             priceListDiv.hidden = false;
         } else {
             priceListDiv.hidden = true;
-            errorMsg.textContent = 'Invalid code or model. Please try again.';
+            errorMsg.textContent = 'Invalid code or model selection. Please try again.';
         }
     });
 
-    // Also allow pressing Enter key to submit
+    // Allow pressing Enter to submit
     codeInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             submitBtn.click();
@@ -296,3 +305,4 @@
 </script>
 </body>
 </html>
+
