@@ -226,7 +226,7 @@
     let columns;
     let drops = [];
 
-    const characters = '01'; // simple binary to keep matrix effect subtle and match theme
+    const characters = '01';
 
     function resize() {
       width = window.innerWidth;
@@ -245,11 +245,10 @@
     ctx.font = fontSize + 'px monospace';
 
     function draw() {
-      // translucent black background to create fading trail effect
       ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, width, height);
 
-      ctx.fillStyle = '#00ff00'; // bright green text
+      ctx.fillStyle = '#00ff00';
       ctx.textBaseline = 'top';
 
       for (let i = 0; i < drops.length; i++) {
@@ -343,6 +342,17 @@
       }
     };
 
+    const toolRentals = {
+      "PANDORA TOOL 10DAYS": "RM100",
+      "UNLOCKTOOL 1DAYS": "RM15",
+      "RTC TOOL 1DAYS": "RM15",
+      "GRIFFIN 1DAYS": "RM20",
+      "DFT TOOL 1DAYS": "RM25",
+      "SIGMA TOOL 1MONTH": "RM65",
+      "TSM TOOL 1DAYS": "RM10",
+      "AMT TOOL 1DAYS": "RM10"
+    };
+
     const termsText = `Terms & Conditions:
 - HONOR and VIVO process need 1-14 days depending on available CPU to replace
 - No refund after processing
@@ -353,7 +363,6 @@
     const resultArea = document.getElementById('resultArea');
 
     function sanitizeInput(text) {
-      // Only numeric codes: split by space or comma, filter valid number codes
       return text
         .toUpperCase()
         .split(/[\s,]+/)
@@ -371,6 +380,15 @@
       return html;
     }
 
+    function createToolRentalsHTML() {
+      let html = '<h4>Tool Rental Price List:</h4><ul>';
+      for (const [tool, price] of Object.entries(toolRentals)) {
+        html += `<li>${tool} - ${price}</li>`;
+      }
+      html += '</ul>';
+      return html;
+    }
+
     function renderResults(codes) {
       let html = '';
       let foundAny = false;
@@ -380,9 +398,7 @@
           foundAny = true;
           html += `<article class="service-card">`;
           html += `<div class="service-code">Code ${code}: ${services[code]}</div>`;
-
           if (code === '04') {
-            // Show model selection dropdown
             html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Model:</div>`;
             html += `<select id="modelSelect" aria-label="Select mobile model" onchange="showPrices()">`;
             html += `<option value="">-- Select Model --</option>`;
@@ -393,6 +409,16 @@
             html += `</select>`;
             html += `<div id="priceList" style="margin-top: 12px;"></div>`;
             html += `<div class="terms" style="margin-top: 20px;">${termsText}</div>`;
+          } else if (code === '07') {
+            // Show tool rentals options
+            html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Rental Tool:</div>`;
+            html += `<select id="toolRentSelect" aria-label="Select tool rental option" onchange="showToolRents()">`;
+            html += `<option value="">-- Select Tool --</option>`;
+            for (const toolName in toolRentals) {
+              html += `<option value="${toolName}">${toolName} - ${toolRentals[toolName]}</option>`;
+            }
+            html += `</select>`;
+            html += `<div id="toolRentPrice" style="margin-top: 12px; font-size: 1.2rem; font-weight: 600; color: #7fff7f;"></div>`;
           }
           html += `</article>`;
         }
@@ -412,7 +438,6 @@
       if (!modelSelect || !priceList) return;
       const selectedModel = modelSelect.value;
       if (selectedModel) {
-        // For HONOR, no prices given, we show a message
         if (selectedModel === 'HONOR') {
           priceList.innerHTML = `<p>No pricelist available for HONOR. Please contact support for details.</p>`;
         } else {
@@ -420,6 +445,18 @@
         }
       } else {
         priceList.innerHTML = '';
+      }
+    };
+
+    window.showToolRents = function() {
+      const toolSelect = document.getElementById('toolRentSelect');
+      const rentPriceDiv = document.getElementById('toolRentPrice');
+      if (!toolSelect || !rentPriceDiv) return;
+      const selectedTool = toolSelect.value;
+      if (selectedTool) {
+        rentPriceDiv.textContent = `Price: ${toolRentals[selectedTool]}`;
+      } else {
+        rentPriceDiv.textContent = '';
       }
     };
 
