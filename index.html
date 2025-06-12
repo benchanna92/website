@@ -353,10 +353,16 @@
       "AMT TOOL 1DAYS": "RM10"
     };
 
-    const termsText = `Terms & Conditions:
+    const termsTextTelco = `Terms & Conditions:
 - HONOR and VIVO process need 1-14 days depending on available CPU to replace
 - No refund after processing
 - No cancellation once service is in progress`;
+
+    const termsTextGoogle = `TERM & CONDITION:
+-WE NOT UNLOCK ANY LOST PHONE
+-AFTER PROCESSING NO REFUNDABLE`;
+
+    const phoneWhatsApp = '60178040403';
 
     const form = document.getElementById('accessForm');
     const input = document.getElementById('accessCodes');
@@ -380,7 +386,6 @@
       return html;
     }
 
-    // Generate simple order number YYYYMMDD-HHMMSS-rand4digits
     function generateOrderNumber() {
       const now = new Date();
       const pad = (n) => n.toString().padStart(2, '0');
@@ -403,8 +408,9 @@
           foundAny = true;
           html += `<article class="service-card">`;
           html += `<div class="service-code">Code ${code}: ${services[code]}</div>`;
+
           if (code === '04') {
-            html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Model:</div>`;
+            html += `<div class="service-description" style="margin-top:8px; margin-bottom:6px;">Select Model:</div>`;
             html += `<select id="modelSelect" aria-label="Select mobile model" onchange="showPrices()">`;
             html += `<option value="">-- Select Model --</option>`;
             html += `<option value="OPPO">OPPO</option>`;
@@ -412,8 +418,8 @@
             html += `<option value="REALME">REALME</option>`;
             html += `<option value="VIVO">VIVO</option>`;
             html += `</select>`;
-            html += `<div id="priceList" style="margin-top: 12px;"></div>`;
-            html += `<div class="terms" style="margin-top: 20px;">${termsText}</div>`;
+            html += `<div id="priceList" style="margin-top:12px;"></div>`;
+            html += `<div class="terms" style="margin-top:20px;">${termsTextTelco}</div>`;
           } else if (code === '07') {
             html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Rental Tool:</div>`;
             html += `<select id="toolRentSelect" aria-label="Select tool rental option" onchange="handleToolRentalSelection()">`;
@@ -424,7 +430,41 @@
             html += `</select>`;
             html += `<div id="toolRentPrice" style="margin-top: 12px; font-size: 1.2rem; font-weight: 600; color: #7fff7f;"></div>`;
             html += `<div id="orderLink" style="margin-top: 12px;"></div>`;
+          } else if(code === '02') {
+            html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Model:</div>`;
+            html += `<select id="googleModelSelect" aria-label="Select model" onchange="checkGoogleForm()">`;
+            html += `<option value="">-- Select Model --</option>`;
+            html += `<option value="OPPO">OPPO</option>`;
+            html += `<option value="REALME">REALME</option>`;
+            html += `<option value="SAMSUNG">SAMSUNG</option>`;
+            html += `<option value="REDMI">REDMI</option>`;
+            html += `<option value="XIAOMI">XIAOMI</option>`;
+            html += `<option value="HONOR">HONOR</option>`;
+            html += `<option value="PIXEL">PIXEL</option>`;
+            html += `<option value="ONEPLUS">ONEPLUS</option>`;
+            html += `<option value="VIVO">VIVO</option>`;
+            html += `</select>`;
+
+            html += `<label for="codeModel" style="margin-top:12px;">Code Model (Example: RMX2122 CPH3212)</label>`;
+            html += `<input type="text" id="codeModel" placeholder="Enter Code Model" aria-label="Enter Code Model" />`;
+
+            html += `<div class="service-description" style="margin-top: 12px; margin-bottom: 6px;">Select Method:</div>`;
+            html += `<select id="googleMethodSelect" aria-label="Select method" onchange="checkGoogleForm()">`;
+            html += `<option value="">-- Select Method --</option>`;
+            html += `<option value="REMOTE">REMOTE</option>`;
+            html += `<option value="WALKIN">WALK-IN</option>`;
+            html += `<option value="POSTAGE">POSTAGE</option>`;
+            html += `</select>`;
+
+            html += `<div class="terms" style="margin-top: 20px;">${termsTextGoogle}</div>`;
+
+            html += `<div id="googleOrderPrice" style="margin-top: 12px; font-size: 1.2rem; font-weight: 600; color: #7fff7f;"></div>`;
+            html += `<div id="googleOrderLink" style="margin-top: 12px;"></div>`;
+          } else {
+            // For other codes show just the description
+            html += `<div class="service-description" style="margin-top:8px;">${services[code]}</div>`;
           }
+
           html += `</article>`;
         }
       });
@@ -446,7 +486,7 @@
         if (selectedModel === 'HONOR') {
           priceList.innerHTML = `<p>No pricelist available for HONOR. Please contact support for details.</p>`;
         } else {
-          priceList.innerHTML = createPriceListHTML(selectedModel);
+          priceList.innerHTML = ''; // No price list for telco models here per previous code
         }
       } else {
         priceList.innerHTML = '';
@@ -465,20 +505,56 @@
         // Generate unique order number
         const orderNumber = generateOrderNumber();
 
-        // Prepare WhatsApp message with order details including CR LF (%0A)
         const messageText = `Order Number: ${orderNumber}\nSelected Tool: ${selectedTool}\nPrice: ${price}`;
         const encodedMessage = encodeURIComponent(messageText);
 
-        // WhatsApp API link (without plus sign, no spaces)
-        const phoneNumber = '60178040403';
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        const whatsappURL = `https://wa.me/${phoneWhatsApp}?text=${encodedMessage}`;
 
-        // Create link
         orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
       } else {
         rentPriceDiv.textContent = '';
         orderLinkDiv.innerHTML = '';
       }
+    };
+
+    window.checkGoogleForm = function () {
+      const modelSelect = document.getElementById('googleModelSelect');
+      const codeInput = document.getElementById('codeModel');
+      const methodSelect = document.getElementById('googleMethodSelect');
+      const orderPriceDiv = document.getElementById('googleOrderPrice');
+      const orderLinkDiv = document.getElementById('googleOrderLink');
+      if (!modelSelect || !codeInput || !methodSelect || !orderPriceDiv || !orderLinkDiv) return;
+
+      const selectedModel = modelSelect.value;
+      const codeModel = codeInput.value.trim();
+      const selectedMethod = methodSelect.value;
+
+      // Clear outputs if inputs incomplete
+      if (!selectedModel || !codeModel || !selectedMethod) {
+        orderPriceDiv.textContent = '';
+        orderLinkDiv.innerHTML = '';
+        return;
+      }
+
+      // Price logic not specified for Google unlock, just show confirmation
+      orderPriceDiv.textContent = `Model: ${selectedModel} | Code Model: ${codeModel} | Method: ${selectedMethod}`;
+
+      // Generate order number
+      const orderNumber = generateOrderNumber();
+
+      // Message for whatsapp
+      const messageText = 
+        `Order Number: ${orderNumber}\n` +
+        `Unlock Google Service\n` +
+        `Model: ${selectedModel}\n` +
+        `Code Model: ${codeModel}\n` +
+        `Method: ${selectedMethod}`;
+
+      const encodedMessage = encodeURIComponent(messageText);
+
+      const whatsappURL = `https://wa.me/${phoneWhatsApp}?text=${encodedMessage}`;
+
+      orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
     };
 
     form.addEventListener('submit', e => {
