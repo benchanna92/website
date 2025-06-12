@@ -336,7 +336,7 @@
         <h2>Samsung IMEI Unlock Request</h2>
         <form id="imeiForm" aria-label="Samsung IMEI unlock form">
           <label for="imeiInput">IMEI Number:</label>
-          <input type="text" id="imeiInput" name="imei" placeholder="Enter IMEI" maxlength="20" required pattern="\d+" inputmode="numeric" autocomplete="off">
+          <input type="text" id="imeiInput" name="imei" placeholder="Enter IMEI" maxlength="20" required pattern="\\d+" inputmode="numeric" autocomplete="off">
 
           <label for="modelInput">Model:</label>
           <input type="text" id="modelInput" name="model" placeholder="Enter Model" required autocomplete="off">
@@ -585,10 +585,13 @@
       }
 
       // Format WhatsApp link with encoded message
-      const phoneNumber = '+60178040403';
-      const message = 
-        `Samsung IMEI Unlock Request:%0AIMEI: ${imei}%0AModel: ${model}%0AKG/TELCO UNIT: ${kgTelco}`;
-      const whatsappURL = `https://wa.me/${phoneNumber.replace(/\D/g,'')}?text=${encodeURIComponent(message)}`;
+      const phoneNumber = '60178040403'; // no '+'
+      const message = `Samsung IMEI Unlock Request:
+IMEI: ${imei}
+Model: ${model}
+KG/TELCO UNIT: ${kgTelco}`;
+
+      const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
       // Open WhatsApp link in new tab
       window.open(whatsappURL, '_blank');
@@ -603,4 +606,3 @@
 </script>
 </body>
 </html>
-
