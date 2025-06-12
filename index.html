@@ -132,18 +132,70 @@
             width: 80%;
             max-width: 600px;
             color: #00ff00;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .close {
+            align-self: flex-end;
             color: #aaa;
-            float: right;
             font-size: 28px;
             font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
         }
         .close:hover,
         .close:focus {
             color: #fff;
             text-decoration: none;
+        }
+        button.brand-btn {
+            margin: 5px;
+            padding: 10px 16px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            font-weight: 700;
+            border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        button.brand-btn:hover {
+            background: #00ff00;
+            color: #000;
+        }
+        #devicePrices, #termsConditions {
+            margin-top: 20px;
+            width: 100%;
+            overflow-wrap: break-word;
+        }
+
+        #icModal input[type="text"] {
+            padding: 12px;
+            font-size: 1.2rem;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            width: 100%;
+            color: #00ff00;
+            background-color: #001a00;
+            outline-offset: 4px;
+            margin-bottom: 16px;
+        }
+        #icModal button#submitICBtn {
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: #004400;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+        #icModal button#submitICBtn:hover {
+            background: #00ff00;
+            color: #000;
+            outline: none;
         }
 
         /* Responsive */
@@ -159,6 +211,9 @@
                 width: 100%;
                 min-width: auto;
                 text-align: center;
+            }
+            .modal-content {
+                width: 90%;
             }
         }
     </style>
@@ -183,16 +238,28 @@
 </div>
 
 <!-- Modal for Device Selection -->
-<div id="deviceModal" class="modal">
+<div id="deviceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="deviceModalTitle">
     <div class="modal-content">
-        <span class="close" id="closeDeviceModal">&times;</span>
-        <h2>Select Device Brand</h2>
-        <button onclick="showDevicePrices('REALME')">REALME</button>
-        <button onclick="showDevicePrices('VIVO')">VIVO</button>
-        <button onclick="showDevicePrices('OPPO')">OPPO</button>
-        <button onclick="showDevicePrices('HONOR')">HONOR</button>
-        <div id="devicePrices" style="margin-top: 20px;"></div>
-        <div id="termsConditions" style="margin-top: 20px;"></div>
+        <span class="close" id="closeDeviceModal" role="button" aria-label="Close device selection">&times;</span>
+        <h2 id="deviceModalTitle">Select Device Brand</h2>
+        <div>
+            <button class="brand-btn" onclick="showDevicePrices('REALME')">REALME</button>
+            <button class="brand-btn" onclick="showDevicePrices('VIVO')">VIVO</button>
+            <button class="brand-btn" onclick="showDevicePrices('OPPO')">OPPO</button>
+            <button class="brand-btn" onclick="showDevicePrices('HONOR')">HONOR</button>
+        </div>
+        <div id="devicePrices"></div>
+        <div id="termsConditions"></div>
+    </div>
+</div>
+
+<!-- Modal for IC Number Input -->
+<div id="icModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="icModalTitle">
+    <div class="modal-content">
+        <span class="close" id="closeICModal" role="button" aria-label="Close IC input">&times;</span>
+        <h2 id="icModalTitle">Enter IC Number</h2>
+        <input type="text" id="icNumberInput" placeholder="Enter your IC number" aria-required="true" />
+        <button id="submitICBtn" aria-label="Submit IC number">Submit</button>
     </div>
 </div>
 
@@ -290,6 +357,9 @@
                 if (code === "111") {
                     openDeviceModal();
                 }
+                else if(code === "02") {
+                    openICModal();
+                }
             } else {
                 resultLines.push(`${code}: Invalid access code`);
             }
@@ -298,35 +368,65 @@
         output.focus();
     });
 
-    // Open device selection modal
-    function openDeviceModal() {
-        document.getElementById('deviceModal').style.display = "block";
+    // Modal controls
+    const deviceModal = document.getElementById('deviceModal');
+    const icModal = document.getElementById('icModal');
+    document.getElementById('closeDeviceModal').onclick = () => deviceModal.style.display = 'none';
+    document.getElementById('closeICModal').onclick = () => icModal.style.display = 'none';
+    
+    window.onclick = function(event) {
+        if (event.target === deviceModal) deviceModal.style.display = 'none';
+        if (event.target === icModal) icModal.style.display = 'none';
     }
 
-    // Show device prices based on selection
+    // Show device prices
     function showDevicePrices(brand) {
-        const prices = devicePrices[brand].join('<br>');
-        document.getElementById('devicePrices').innerHTML = prices;
-        const terms = `
-            <strong>Terms & Conditions:</strong><br>
-            - HONOR and VIVO process need 1-14 days depending on available CPU to replace.<br>
-            - No refund after processing.<br>
-            - No cancellation after service in progress.
+        const pricesHtml = devicePrices[brand].map(item => `<div>${item}</div>`).join('');
+        document.getElementById('devicePrices').innerHTML = pricesHtml;
+        const termsHtml = `
+            <p><strong>Terms & Conditions:</strong></p>
+            <ul style="text-align:left;">
+              <li>HONOR and VIVO process need 1-14 days depending on available CPU to replace.</li>
+              <li>No refund after processing.</li>
+              <li>No cancellation after service in progress.</li>
+            </ul>
         `;
-        document.getElementById('termsConditions').innerHTML = terms;
+        document.getElementById('termsConditions').innerHTML = termsHtml;
     }
 
-    // Close modals
-    document.getElementById('closeDeviceModal').onclick = function() {
-        document.getElementById('deviceModal').style.display = "none";
+    // Open modals
+    function openDeviceModal() {
+        deviceModal.style.display = 'block';
+        // Clear prices and terms initially
+        document.getElementById('devicePrices').innerHTML = '';
+        document.getElementById('termsConditions').innerHTML = '';
+    }
+    function openICModal() {
+        icModal.style.display = 'block';
+        document.getElementById('icNumberInput').value = '';
+        document.getElementById('icNumberInput').focus();
     }
 
-    // Matrix code rain animation on canvas
+    // Submit IC Number button
+    document.getElementById('submitICBtn').addEventListener('click', () => {
+        const icNumber = document.getElementById('icNumberInput').value.trim();
+        if (!icNumber) {
+            alert('Please enter your IC number.');
+            document.getElementById('icNumberInput').focus();
+            return;
+        }
+        // Encode to URI component for WhatsApp
+        const message = encodeURIComponent(`IC Number for blacklist case: ${icNumber}`);
+        const whatsappUrl = `https://wa.me/60178040403?text=${message}`;
+        window.open(whatsappUrl, '_blank');
+        icModal.style.display = 'none';
+    });
+
+    // Matrix animation script
     (function matrixAnimation(){
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
 
-        // Set canvas full screen
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -334,25 +434,20 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Characters used for matrix effect
         const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*+-=<>'.split('');
         const fontSize = 16;
         const columns = Math.floor(canvas.width / fontSize);
-
-        // Array of y-coordinates for each column
         const drops = [];
 
-        // Initialize drops (start y=0 for each column)
         for (let i = 0; i < columns; i++) {
-            drops[i] = Math.random() * -1000; // start dispersed upward to avoid clumping
+            drops[i] = Math.random() * -1000;
         }
 
         function draw() {
-            // translucent black background to create fading effect
             ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.fillStyle = '#00ff00'; // green for matrix text
+            ctx.fillStyle = '#00ff00';
             ctx.font = fontSize + 'px Courier New';
 
             for (let i = 0; i < drops.length; i++) {
@@ -360,12 +455,10 @@
                 const x = i * fontSize;
                 const y = drops[i] * fontSize;
 
-                // Glow effect for the leading character
                 ctx.shadowColor = '#00ff00';
                 ctx.shadowBlur = 8;
                 ctx.fillText(text, x, y);
 
-                // Reset drop back to top randomly after it passes screen bottom
                 if (y > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 } else {
