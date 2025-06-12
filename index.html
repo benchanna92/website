@@ -94,7 +94,7 @@
     box-shadow: 0 0 8px #7fff7f;
   }
 
-  button {
+  button, .order-button {
     width: 100%;
     background: linear-gradient(135deg, #44ff44, #00cc00);
     border: none;
@@ -106,17 +106,19 @@
     cursor: pointer;
     box-shadow: 0 0 8px #44ff44;
     transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    margin-top: 8px;
   }
 
   button:hover,
-  button:focus {
+  button:focus, .order-button:hover,
+  .order-button:focus {
     background: linear-gradient(135deg, #7fff7f, #00ff00);
     box-shadow: 0 0 12px #7fff7f;
     transform: scale(1.03);
     outline: none;
   }
 
-  button:active {
+  button:active, .order-button:active {
     transform: scale(0.98);
   }
 
@@ -182,7 +184,6 @@
       padding: 20px;
     }
   }
-
 </style>
 </head>
 <body>
@@ -446,7 +447,7 @@
             html += `</select>`;
 
             html += `<label for="codeModel" style="margin-top:12px;">Code Model (Example: RMX2122 CPH3212)</label>`;
-            html += `<input type="text" id="codeModel" placeholder="Enter Code Model" aria-label="Enter Code Model" />`;
+            html += `<input type="text" id="codeModel" placeholder="Enter Code Model" aria-label="Enter Code Model" oninput="checkGoogleForm()" />`;
 
             html += `<div class="service-description" style="margin-top: 12px; margin-bottom: 6px;">Select Method:</div>`;
             html += `<select id="googleMethodSelect" aria-label="Select method" onchange="checkGoogleForm()">`;
@@ -459,9 +460,9 @@
             html += `<div class="terms" style="margin-top: 20px;">${termsTextGoogle}</div>`;
 
             html += `<div id="googleOrderPrice" style="margin-top: 12px; font-size: 1.2rem; font-weight: 600; color: #7fff7f;"></div>`;
+            html += `<button class="order-button" id="whatsappOrderBtn" style="display:none;" onclick="sendGoogleOrder()">Order via WhatsApp</button>`;
             html += `<div id="googleOrderLink" style="margin-top: 12px;"></div>`;
           } else {
-            // For other codes show just the description
             html += `<div class="service-description" style="margin-top:8px;">${services[code]}</div>`;
           }
 
@@ -502,14 +503,10 @@
       if (selectedTool) {
         const price = toolRentals[selectedTool];
         rentPriceDiv.textContent = `Price: ${price}`;
-        // Generate unique order number
         const orderNumber = generateOrderNumber();
-
         const messageText = `Order Number: ${orderNumber}\nSelected Tool: ${selectedTool}\nPrice: ${price}`;
         const encodedMessage = encodeURIComponent(messageText);
-
         const whatsappURL = `https://wa.me/${phoneWhatsApp}?text=${encodedMessage}`;
-
         orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
       } else {
         rentPriceDiv.textContent = '';
@@ -522,27 +519,37 @@
       const codeInput = document.getElementById('codeModel');
       const methodSelect = document.getElementById('googleMethodSelect');
       const orderPriceDiv = document.getElementById('googleOrderPrice');
-      const orderLinkDiv = document.getElementById('googleOrderLink');
-      if (!modelSelect || !codeInput || !methodSelect || !orderPriceDiv || !orderLinkDiv) return;
+      const orderButton = document.getElementById('whatsappOrderBtn');
+      if (!modelSelect || !codeInput || !methodSelect || !orderPriceDiv || !orderButton) return;
 
       const selectedModel = modelSelect.value;
       const codeModel = codeInput.value.trim();
       const selectedMethod = methodSelect.value;
 
-      // Clear outputs if inputs incomplete
       if (!selectedModel || !codeModel || !selectedMethod) {
         orderPriceDiv.textContent = '';
-        orderLinkDiv.innerHTML = '';
+        orderButton.style.display = 'none';
         return;
       }
 
-      // Price logic not specified for Google unlock, just show confirmation
       orderPriceDiv.textContent = `Model: ${selectedModel} | Code Model: ${codeModel} | Method: ${selectedMethod}`;
+      orderButton.style.display = 'block';
+    };
 
-      // Generate order number
+    window.sendGoogleOrder = function () {
+      const modelSelect = document.getElementById('googleModelSelect');
+      const codeInput = document.getElementById('codeModel');
+      const methodSelect = document.getElementById('googleMethodSelect');
+      if (!modelSelect || !codeInput || !methodSelect) return;
+
+      const selectedModel = modelSelect.value;
+      const codeModel = codeInput.value.trim();
+      const selectedMethod = methodSelect.value;
+
+      if (!selectedModel || !codeModel || !selectedMethod) return;
+
       const orderNumber = generateOrderNumber();
 
-      // Message for whatsapp
       const messageText = 
         `Order Number: ${orderNumber}\n` +
         `Unlock Google Service\n` +
@@ -551,10 +558,8 @@
         `Method: ${selectedMethod}`;
 
       const encodedMessage = encodeURIComponent(messageText);
-
       const whatsappURL = `https://wa.me/${phoneWhatsApp}?text=${encodedMessage}`;
-
-      orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
+      window.open(whatsappURL, '_blank', 'noopener');
     };
 
     form.addEventListener('submit', e => {
