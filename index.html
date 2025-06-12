@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SOROK BLACKLIST TELCO Price List</title>
+<title>Hide BLACKLIST TELCO Price List</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
@@ -167,19 +167,22 @@
       0 0 12px #00ff00;
   }
 
-  #price-list .price {
-    font-size: 2rem;
-    font-weight: 800;
-    margin-bottom: 24px;
-    color: #99ff99;
-    letter-spacing: 1.8px;
-  }
-
-  #price-list .desc {
+  #price-list .selection-option {
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 36px;
     color: #a0ffa0cc;
+  }
+
+  ul.selection-list {
+    list-style: disc;
+    margin: 0 auto 36px;
+    color: #a0ffa0cc;
+    font-weight: 600;
+    font-size: 1.2rem;
+    max-width: 180px;
+    text-align: left;
+    padding-left: 20px;
   }
 
   #price-list a.whatsapp-link {
@@ -226,9 +229,6 @@
     #price-list h2 {
       font-size: 1.75rem;
     }
-    #price-list .price {
-      font-size: 1.6rem;
-    }
   }
 </style>
 </head>
@@ -237,7 +237,7 @@
 <main>
   <section class="container" aria-label="Encrypted code input and price list">
     <h1>Enter Encrypted Code</h1>
-    <p>Unlock the SOROK BLACKLIST TELCO price list by entering the secret code below.</p>
+    <p>Unlock the Hide BLACKLIST TELCO price list by entering the secret code below.</p>
     <form id="code-form" aria-describedby="code-help" autocomplete="off" novalidate>
       <label for="code-input">Encrypted Code</label>
       <input
@@ -257,11 +257,13 @@
     </form>
 
     <section id="price-list" aria-live="polite" style="display:none;">
-      <h2>SOROK BLACKLIST TELCO</h2>
-      <div class="price">PRICE RM80</div>
-      <div class="desc">NO IC (FILL)</div>
+      <h2>Hide BLACKLIST TELCO</h2>
+      <div class="selection-option">Selection option</div>
+      <ul class="selection-list">
+        <li>NO IC (FILL)</li>
+      </ul>
       <a
-        href="https://wa.me/60178040403?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20SOROK%20BLACKLIST%20TELCO."
+        href="https://wa.me/60178040403?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20Hide%20BLACKLIST%20TELCO."
         target="_blank"
         rel="noopener noreferrer"
         class="whatsapp-link"
