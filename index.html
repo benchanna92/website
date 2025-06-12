@@ -106,7 +106,6 @@
     cursor: pointer;
     box-shadow: 0 0 8px #44ff44;
     transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-    margin-top: 8px;
   }
 
   button:hover,
@@ -183,6 +182,7 @@
       padding: 20px;
     }
   }
+
 </style>
 </head>
 <body>
@@ -271,7 +271,7 @@
     draw();
   })();
 
-  // Form and pricing logic with auto WhatsApp send for code 02
+  // Form and pricing logic
   (() => {
     const services = {
       "01": "Unlock FRP",
@@ -287,9 +287,59 @@
     };
 
     const models = {
-      "REALME": {"C21": "RM50","C20": "RM50","C53": "RM60","C55": "RM60","NOTE50": "RM100","NOTE60": "RM100","11 (ANDROID 14)": "RM80","11 (ANDROID 15)": "RM130","12X (ANDROID 14)": "RM150","12X (ANDROID 15)": "RM200","14X": "RM200","12": "RM200","13": "RM200","12 PRO": "RM250"},
-      "VIVO": {"Y03": "RM170","Y20": "RM70","Y16": "RM130","Y36": "RM180","Y27": "RM200","Y28S": "RM230","Y77": "RM200","Y30": "RM200","V23": "RM200","V40 LITE": "RM350"},
-      "OPPO": {"A16": "RM100","A16K": "RM100","A17": "RM100","A18": "RM100","A38 (ANDROID 14)": "RM100","A38 (ANDROID 15)": "RM150","A54": "RM100","A57": "RM100","A77": "RM100","A78": "RM150","A79": "RM150","RENO 5PRO": "RM150","RENO 6/6Z": "RM150","RENO 8": "RM150","RENO 8 PRO": "RM180","RENO 10": "RM150","RENO 11": "RM150","RENO 12 PRO": "RM180","RENO 11F": "RM150","RENO 12F": "RM200","RENO 13F (MEDIATEK)": "RM250","A3PRO/A60": "RM200","A3": "RM150"}
+      "REALME": {
+        "C21": "RM50",
+        "C20": "RM50",
+        "C53": "RM60",
+        "C55": "RM60",
+        "NOTE50": "RM100",
+        "NOTE60": "RM100",
+        "11 (ANDROID 14)": "RM80",
+        "11 (ANDROID 15)": "RM130",
+        "12X (ANDROID 14)": "RM150",
+        "12X (ANDROID 15)": "RM200",
+        "14X": "RM200",
+        "12": "RM200",
+        "13": "RM200",
+        "12 PRO": "RM250"
+      },
+      "VIVO": {
+        "Y03": "RM170",
+        "Y20": "RM70",
+        "Y16": "RM130",
+        "Y36": "RM180",
+        "Y27": "RM200",
+        "Y28S": "RM230",
+        "Y77": "RM200",
+        "Y30": "RM200",
+        "V23": "RM200",
+        "V40 LITE": "RM350"
+      },
+      "OPPO": {
+        "A16": "RM100",
+        "A16K": "RM100",
+        "A17": "RM100",
+        "A18": "RM100",
+        "A38 (ANDROID 14)": "RM100",
+        "A38 (ANDROID 15)": "RM150",
+        "A54": "RM100",
+        "A57": "RM100",
+        "A77": "RM100",
+        "A78": "RM150",
+        "A79": "RM150",
+        "RENO 5PRO": "RM150",
+        "RENO 6/6Z": "RM150",
+        "RENO 8": "RM150",
+        "RENO 8 PRO": "RM180",
+        "RENO 10": "RM150",
+        "RENO 11": "RM150",
+        "RENO 12 PRO": "RM180",
+        "RENO 11F": "RM150",
+        "RENO 12F": "RM200",
+        "RENO 13F (MEDIATEK)": "RM250",
+        "A3PRO/A60": "RM200",
+        "A3": "RM150"
+      }
     };
 
     const toolRentals = {
@@ -318,15 +368,22 @@
     const input = document.getElementById('accessCodes');
     const resultArea = document.getElementById('resultArea');
 
-    let googleOrderSent = false;
-    let googleDebounceTimer;
-
     function sanitizeInput(text) {
       return text
         .toUpperCase()
         .split(/[\s,]+/)
         .map(c => c.trim())
         .filter(c => c.length > 0 && /^[0-9]+$/.test(c));
+    }
+
+    function createPriceListHTML(model) {
+      if (!models[model]) return '';
+      let html = '<h4>Price List for ' + model + ':</h4><ul>';
+      for (const [modelName, price] of Object.entries(models[model])) {
+        html += `<li>${modelName} - ${price}</li>`;
+      }
+      html += '</ul>';
+      return html;
     }
 
     function generateOrderNumber() {
@@ -343,7 +400,6 @@
     }
 
     function renderResults(codes) {
-      googleOrderSent = false; // reset flag each render
       let html = '';
       let foundAny = false;
       const uniqueCodes = [...new Set(codes)];
@@ -376,7 +432,7 @@
             html += `<div id="orderLink" style="margin-top: 12px;"></div>`;
           } else if(code === '02') {
             html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Model:</div>`;
-            html += `<select id="googleModelSelect" aria-label="Select model" onchange="scheduleGoogleOrderSend()">`;
+            html += `<select id="googleModelSelect" aria-label="Select model" onchange="checkGoogleForm()">`;
             html += `<option value="">-- Select Model --</option>`;
             html += `<option value="OPPO">OPPO</option>`;
             html += `<option value="REALME">REALME</option>`;
@@ -390,10 +446,10 @@
             html += `</select>`;
 
             html += `<label for="codeModel" style="margin-top:12px;">Code Model (Example: RMX2122 CPH3212)</label>`;
-            html += `<input type="text" id="codeModel" placeholder="Enter Code Model" aria-label="Enter Code Model" oninput="scheduleGoogleOrderSend()" />`;
+            html += `<input type="text" id="codeModel" placeholder="Enter Code Model" aria-label="Enter Code Model" />`;
 
             html += `<div class="service-description" style="margin-top: 12px; margin-bottom: 6px;">Select Method:</div>`;
-            html += `<select id="googleMethodSelect" aria-label="Select method" onchange="scheduleGoogleOrderSend()">`;
+            html += `<select id="googleMethodSelect" aria-label="Select method" onchange="checkGoogleForm()">`;
             html += `<option value="">-- Select Method --</option>`;
             html += `<option value="REMOTE">REMOTE</option>`;
             html += `<option value="WALKIN">WALK-IN</option>`;
@@ -401,7 +457,11 @@
             html += `</select>`;
 
             html += `<div class="terms" style="margin-top: 20px;">${termsTextGoogle}</div>`;
+
+            html += `<div id="googleOrderPrice" style="margin-top: 12px; font-size: 1.2rem; font-weight: 600; color: #7fff7f;"></div>`;
+            html += `<div id="googleOrderLink" style="margin-top: 12px;"></div>`;
           } else {
+            // For other codes show just the description
             html += `<div class="service-description" style="margin-top:8px;">${services[code]}</div>`;
           }
 
@@ -426,7 +486,7 @@
         if (selectedModel === 'HONOR') {
           priceList.innerHTML = `<p>No pricelist available for HONOR. Please contact support for details.</p>`;
         } else {
-          priceList.innerHTML = ''; // No price list for telco models per previous code
+          priceList.innerHTML = ''; // No price list for telco models here per previous code
         }
       } else {
         priceList.innerHTML = '';
@@ -442,10 +502,14 @@
       if (selectedTool) {
         const price = toolRentals[selectedTool];
         rentPriceDiv.textContent = `Price: ${price}`;
+        // Generate unique order number
         const orderNumber = generateOrderNumber();
+
         const messageText = `Order Number: ${orderNumber}\nSelected Tool: ${selectedTool}\nPrice: ${price}`;
         const encodedMessage = encodeURIComponent(messageText);
+
         const whatsappURL = `https://wa.me/${phoneWhatsApp}?text=${encodedMessage}`;
+
         orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
       } else {
         rentPriceDiv.textContent = '';
@@ -453,34 +517,32 @@
       }
     };
 
-    let googleOrderSent = false;
-    let googleDebounceTimer;
-
-    window.scheduleGoogleOrderSend = function () {
-      if (googleDebounceTimer) clearTimeout(googleDebounceTimer);
-      googleDebounceTimer = setTimeout(() => {
-        sendGoogleOrderIfValid();
-      }, 800);
-    };
-
-    function sendGoogleOrderIfValid() {
-      if (googleOrderSent) return; // prevent multiple sends
-
+    window.checkGoogleForm = function () {
       const modelSelect = document.getElementById('googleModelSelect');
       const codeInput = document.getElementById('codeModel');
       const methodSelect = document.getElementById('googleMethodSelect');
-      if (!modelSelect || !codeInput || !methodSelect) return;
+      const orderPriceDiv = document.getElementById('googleOrderPrice');
+      const orderLinkDiv = document.getElementById('googleOrderLink');
+      if (!modelSelect || !codeInput || !methodSelect || !orderPriceDiv || !orderLinkDiv) return;
 
       const selectedModel = modelSelect.value;
       const codeModel = codeInput.value.trim();
       const selectedMethod = methodSelect.value;
 
-      if (!selectedModel || !codeModel || !selectedMethod) return;
+      // Clear outputs if inputs incomplete
+      if (!selectedModel || !codeModel || !selectedMethod) {
+        orderPriceDiv.textContent = '';
+        orderLinkDiv.innerHTML = '';
+        return;
+      }
 
-      googleOrderSent = true; // mark sent
+      // Price logic not specified for Google unlock, just show confirmation
+      orderPriceDiv.textContent = `Model: ${selectedModel} | Code Model: ${codeModel} | Method: ${selectedMethod}`;
 
+      // Generate order number
       const orderNumber = generateOrderNumber();
 
+      // Message for whatsapp
       const messageText = 
         `Order Number: ${orderNumber}\n` +
         `Unlock Google Service\n` +
@@ -489,18 +551,19 @@
         `Method: ${selectedMethod}`;
 
       const encodedMessage = encodeURIComponent(messageText);
+
       const whatsappURL = `https://wa.me/${phoneWhatsApp}?text=${encodedMessage}`;
-      // Open whatsapp link in new tab
-      window.open(whatsappURL, '_blank', 'noopener');
-    }
+
+      orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
+    };
 
     form.addEventListener('submit', e => {
       e.preventDefault();
       const codes = sanitizeInput(input.value);
       renderResults(codes);
-      googleOrderSent = false; // reset on new render
     });
   })();
 </script>
 </body>
 </html>
+
