@@ -15,19 +15,35 @@
     box-sizing: border-box;
   }
 
-  body {
+  body, html {
+    height: 100%;
     font-family: 'Inter', sans-serif;
     background-color: #000;
     color: #e0f8e0;
+    overflow-x: hidden;
+  }
+
+  /* Matrix canvas full screen behind content */
+  #matrixCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-color: black;
+  }
+
+  /* Container above canvas */
+  .container-wrapper {
+    position: relative;
+    z-index: 10;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-start;
     padding: 40px 20px;
-    background-image:
-      linear-gradient(90deg, rgba(0,255,0,0.04) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(0,255,0,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
+    box-sizing: border-box;
   }
 
   h1 {
@@ -37,6 +53,7 @@
     color: #7fff7f;
     text-align: center;
     text-shadow: 0 0 6px #00cc00;
+    user-select: none;
   }
 
   .container {
@@ -48,6 +65,7 @@
     box-shadow:
       0 0 12px rgba(0, 255, 0, 0.3),
       inset 0 0 10px rgba(0, 255, 0, 0.1);
+    backdrop-filter: blur(6px);
   }
 
   label {
@@ -139,6 +157,22 @@
     padding: 20px 0;
   }
 
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+
+  ul li {
+    margin-bottom: 6px;
+  }
+
+  .terms {
+    font-size: 0.9rem;
+    color: #559955;
+    margin-top: 30px;
+    white-space: pre-line;
+  }
+
   @media (max-width: 480px) {
     h1 {
       font-size: 2rem;
@@ -152,31 +186,93 @@
 </style>
 </head>
 <body>
-  <h1>Matrix Access Code Pricelist</h1>
-  <div class="container" role="main" aria-label="Access code input and pricelist results">
-    <form id="accessForm" aria-describedby="inputHelp">
-      <label for="accessCodes">Enter Access Code(s)</label>
-      <input 
-        type="text" 
-        id="accessCodes" 
-        name="accessCodes" 
-        placeholder="Example: 04 or 01 04 10" 
-        aria-describedby="inputHelp"
-        autocomplete="off" required 
-        aria-required="true"
-        inputmode="numeric"
-        pattern="[0-9\s,]+"
-      />
-      <div id="inputHelp" style="margin-top:6px; font-size: 0.9rem; color:#559955;">
-        Enter one or multiple codes separated by spaces or commas.
-      </div>
-      <button type="submit">Show Services</button>
-    </form>
+  <canvas id="matrixCanvas"></canvas>
 
-    <section class="result" id="resultArea" aria-live="polite" aria-atomic="true" tabindex="0"></section>
+  <div class="container-wrapper" role="main" aria-label="Access code input and pricelist results">
+    <div>
+      <h1>Matrix Access Code Pricelist</h1>
+      <div class="container">
+        <form id="accessForm" aria-describedby="inputHelp" novalidate>
+          <label for="accessCodes">Enter Access Code(s)</label>
+          <input 
+            type="text" 
+            id="accessCodes" 
+            name="accessCodes" 
+            placeholder="Example: 04 or 01 04 10" 
+            aria-describedby="inputHelp"
+            autocomplete="off" required 
+            aria-required="true"
+            inputmode="numeric"
+            pattern="[0-9\s,]+"
+          />
+          <div id="inputHelp" style="margin-top:6px; font-size: 0.9rem; color:#559955;">
+            Enter one or multiple codes separated by spaces or commas.
+          </div>
+          <button type="submit">Show Services</button>
+        </form>
+
+        <section class="result" id="resultArea" aria-live="polite" aria-atomic="true" tabindex="0"></section>
+      </div>
+    </div>
   </div>
 
 <script>
+  // Matrix raining code animation
+  (() => {
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    let columns;
+    let drops = [];
+
+    const characters = '01'; // simple binary to keep matrix effect subtle and match theme
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      columns = Math.floor(width / fontSize);
+      drops = [];
+      for (let x = 0; x < columns; x++) {
+        drops[x] = Math.floor(Math.random() * height);
+      }
+    }
+
+    const fontSize = 16;
+
+    ctx.font = fontSize + 'px monospace';
+
+    function draw() {
+      // translucent black background to create fading trail effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = '#00ff00'; // bright green text
+      ctx.textBaseline = 'top';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+        ctx.fillText(text, x, y);
+
+        if (y > height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+  })();
+
+  // Form and pricing logic
   (() => {
     const services = {
       "01": "Unlock FRP",
@@ -247,16 +343,32 @@
       }
     };
 
+    const termsText = `Terms & Conditions:
+- HONOR and VIVO process need 1-14 days depending on available CPU to replace
+- No refund after processing
+- No cancellation once service is in progress`;
+
     const form = document.getElementById('accessForm');
     const input = document.getElementById('accessCodes');
     const resultArea = document.getElementById('resultArea');
 
     function sanitizeInput(text) {
+      // Only numeric codes: split by space or comma, filter valid number codes
       return text
         .toUpperCase()
         .split(/[\s,]+/)
         .map(c => c.trim())
         .filter(c => c.length > 0 && /^[0-9]+$/.test(c));
+    }
+
+    function createPriceListHTML(model) {
+      if (!models[model]) return '';
+      let html = '<h4>Price List for ' + model + ':</h4><ul>';
+      for (const [modelName, price] of Object.entries(models[model])) {
+        html += `<li>${modelName} - ${price}</li>`;
+      }
+      html += '</ul>';
+      return html;
     }
 
     function renderResults(codes) {
@@ -266,20 +378,23 @@
       uniqueCodes.forEach(code => {
         if (services[code]) {
           foundAny = true;
-          html += `
-            <article class="service-card">
-              <div class="service-code">Code ${code}: ${services[code]}</div>
-              <div class="service-description">Select Model:</div>
-              <select id="modelSelect" onchange="showPrices('${code}')">
-                <option value="">--Select Model--</option>
-                <option value="REALME">REALME</option>
-                <option value="VIVO">VIVO</option>
-                <option value="OPPO">OPPO</option>
-                <option value="HONOR">HONOR</option>
-              </select>
-              <div id="priceList"></div>
-            </article>
-          `;
+          html += `<article class="service-card">`;
+          html += `<div class="service-code">Code ${code}: ${services[code]}</div>`;
+
+          if (code === '04') {
+            // Show model selection dropdown
+            html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Model:</div>`;
+            html += `<select id="modelSelect" aria-label="Select mobile model" onchange="showPrices()">`;
+            html += `<option value="">-- Select Model --</option>`;
+            html += `<option value="OPPO">OPPO</option>`;
+            html += `<option value="HONOR">HONOR</option>`;
+            html += `<option value="REALME">REALME</option>`;
+            html += `<option value="VIVO">VIVO</option>`;
+            html += `</select>`;
+            html += `<div id="priceList" style="margin-top: 12px;"></div>`;
+            html += `<div class="terms" style="margin-top: 20px;">${termsText}</div>`;
+          }
+          html += `</article>`;
         }
       });
       if (!foundAny) {
@@ -291,19 +406,18 @@
       }
     }
 
-    window.showPrices = function(code) {
+    window.showPrices = function() {
       const modelSelect = document.getElementById('modelSelect');
       const priceList = document.getElementById('priceList');
+      if (!modelSelect || !priceList) return;
       const selectedModel = modelSelect.value;
-
       if (selectedModel) {
-        let pricesHtml = '<h4>Price List:</h4><ul>';
-        const modelPrices = models[selectedModel];
-        for (const [model, price] of Object.entries(modelPrices)) {
-          pricesHtml += `<li>${model} - ${price}</li>`;
+        // For HONOR, no prices given, we show a message
+        if (selectedModel === 'HONOR') {
+          priceList.innerHTML = `<p>No pricelist available for HONOR. Please contact support for details.</p>`;
+        } else {
+          priceList.innerHTML = createPriceListHTML(selectedModel);
         }
-        pricesHtml += '</ul>';
-        priceList.innerHTML = pricesHtml;
       } else {
         priceList.innerHTML = '';
       }
@@ -318,3 +432,4 @@
 </script>
 </body>
 </html>
+
