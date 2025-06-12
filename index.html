@@ -1,569 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Matrix Access Code Pricelist</title>
-<style>
-  /* Import Inter font from Google Fonts */
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Matrix-Themed Pricelist Access</title>
+    <style>
+        /* Reset and base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background: black;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ff00;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-  /* Reset and base */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+        /* Matrix background canvas */
+        canvas#matrix-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            display: block;
+            background: black;
+        }
 
-  body, html {
-    height: 100%;
-    font-family: 'Inter', sans-serif;
-    background-color: #000;
-    color: #e0f8e0;
-    overflow-x: hidden;
-  }
+        /* Main container */
+        #app {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
 
-  /* Matrix canvas full screen behind content */
-  #matrixCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    background-color: black;
-  }
+        h1 {
+            font-weight: 900;
+            font-size: 3rem;
+            margin-bottom: 32px;
+            text-shadow: 0 0 8px #00ff00aa;
+        }
 
-  /* Container above canvas */
-  .container-wrapper {
-    position: relative;
-    z-index: 10;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 40px 20px;
-    box-sizing: border-box;
-  }
+        #inputArea {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            max-width: 480px;
+            width: 100%;
+            margin-bottom: 24px;
+        }
 
-  h1 {
-    font-weight: 700;
-    font-size: 2.5rem;
-    margin-bottom: 24px;
-    color: #7fff7f;
-    text-align: center;
-    text-shadow: 0 0 6px #00cc00;
-    user-select: none;
-  }
+        input#accessCodeInput {
+            flex-grow: 1;
+            padding: 14px 16px;
+            font-size: 1.2rem;
+            background: #001a00;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            color: #00ff00;
+            outline-offset: 4px;
+            transition: border-color 0.3s ease;
+            min-width: 220px;
+        }
+        input#accessCodeInput:focus {
+            border-color: #66ff66;
+        }
 
-  .container {
-    width: 100%;
-    max-width: 600px;
-    background-color: rgba(0,0,0,0.85);
-    border-radius: 16px;
-    padding: 24px 32px;
-    box-shadow:
-      0 0 12px rgba(0, 255, 0, 0.3),
-      inset 0 0 10px rgba(0, 255, 0, 0.1);
-    backdrop-filter: blur(6px);
-  }
+        button#submitBtn {
+            padding: 14px 24px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: #004400;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-width: 120px;
+        }
+        button#submitBtn:hover,
+        button#submitBtn:focus {
+            background: #00ff00;
+            color: #000;
+            outline: none;
+        }
 
-  label {
-    display: block;
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-    color: #9ef09e;
-  }
+        #outputArea {
+            white-space: pre-wrap;
+            font-size: 1.15rem;
+            font-weight: 600;
+            max-width: 480px;
+            text-align: left;
+            background: #001a001a;
+            border: 1.5px solid #00ff0066;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 12px #00ff0055;
+            user-select: text;
+        }
 
-  input[type="text"], select {
-    width: 100%;
-    padding: 12px 16px;
-    border-radius: 12px;
-    border: 2px solid #00cc00;
-    background-color: #011400;
-    color: #ccffcc;
-    font-size: 1rem;
-    outline-offset: 2px;
-    transition: border-color 0.3s ease;
-    margin-bottom: 16px;
-  }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #222;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #00ff00;
+            width: 80%;
+            max-width: 600px;
+            color: #00ff00;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-  input[type="text"]:focus, select:focus {
-    border-color: #7fff7f;
-    box-shadow: 0 0 8px #7fff7f;
-  }
-
-  button {
-    width: 100%;
-    background: linear-gradient(135deg, #44ff44, #00cc00);
-    border: none;
-    padding: 14px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #001100;
-    border-radius: 14px;
-    cursor: pointer;
-    box-shadow: 0 0 8px #44ff44;
-    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-  }
-
-  button:hover,
-  button:focus {
-    background: linear-gradient(135deg, #7fff7f, #00ff00);
-    box-shadow: 0 0 12px #7fff7f;
-    transform: scale(1.03);
-    outline: none;
-  }
-
-  button:active {
-    transform: scale(0.98);
-  }
-
-  .result {
-    margin-top: 32px;
-  }
-
-  .service-card {
-    background-color: #021a02;
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .service-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 255, 0, 0.6);
-  }
-
-  .service-code {
-    font-weight: 700;
-    font-size: 1.3rem;
-    color: #80ff80;
-  }
-
-  .service-description {
-    margin-top: 8px;
-    font-size: 1.1rem;
-    color: #ccffcc;
-  }
-
-  .no-result {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #559955;
-    padding: 20px 0;
-  }
-
-  ul {
-    list-style-type: disc;
-    padding-left: 20px;
-  }
-
-  ul li {
-    margin-bottom: 6px;
-  }
-
-  .terms {
-    font-size: 0.9rem;
-    color: #559955;
-    margin-top: 30px;
-    white-space: pre-line;
-  }
-
-  @media (max-width: 480px) {
-    h1 {
-      font-size: 2rem;
-    }
-
-    .container {
-      padding: 20px;
-    }
-  }
-
-</style>
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            #inputArea {
+                flex-direction: column;
+            }
+            input#accessCodeInput,
+            button#submitBtn {
+                width: 100%;
+                min-width: auto;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <canvas id="matrixCanvas"></canvas>
 
-  <div class="container-wrapper" role="main" aria-label="Access code input and pricelist results">
-    <div>
-      <h1>Matrix Access Code Pricelist</h1>
-      <div class="container">
-        <form id="accessForm" aria-describedby="inputHelp" novalidate>
-          <label for="accessCodes">Enter Access Code(s)</label>
-          <input 
-            type="text" 
-            id="accessCodes" 
-            name="accessCodes" 
-            placeholder="Example: 04 or 01 04 10" 
-            aria-describedby="inputHelp"
-            autocomplete="off" required 
-            aria-required="true"
-            inputmode="numeric"
-            pattern="[0-9\s,]+"
-          />
-          <div id="inputHelp" style="margin-top:6px; font-size: 0.9rem; color:#559955;">
-            Enter one or multiple codes separated by spaces or commas.
-          </div>
-          <button type="submit">Show Services</button>
-        </form>
+<canvas id="matrix-canvas"></canvas>
 
-        <section class="result" id="resultArea" aria-live="polite" aria-atomic="true" tabindex="0"></section>
-      </div>
+<div id="app" role="main" aria-label="Matrix themed pricelist access application">
+    <h1>Software Developer Services Access</h1>
+    <form id="accessForm" aria-describedby="instructionText">
+        <div id="inputArea">
+            <label for="accessCodeInput" class="visually-hidden">Enter access codes separated by commas or spaces</label>
+            <input aria-required="true" id="accessCodeInput" name="accessCodes" type="text" autocomplete="off" placeholder="Enter access codes e.g. 01, 111" />
+            <button type="submit" id="submitBtn" aria-label="Submit access codes">Submit</button>
+        </div>
+        <p id="instructionText" style="color:#00ff00cc; font-size:0.9rem; margin-top:-12px;">
+            Multiple codes separated by comma or space (e.g. 01, 111)
+        </p>
+    </form>
+    <pre id="outputArea" aria-live="polite" aria-atomic="true" tabindex="0"></pre>
+</div>
+
+<!-- Modal for Device Selection -->
+<div id="deviceModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeDeviceModal">&times;</span>
+        <h2>Select Device Brand</h2>
+        <button onclick="showDevicePrices('REALME')">REALME</button>
+        <button onclick="showDevicePrices('VIVO')">VIVO</button>
+        <button onclick="showDevicePrices('OPPO')">OPPO</button>
+        <button onclick="showDevicePrices('HONOR')">HONOR</button>
+        <div id="devicePrices" style="margin-top: 20px;"></div>
     </div>
-  </div>
+</div>
+
+<!-- Modal for Tool Selection -->
+<div id="toolModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeToolModal">&times;</span>
+        <h2>Select Tool</h2>
+        <div id="toolPrices"></div>
+    </div>
+</div>
 
 <script>
-  // Matrix raining code animation
-  (() => {
-    const canvas = document.getElementById('matrixCanvas');
-    const ctx = canvas.getContext('2d');
-
-    let width, height;
-    let columns;
-    let drops = [];
-
-    const characters = '01';
-
-    function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-      columns = Math.floor(width / fontSize);
-      drops = [];
-      for (let x = 0; x < columns; x++) {
-        drops[x] = Math.floor(Math.random() * height);
-      }
-    }
-
-    const fontSize = 16;
-
-    ctx.font = fontSize + 'px monospace';
-
-    function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.fillRect(0, 0, width, height);
-
-      ctx.fillStyle = '#00ff00';
-      ctx.textBaseline = 'top';
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = characters.charAt(Math.floor(Math.random() * characters.length));
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-        ctx.fillText(text, x, y);
-
-        if (y > height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-
-      requestAnimationFrame(draw);
-    }
-
-    window.addEventListener('resize', resize);
-    resize();
-    draw();
-  })();
-
-  // Form and pricing logic
-  (() => {
-    const services = {
-      "01": "Unlock FRP",
-      "02": "Unlock Google",
-      "03": "Unlock Xiaomi account",
-      "04": "Unlock Telco/Contract device",
-      "05": "Unlock pin/passcode",
-      "06": "Reset Apple ID",
-      "07": "Rent tool software",
-      "08": "TUTUP BLACKLIST TELCO KEKAL",
-      "09": "AUTH FLASHER + FILE REQUEST",
-      "10": "Samsung IMEI unlock by Server"
+    // Service code mapping
+    const serviceMap = {
+        "01": "Unlock FRP/Google",
+        "111": "Unlock Telco/Contract device",
+        "07": "Rent tool software",
+        "02": "TUTUP BLACKLIST TELCO KEKAL",
+        "09": "AUTH FLASHER + FILE REQUEST"
     };
 
-    const models = {
-      "REALME": {
-        "C21": "RM50",
-        "C20": "RM50",
-        "C53": "RM60",
-        "C55": "RM60",
-        "NOTE50": "RM100",
-        "NOTE60": "RM100",
-        "11 (ANDROID 14)": "RM80",
-        "11 (ANDROID 15)": "RM130",
-        "12X (ANDROID 14)": "RM150",
-        "12X (ANDROID 15)": "RM200",
-        "14X": "RM200",
-        "12": "RM200",
-        "13": "RM200",
-        "12 PRO": "RM250"
-      },
-      "VIVO": {
-        "Y03": "RM170",
-        "Y20": "RM70",
-        "Y16": "RM130",
-        "Y36": "RM180",
-        "Y27": "RM200",
-        "Y28S": "RM230",
-        "Y77": "RM200",
-        "Y30": "RM200",
-        "V23": "RM200",
-        "V40 LITE": "RM350"
-      },
-      "OPPO": {
-        "A16": "RM100",
-        "A16K": "RM100",
-        "A17": "RM100",
-        "A18": "RM100",
-        "A38 (ANDROID 14)": "RM100",
-        "A38 (ANDROID 15)": "RM150",
-        "A54": "RM100",
-        "A57": "RM100",
-        "A77": "RM100",
-        "A78": "RM150",
-        "A79": "RM150",
-        "RENO 5PRO": "RM150",
-        "RENO 6/6Z": "RM150",
-        "RENO 8": "RM150",
-        "RENO 8 PRO": "RM180",
-        "RENO 10": "RM150",
-        "RENO 11": "RM150",
-        "RENO 12 PRO": "RM180",
-        "RENO 11F": "RM150",
-        "RENO 12F": "RM200",
-        "RENO 13F (MEDIATEK)": "RM250",
-        "A3PRO/A60": "RM200",
-        "A3": "RM150"
-      }
+    // Device prices
+    const devicePrices = {
+        REALME: [
+            "REALME C21 - RM50",
+            "REALME C20 - RM50",
+            "REALME C53 - RM60",
+            "REALME C55 - RM60",
+            "REALME NOTE50 - RM100",
+            "REALME NOTE60 - RM100",
+            "REALME 11 - RM80 (ANDROID 14)",
+            "REALME 11 - RM130 (ANDROID 15)",
+            "REALME 12X - RM150 (ANDROID 14)",
+            "REALME 12X - RM200 (ANDROID 15)",
+            "REALME 14X - RM200",
+            "REALME 12 - RM200",
+            "REALME 13 - RM200",
+            "REALME 12 PRO - RM250"
+        ],
+        VIVO: [
+            "VIVO Y03 - RM170",
+            "VIVO Y20 - RM70",
+            "VIVO Y16 - RM130",
+            "VIVO Y36 - RM180",
+            "VIVO Y27 - RM200",
+            "VIVO Y28S - RM230",
+            "VIVO Y77 - RM200",
+            "VIVO Y30 - RM200",
+            "VIVO V23 - RM200",
+            "VIVO V40 LITE - RM350"
+        ],
+        OPPO: [
+            "OPPO A16 - RM100",
+            "OPPO A16K - RM100",
+            "OPPO A17 - RM100",
+            "OPPO A18 - RM100",
+            "OPPO A38 - RM100 (ANDROID 14)",
+            "OPPO A38 - RM150 (ANDROID 15)",
+            "OPPO A54 - RM100",
+            "OPPO A57 - RM100",
+            "OPPO A77 - RM100",
+            "OPPO A78 - RM150",
+            "OPPO A79 - RM150",
+            "OPPO RENO 5PRO - RM150",
+            "OPPO RENO 6/6Z - RM150",
+            "OPPO RENO 8 - RM150",
+            "OPPO RENO 8 PRO - RM180",
+            "OPPO RENO 10 - RM150",
+            "OPPO RENO 11 - RM150",
+            "OPPO RENO 12 PRO - RM180",
+            "OPPO RENO 11F - RM150",
+            "OPPO RENO 12F - RM200",
+            "OPPO RENO 13F (MEDIATEK) - RM250",
+            "OPPO A3PRO/A60 - RM200",
+            "OPPO A3 - RM150"
+        ],
+        HONOR: [
+            "HONOR devices may take 1-14 days depending on available CPU to replace."
+        ]
     };
 
-    const toolRentals = {
-      "PANDORA TOOL 10DAYS": "RM100",
-      "UNLOCKTOOL 1DAYS": "RM15",
-      "RTC TOOL 1DAYS": "RM15",
-      "GRIFFIN 1DAYS": "RM20",
-      "DFT TOOL 1DAYS": "RM25",
-      "SIGMA TOOL 1MONTH": "RM65",
-      "TSM TOOL 1DAYS": "RM10",
-      "AMT TOOL 1DAYS": "RM10"
-    };
+    // Tool prices
+    const toolPrices = [
+        "PANDORA TOOL - 10 DAYS RM100",
+        "UNLOCKTOOL - 1 DAY RM15",
+        "RTC TOOL - 1 DAY RM15",
+        "GRIFFIN - 1 DAY RM20",
+        "DFT TOOL - 1 DAY RM25",
+        "SIGMA TOOL - 1 MONTH RM65",
+        "TSM TOOL - 1 DAY RM10",
+        "AMT TOOL - 1 DAY RM10"
+    ];
 
-    const termsTextTelco = `Terms & Conditions:
-- HONOR and VIVO process need 1-14 days depending on available CPU to replace
-- No refund after processing
-- No cancellation once service is in progress`;
-
-    const termsTextGoogle = `TERM & CONDITION:
--WE NOT UNLOCK ANY LOST PHONE
--AFTER PROCESSING NO REFUNDABLE`;
-
-    const phoneWhatsApp = '60178040403';
-
+    // Handle form submission
     const form = document.getElementById('accessForm');
-    const input = document.getElementById('accessCodes');
-    const resultArea = document.getElementById('resultArea');
-
-    function sanitizeInput(text) {
-      return text
-        .toUpperCase()
-        .split(/[\s,]+/)
-        .map(c => c.trim())
-        .filter(c => c.length > 0 && /^[0-9]+$/.test(c));
-    }
-
-    function createPriceListHTML(model) {
-      if (!models[model]) return '';
-      let html = '<h4>Price List for ' + model + ':</h4><ul>';
-      for (const [modelName, price] of Object.entries(models[model])) {
-        html += `<li>${modelName} - ${price}</li>`;
-      }
-      html += '</ul>';
-      return html;
-    }
-
-    function generateOrderNumber() {
-      const now = new Date();
-      const pad = (n) => n.toString().padStart(2, '0');
-      const year = now.getFullYear();
-      const month = pad(now.getMonth() + 1);
-      const day = pad(now.getDate());
-      const hours = pad(now.getHours());
-      const minutes = pad(now.getMinutes());
-      const seconds = pad(now.getSeconds());
-      const rand = Math.floor(1000 + Math.random() * 9000);
-      return `${year}${month}${day}-${hours}${minutes}${seconds}-${rand}`;
-    }
-
-    function renderResults(codes) {
-      let html = '';
-      let foundAny = false;
-      const uniqueCodes = [...new Set(codes)];
-      uniqueCodes.forEach(code => {
-        if (services[code]) {
-          foundAny = true;
-          html += `<article class="service-card">`;
-          html += `<div class="service-code">Code ${code}: ${services[code]}</div>`;
-
-          if (code === '04') {
-            html += `<div class="service-description" style="margin-top:8px; margin-bottom:6px;">Select Model:</div>`;
-            html += `<select id="modelSelect" aria-label="Select mobile model" onchange="showPrices()">`;
-            html += `<option value="">-- Select Model --</option>`;
-            html += `<option value="OPPO">OPPO</option>`;
-            html += `<option value="HONOR">HONOR</option>`;
-            html += `<option value="REALME">REALME</option>`;
-            html += `<option value="VIVO">VIVO</option>`;
-            html += `</select>`;
-            html += `<div id="priceList" style="margin-top:12px;"></div>`;
-            html += `<div class="terms" style="margin-top:20px;">${termsTextTelco}</div>`;
-          } else if (code === '07') {
-            html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Rental Tool:</div>`;
-            html += `<select id="toolRentSelect" aria-label="Select tool rental option" onchange="handleToolRentalSelection()">`;
-            html += `<option value="">-- Select Tool --</option>`;
-            for (const [toolName, price] of Object.entries(toolRentals)) {
-              html += `<option value="${toolName}">${toolName} - ${price}</option>`;
-            }
-            html += `</select>`;
-            html += `<div id="toolRentPrice" style="margin-top: 12px; font-size: 1.2rem; font-weight: 600; color: #7fff7f;"></div>`;
-            html += `<div id="orderLink" style="margin-top: 12px;"></div>`;
-          } else if(code === '02') {
-            html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Model:</div>`;
-            html += `<select id="googleModelSelect" aria-label="Select model" onchange="checkGoogleForm()">`;
-            html += `<option value="">-- Select Model --</option>`;
-            html += `<option value="OPPO">OPPO</option>`;
-            html += `<option value="REALME">REALME</option>`;
-            html += `<option value="SAMSUNG">SAMSUNG</option>`;
-            html += `<option value="REDMI">REDMI</option>`;
-            html += `<option value="XIAOMI">XIAOMI</option>`;
-            html += `<option value="HONOR">HONOR</option>`;
-            html += `<option value="PIXEL">PIXEL</option>`;
-            html += `<option value="ONEPLUS">ONEPLUS</option>`;
-            html += `<option value="VIVO">VIVO</option>`;
-            html += `</select>`;
-
-            html += `<label for="codeModel" style="margin-top:12px;">Code Model (Example: RMX2122 CPH3212)</label>`;
-            html += `<input type="text" id="codeModel" placeholder="Enter Code Model" aria-label="Enter Code Model" />`;
-
-            html += `<div class="service-description" style="margin-top: 12px; margin-bottom: 6px;">Select Method:</div>`;
-            html += `<select id="googleMethodSelect" aria-label="Select method" onchange="checkGoogleForm()">`;
-            html += `<option value="">-- Select Method --</option>`;
-            html += `<option value="REMOTE">REMOTE</option>`;
-            html += `<option value="WALKIN">WALK-IN</option>`;
-            html += `<option value="POSTAGE">POSTAGE</option>`;
-            html += `</select>`;
-
-            html += `<div class="terms" style="margin-top: 20px;">${termsTextGoogle}</div>`;
-
-            html += `<div id="googleOrderPrice" style="margin-top: 12px; font-size: 1.2rem; font-weight: 600; color: #7fff7f;"></div>`;
-            html += `<div id="googleOrderLink" style="margin-top: 12px;"></div>`;
-          } else {
-            // For other codes show just the description
-            html += `<div class="service-description" style="margin-top:8px;">${services[code]}</div>`;
-          }
-
-          html += `</article>`;
-        }
-      });
-      if (!foundAny) {
-        html = `<p class="no-result">No matching services found for the entered code(s).</p>`;
-      }
-      resultArea.innerHTML = html;
-      if (!foundAny) {
-        resultArea.focus();
-      }
-    }
-
-    window.showPrices = function() {
-      const modelSelect = document.getElementById('modelSelect');
-      const priceList = document.getElementById('priceList');
-      if (!modelSelect || !priceList) return;
-      const selectedModel = modelSelect.value;
-      if (selectedModel) {
-        if (selectedModel === 'HONOR') {
-          priceList.innerHTML = `<p>No pricelist available for HONOR. Please contact support for details.</p>`;
-        } else {
-          priceList.innerHTML = ''; // No price list for telco models here per previous code
-        }
-      } else {
-        priceList.innerHTML = '';
-      }
-    };
-
-    window.handleToolRentalSelection = function () {
-      const toolSelect = document.getElementById('toolRentSelect');
-      const rentPriceDiv = document.getElementById('toolRentPrice');
-      const orderLinkDiv = document.getElementById('orderLink');
-      if (!toolSelect || !rentPriceDiv || !orderLinkDiv) return;
-      const selectedTool = toolSelect.value;
-      if (selectedTool) {
-        const price = toolRentals[selectedTool];
-        rentPriceDiv.textContent = `Price: ${price}`;
-        // Generate unique order number
-        const orderNumber = generateOrderNumber();
-
-        const messageText = `Order Number: ${orderNumber}\nSelected Tool: ${selectedTool}\nPrice: ${price}`;
-        const encodedMessage = encodeURIComponent(messageText);
-
-        const whatsappURL = `https://wa.me/${phoneWhatsApp}?text=${encodedMessage}`;
-
-        orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
-      } else {
-        rentPriceDiv.textContent = '';
-        orderLinkDiv.innerHTML = '';
-      }
-    };
-
-    window.checkGoogleForm = function () {
-      const modelSelect = document.getElementById('googleModelSelect');
-      const codeInput = document.getElementById('codeModel');
-      const methodSelect = document.getElementById('googleMethodSelect');
-      const orderPriceDiv = document.getElementById('googleOrderPrice');
-      const orderLinkDiv = document.getElementById('googleOrderLink');
-      if (!modelSelect || !codeInput || !methodSelect || !orderPriceDiv || !orderLinkDiv) return;
-
-      const selectedModel = modelSelect.value;
-      const codeModel = codeInput.value.trim();
-      const selectedMethod = methodSelect.value;
-
-      // Clear outputs if inputs incomplete
-      if (!selectedModel || !codeModel || !selectedMethod) {
-        orderPriceDiv.textContent = '';
-        orderLinkDiv.innerHTML = '';
-        return;
-      }
-
-      // Price logic not specified for Google unlock, just show confirmation
-      orderPriceDiv.textContent = `Model: ${selectedModel} | Code Model: ${codeModel} | Method: ${selectedMethod}`;
-
-      // Generate order number
-      const orderNumber = generateOrderNumber();
-
-      // Message for whatsapp
-      const messageText = 
-        `Order Number: ${orderNumber}\n` +
-        `Unlock Google Service\n` +
-        `Model: ${selectedModel}\n` +
-        `Code Model: ${codeModel}\n` +
-        `Method: ${selectedMethod}`;
-
-      const encodedMessage = encodeURIComponent(messageText);
-
-      const whatsappURL = `https://wa.me/${phoneWhatsApp}?text=${encodedMessage}`;
-
-      orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
-    };
+    const input = document.getElementById('accessCodeInput');
+    const output = document.getElementById('outputArea');
 
     form.addEventListener('submit', e => {
-      e.preventDefault();
-      const codes = sanitizeInput(input.value);
-      renderResults(codes);
+        e.preventDefault();
+
+        let rawCodes = input.value.trim();
+        if (!rawCodes) {
+            output.textContent = 'Please enter at least one access code.';
+            output.focus();
+            return;
+        }
+        const codes = rawCodes.split(/[\s,]+/);
+        let resultLines = [];
+
+        codes.forEach(code => {
+            if (!code) return;
+            if (serviceMap.hasOwnProperty(code)) {
+                resultLines.push(`${code}: ${serviceMap[code]}`);
+                if (code === "111") {
+                    openDeviceModal();
+                } else if (code === "07") {
+                    openToolModal();
+                } else if (code === "02") {
+                    const icNumber = prompt("Please enter your IC number:");
+                    if (icNumber) {
+                        const caseNumber = generateCaseNumber();
+                        const whatsappLink = `https://wa.me/60178040403?text=New case created with IC: ${icNumber}, Case Number: ${caseNumber}`;
+                        output.textContent = `Case Number: ${caseNumber}. Click here to contact WhatsApp: ${whatsappLink}`;
+                    }
+                }
+            } else {
+                resultLines.push(`${code}: Invalid access code`);
+            }
+        });
+        output.textContent = resultLines.join('\n');
+        output.focus();
     });
-  })();
+
+    // Open device selection modal
+    function openDeviceModal() {
+        document.getElementById('deviceModal').style.display = "block";
+    }
+
+    // Show device prices based on selection
+    function showDevicePrices(brand) {
+        const prices = devicePrices[brand].join('\n');
+        document.getElementById('devicePrices').innerText = prices;
+        const whatsappLink = `https://wa.me/60178040403?text=Order for ${brand} devices: ${prices}`;
+        document.getElementById('devicePrices').innerHTML += `<br><a href="${whatsappLink}" style="color: #00ff00;">Click here to order via WhatsApp</a>`;
+    }
+
+    // Open tool selection modal
+    function openToolModal() {
+        document.getElementById('toolModal').style.display = "block";
+        const toolList = toolPrices.join('<br>');
+        document.getElementById('toolPrices').innerHTML = toolList + '<br><a href="https://wa.me/60178040403" style="color: #00ff00;">Click here to order via WhatsApp</a>';
+    }
+
+    // Generate a random case number
+    function generateCaseNumber() {
+        return 'CASE-' + Math.floor(Math.random() * 100000);
+    }
+
+    // Close modals
+    document.getElementById('closeDeviceModal').onclick = function() {
+        document.getElementById('deviceModal').style.display = "none";
+    }
+    document.getElementById('closeToolModal').onclick = function() {
+        document.getElementById('toolModal').style.display = "none";
+    }
+
+    // Matrix code rain animation on canvas
+    (function matrixAnimation(){
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas full screen
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Characters used for matrix effect
+        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*+-=<>'.split('');
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+
+        // Array of y-coordinates for each column
+        const drops = [];
+
+        // Initialize drops (start y=0 for each column)
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -1000; // start dispersed upward to avoid clumping
+        }
+
+        function draw() {
+            // translucent black background to create fading effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff00'; // green for matrix text
+            ctx.font = fontSize + 'px Courier New';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters[Math.floor(Math.random() * characters.length)];
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+
+                // Glow effect for the leading character
+                ctx.shadowColor = '#00ff00';
+                ctx.shadowBlur = 8;
+                ctx.fillText(text, x, y);
+
+                // Reset drop back to top randomly after it passes screen bottom
+                if (y > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                } else {
+                    drops[i]++;
+                }
+                ctx.shadowBlur = 0;
+            }
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    })();
 </script>
+
 </body>
 </html>
-
