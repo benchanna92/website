@@ -3,24 +3,45 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Matrix Theme Service Selection - Software Developer Services</title>
+<title>Matrix Theme Service Selection - ZuuCaster Service</title>
 <style>
   /* Reset and base */
   *, *::before, *::after {
     box-sizing: border-box;
   }
-  body {
+  body, html {
     margin: 0;
-    background-color: #000000;
-    color: #33ff33;
+    padding: 0;
+    height: 100%;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
       Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    background-color: #000000;
+    overflow-x: hidden;
+  }
+
+  /* Matrix code canvas behind all content */
+  #matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    background-color: black;
+  }
+
+  /* Content container above canvas */
+  #content {
+    position: relative;
+    z-index: 10;
     min-height: 100vh;
+    color: #33ff33;
     display: flex;
     flex-direction: column;
+    background: rgba(0, 0, 0, 0.85); /* Slight overlay for readability */
   }
+
   /* Container and layout */
   .container {
     max-width: 640px;
@@ -87,6 +108,60 @@
     color: #bbffbb;
   }
 
+  /* Form Fields for Samsung IMEI unlock */
+  #samsung-imei-form {
+    display: none;
+    background-color: #112211cc;
+    border: 1px solid #339933aa;
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 640px;
+    margin: 0 auto 2rem;
+    box-shadow: 0 0 15px #22ff22bb;
+    color: #bbffbb;
+  }
+  #samsung-imei-form label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+  #samsung-imei-form input[type="text"],
+  #samsung-imei-form select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+    border: 2px solid #33ff33;
+    background: #000a00;
+    color: #bbffbb;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  #samsung-imei-form select {
+    appearance: none;
+    cursor: pointer;
+  }
+  #samsung-imei-form button {
+    background-color: #007700;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #bbffbb;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 0 5px #33ff33aa;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: block;
+    margin: 0 auto;
+  }
+  #samsung-imei-form button:hover,
+  #samsung-imei-form button:focus {
+    background-color: #22ee22;
+    color: #003300;
+    transform: scale(1.05);
+    outline: none;
+  }
+
   button {
     background-color: #007700;
     border: none;
@@ -148,6 +223,10 @@
     color: #66ff66;
     text-shadow: 0 0 10px #66ff66aa;
   }
+  .price-list h3 {
+    margin-top: 1rem;
+    color: #99ff99;
+  }
   .price-list ul {
     padding-left: 1.2rem;
   }
@@ -158,6 +237,12 @@
     cursor: default;
     user-select: none;
     color: #bbffbb;
+  }
+  #telcoInfo p {
+    margin: 0.3rem 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #ffcc00;
   }
 
   /* Footer */
@@ -189,141 +274,209 @@
 </style>
 </head>
 <body>
-  <header>
-    <h1>Software Developer Services</h1>
-  </header>
+  <canvas id="matrix-canvas"></canvas>
 
-  <main class="container" role="main">
-    <form id="servicesForm" aria-label="Select services form">
-      <ul class="service-list" role="list">
-        <li class="service-item">
-          <input type="checkbox" id="service01" name="services" value="01" />
-          <label for="service01" class="service-label"><code>01</code> Unlock FRP</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service02" name="services" value="02" />
-          <label for="service02" class="service-label"><code>02</code> Unlock Google</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service03" name="services" value="03" />
-          <label for="service03" class="service-label"><code>03</code> Unlock Xiaomi account</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service04" name="services" value="04" />
-          <label for="service04" class="service-label"><code>04</code> Unlock Telco/Contract device</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service05" name="services" value="05" />
-          <label for="service05" class="service-label"><code>05</code> Unlock pin/passcode</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service06" name="services" value="06" />
-          <label for="service06" class="service-label"><code>06</code> Reset Apple ID</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service07" name="services" value="07" />
-          <label for="service07" class="service-label"><code>07</code> Rent tool software</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service08" name="services" value="08" />
-          <label for="service08" class="service-label"><code>08</code> TUTUP BLACKLIST TELCO KEKAL</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service09" name="services" value="09" />
-          <label for="service09" class="service-label"><code>09</code> AUTH FLASHER + FILE REQUEST</label>
-        </li>
-        <li class="service-item">
-          <input type="checkbox" id="service10" name="services" value="10" />
-          <label for="service10" class="service-label"><code>10</code> Samsung IMEI unlock by Server</label>
-        </li>
-      </ul>
-      <button type="submit" aria-label="Submit selected services">Show Selected Services</button>
-    </form>
+  <div id="content">
+    <header>
+      <h1>ZuuCaster Service</h1>
+    </header>
 
-    <section id="resultContainer" aria-live="polite" aria-atomic="true" role="region" class="result" style="visibility:hidden;">
-      <!-- Result message will appear here -->
-    </section>
-
-    <section id="priceListContainer" class="price-list" style="display:none;">
-      <h2>Price List</h2>
-      <div id="oppoPriceList" style="display:none;">
-        <h3>OPPO Models</h3>
-        <ul>
-          <li>OPPO A16 - RM100</li>
-          <li>OPPO A16K - RM100</li>
-          <li>OPPO A17 - RM100</li>
-          <li>OPPO A18 - RM100</li>
-          <li>OPPO A38 - RM100 (ANDROID 14)</li>
-          <li>OPPO A38 - RM150 (ANDROID 15)</li>
-          <li>OPPO A54 - RM100</li>
-          <li>OPPO A57 - RM100</li>
-          <li>OPPO A77 - RM100</li>
-          <li>OPPO A78 - RM150</li>
-          <li>OPPO A79 - RM150</li>
-          <li>OPPO RENO 5PRO - RM150</li>
-          <li>OPPO RENO 6/6Z - RM150</li>
-          <li>OPPO RENO 8 - RM150</li>
-          <li>OPPO RENO 8 PRO - RM180</li>
-          <li>OPPO RENO 10 - RM150</li>
-          <li>OPPO RENO 11 - RM150</li>
-          <li>OPPO RENO 12 PRO - RM180</li>
-          <li>OPPO RENO 11F - RM150</li>
-          <li>OPPO RENO 12F - RM200</li>
-          <li>OPPO RENO 13F (MEDIATEK) - RM250</li>
-          <li>OPPO A3PRO/A60 - RM200</li>
-          <li>OPPO A3 - RM150</li>
+    <main class="container" role="main">
+      <form id="servicesForm" aria-label="Select services form">
+        <ul class="service-list" role="list">
+          <li class="service-item">
+            <input type="checkbox" id="service01" name="services" value="01" />
+            <label for="service01" class="service-label"><code>01</code> Unlock FRP</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service02" name="services" value="02" />
+            <label for="service02" class="service-label"><code>02</code> Unlock Google</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service03" name="services" value="03" />
+            <label for="service03" class="service-label"><code>03</code> Unlock Xiaomi account</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service04" name="services" value="04" />
+            <label for="service04" class="service-label"><code>04</code> Unlock Telco/Contract device</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service05" name="services" value="05" />
+            <label for="service05" class="service-label"><code>05</code> Unlock pin/passcode</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service06" name="services" value="06" />
+            <label for="service06" class="service-label"><code>06</code> Reset Apple ID</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service07" name="services" value="07" />
+            <label for="service07" class="service-label"><code>07</code> Rent tool software</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service08" name="services" value="08" />
+            <label for="service08" class="service-label"><code>08</code> TUTUP BLACKLIST TELCO KEKAL</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service09" name="services" value="09" />
+            <label for="service09" class="service-label"><code>09</code> AUTH FLASHER + FILE REQUEST</label>
+          </li>
+          <li class="service-item">
+            <input type="checkbox" id="service10" name="services" value="10" />
+            <label for="service10" class="service-label"><code>10</code> Samsung IMEI unlock by Server</label>
+          </li>
         </ul>
-      </div>
-      <div id="vivoPriceList" style="display:none;">
-        <h3>VIVO Models</h3>
-        <ul>
-          <li>VIVO Y03 - RM170</li>
-          <li>VIVO Y20 - RM70</li>
-          <li>VIVO Y16 - RM130</li>
-          <li>VIVO Y36 - RM180</li>
-          <li>VIVO Y27 - RM200</li>
-          <li>VIVO Y28S - RM230</li>
-          <li>VIVO Y77 - RM200</li>
-          <li>VIVO Y30 - RM200</li>
-          <li>VIVO V23 - RM200</li>
-          <li>VIVO V40 LITE - RM350</li>
-        </ul>
-      </div>
-      <div id="realmePriceList" style="display:none;">
-        <h3>REALME Models</h3>
-        <ul>
-          <li>REALME C21 - RM50</li>
-          <li>REALME C20 - RM50</li>
-          <li>REALME C53 - RM60</li>
-          <li>REALME C55 - RM60</li>
-          <li>REALME NOTE50 - RM100</li>
-          <li>REALME NOTE60 - RM100</li>
-          <li>REALME 11 - RM80 (ANDROID 14)</li>
-          <li>REALME 11 - RM130 (ANDROID 15)</li>
-          <li>REALME 12X - RM150 (ANDROID 14)</li>
-          <li>REALME 12X - RM200 (ANDROID 15)</li>
-          <li>REALME 14X - RM200</li>
-          <li>REALME 12 - RM200</li>
-          <li>REALME 13 - RM200</li>
-          <li>REALME 12 PRO - RM250</li>
-        </ul>
-      </div>
-      <div id="telcoInfo" style="margin-top: 1rem; color: #ffcc00;">
-        <p>- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
-        <p>- No refund after processing.</p>
-        <p>- No cancellation after service in progress.</p>
-      </div>
-    </section>
-  </main>
+        <button type="submit" aria-label="Submit selected services">Show Selected Services</button>
+      </form>
 
-  <footer>
-    &copy; 2024 Software Developer Services. All rights reserved.
-  </footer>
+      <section id="resultContainer" aria-live="polite" aria-atomic="true" role="region" class="result" style="visibility:hidden;">
+        <!-- Result message will appear here -->
+      </section>
+
+      <section id="samsung-imei-form">
+        <h2>Samsung IMEI Unlock Request</h2>
+        <form id="imeiForm" aria-label="Samsung IMEI unlock form">
+          <label for="imeiInput">IMEI Number:</label>
+          <input type="text" id="imeiInput" name="imei" placeholder="Enter IMEI" maxlength="20" required pattern="\d+" inputmode="numeric" autocomplete="off">
+
+          <label for="modelInput">Model:</label>
+          <input type="text" id="modelInput" name="model" placeholder="Enter Model" required autocomplete="off">
+
+          <label for="kgTelcoSelect">KG/Telco Unit:</label>
+          <select id="kgTelcoSelect" name="kgTelco">
+            <option value="ON">ON</option>
+            <option value="OFF">OFF</option>
+          </select>
+
+          <button type="submit" aria-label="Send request via WhatsApp">Send to WhatsApp</button>
+        </form>
+      </section>
+
+      <section id="priceListContainer" class="price-list" style="display:none;">
+        <h2>Price List</h2>
+        <div id="oppoPriceList" style="display:none;">
+          <h3>OPPO Models</h3>
+          <ul>
+            <li>OPPO A16 - RM100</li>
+            <li>OPPO A16K - RM100</li>
+            <li>OPPO A17 - RM100</li>
+            <li>OPPO A18 - RM100</li>
+            <li>OPPO A38 - RM100 (ANDROID 14)</li>
+            <li>OPPO A38 - RM150 (ANDROID 15)</li>
+            <li>OPPO A54 - RM100</li>
+            <li>OPPO A57 - RM100</li>
+            <li>OPPO A77 - RM100</li>
+            <li>OPPO A78 - RM150</li>
+            <li>OPPO A79 - RM150</li>
+            <li>OPPO RENO 5PRO - RM150</li>
+            <li>OPPO RENO 6/6Z - RM150</li>
+            <li>OPPO RENO 8 - RM150</li>
+            <li>OPPO RENO 8 PRO - RM180</li>
+            <li>OPPO RENO 10 - RM150</li>
+            <li>OPPO RENO 11 - RM150</li>
+            <li>OPPO RENO 12 PRO - RM180</li>
+            <li>OPPO RENO 11F - RM150</li>
+            <li>OPPO RENO 12F - RM200</li>
+            <li>OPPO RENO 13F (MEDIATEK) - RM250</li>
+            <li>OPPO A3PRO/A60 - RM200</li>
+            <li>OPPO A3 - RM150</li>
+          </ul>
+        </div>
+        <div id="vivoPriceList" style="display:none;">
+          <h3>VIVO Models</h3>
+          <ul>
+            <li>VIVO Y03 - RM170</li>
+            <li>VIVO Y20 - RM70</li>
+            <li>VIVO Y16 - RM130</li>
+            <li>VIVO Y36 - RM180</li>
+            <li>VIVO Y27 - RM200</li>
+            <li>VIVO Y28S - RM230</li>
+            <li>VIVO Y77 - RM200</li>
+            <li>VIVO Y30 - RM200</li>
+            <li>VIVO V23 - RM200</li>
+            <li>VIVO V40 LITE - RM350</li>
+          </ul>
+        </div>
+        <div id="realmePriceList" style="display:none;">
+          <h3>REALME Models</h3>
+          <ul>
+            <li>REALME C21 - RM50</li>
+            <li>REALME C20 - RM50</li>
+            <li>REALME C53 - RM60</li>
+            <li>REALME C55 - RM60</li>
+            <li>REALME NOTE50 - RM100</li>
+            <li>REALME NOTE60 - RM100</li>
+            <li>REALME 11 - RM80 (ANDROID 14)</li>
+            <li>REALME 11 - RM130 (ANDROID 15)</li>
+            <li>REALME 12X - RM150 (ANDROID 14)</li>
+            <li>REALME 12X - RM200 (ANDROID 15)</li>
+            <li>REALME 14X - RM200</li>
+            <li>REALME 12 - RM200</li>
+            <li>REALME 13 - RM200</li>
+            <li>REALME 12 PRO - RM250</li>
+          </ul>
+        </div>
+        <div id="telcoInfo" style="margin-top: 1rem;">
+          <p>- HONOR and VIVO process need 1-14 days depending on available CPU to replace.</p>
+          <p>- No refund after processing.</p>
+          <p>- No cancellation after service in progress.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      &copy; 2024 ZuuCaster Service. All rights reserved.
+    </footer>
+  </div>
 
 <script>
   (function() {
     'use strict';
 
+    // Matrix code canvas animation
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const letters = 'アァカサタナハマヤャラワンガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&*@';
+    const fontSize = 18;
+    const columns = Math.floor(width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = '#0f0'; // Green text
+      ctx.font = `${fontSize}px monospace`;
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        ctx.fillText(text, x, y);
+
+        if (y > height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+      requestAnimationFrame(drawMatrix);
+    }
+
+    drawMatrix();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    });
+
+    // Services & UI logic
     const serviceMap = {
       '01': 'Unlock FRP',
       '02': 'Unlock Google',
@@ -343,6 +496,34 @@
     const oppoPriceList = document.getElementById('oppoPriceList');
     const vivoPriceList = document.getElementById('vivoPriceList');
     const realmePriceList = document.getElementById('realmePriceList');
+    const samsungImeiFormSection = document.getElementById('samsung-imei-form');
+    const imeiForm = document.getElementById('imeiForm');
+
+    // Show or hide price list and Samsung IMEI form based on selection
+    function updateVisibility(selectedCodes) {
+      // Show price list and IMEI form only if '04' or '10' selected
+      const hasTelco = selectedCodes.includes('04');
+      const hasSamsung = selectedCodes.includes('10');
+
+      // Price list visible if '04' selected
+      if (hasTelco) {
+        priceListContainer.style.display = 'block';
+        oppoPriceList.style.display = 'block';
+        vivoPriceList.style.display = 'block';
+        realmePriceList.style.display = 'block';
+      } else {
+        priceListContainer.style.display = 'none';
+        oppoPriceList.style.display = 'none';
+        vivoPriceList.style.display = 'none';
+        realmePriceList.style.display = 'none';
+      }
+      // Samsung IMEI form visible if '10' selected
+      if (hasSamsung) {
+        samsungImeiFormSection.style.display = 'block';
+      } else {
+        samsungImeiFormSection.style.display = 'none';
+      }
+    }
 
     function showResult(message, isError = false) {
       resultContainer.style.visibility = 'visible';
@@ -354,6 +535,7 @@
       }
     }
 
+    // On services form submit
     form.addEventListener('submit', function(event) {
       event.preventDefault();
       const formData = new FormData(form);
@@ -361,6 +543,11 @@
 
       if (selectedCodes.length === 0) {
         showResult('No services selected. Please choose at least one.', true);
+        priceListContainer.style.display = 'none';
+        oppoPriceList.style.display = 'none';
+        vivoPriceList.style.display = 'none';
+        realmePriceList.style.display = 'none';
+        samsungImeiFormSection.style.display = 'none';
         return;
       }
 
@@ -372,23 +559,42 @@
 
       if (selectedServices.length === 0) {
         showResult('Selected codes not recognized. Please try again.', true);
+        priceListContainer.style.display = 'none';
+        oppoPriceList.style.display = 'none';
+        vivoPriceList.style.display = 'none';
+        realmePriceList.style.display = 'none';
+        samsungImeiFormSection.style.display = 'none';
         return;
       }
 
       showResult(selectedServices.join('\n'));
 
-      // Show price list for selected services
-      if (selectedCodes.includes('04')) {
-        priceListContainer.style.display = 'block';
-        oppoPriceList.style.display = 'block'; // Show OPPO price list
-        vivoPriceList.style.display = 'block'; // Show VIVO price list
-        realmePriceList.style.display = 'block'; // Show REALME price list
-      } else {
-        priceListContainer.style.display = 'none';
-      }
+      updateVisibility(selectedCodes);
     });
 
-    // Accessibility: focus on first checkbox on load
+    // Samsung IMEI form submission - send WhatsApp link
+    imeiForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const imei = imeiForm.imei.value.trim();
+      const model = imeiForm.model.value.trim();
+      const kgTelco = imeiForm.kgTelco.value;
+
+      if (!imei || !model) {
+        alert('Please fill in both IMEI and Model fields.');
+        return;
+      }
+
+      // Format WhatsApp link with encoded message
+      const phoneNumber = '+60178040403';
+      const message = 
+        `Samsung IMEI Unlock Request:%0AIMEI: ${imei}%0AModel: ${model}%0AKG/TELCO UNIT: ${kgTelco}`;
+      const whatsappURL = `https://wa.me/${phoneNumber.replace(/\D/g,'')}?text=${encodeURIComponent(message)}`;
+
+      // Open WhatsApp link in new tab
+      window.open(whatsappURL, '_blank');
+    });
+
+    // Accessibility - focus first checkbox on load
     window.addEventListener('load', () => {
       const firstCheckbox = form.querySelector('input[type=checkbox]');
       if (firstCheckbox) firstCheckbox.focus();
@@ -397,3 +603,4 @@
 </script>
 </body>
 </html>
+
