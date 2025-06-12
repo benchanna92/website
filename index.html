@@ -173,6 +173,17 @@
     white-space: pre-line;
   }
 
+  .whatsapp-button {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 12px 20px;
+    background: #25D366;
+    color: white;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
   @media (max-width: 480px) {
     h1 {
       font-size: 2rem;
@@ -182,7 +193,6 @@
       padding: 20px;
     }
   }
-
 </style>
 </head>
 <body>
@@ -403,6 +413,7 @@
           foundAny = true;
           html += `<article class="service-card">`;
           html += `<div class="service-code">Code ${code}: ${services[code]}</div>`;
+
           if (code === '04') {
             html += `<div class="service-description" style="margin-top: 8px; margin-bottom: 6px;">Select Model:</div>`;
             html += `<select id="modelSelect" aria-label="Select mobile model" onchange="showPrices()">`;
@@ -424,6 +435,23 @@
             html += `</select>`;
             html += `<div id="toolRentPrice" style="margin-top: 12px; font-size: 1.2rem; font-weight: 600; color: #7fff7f;"></div>`;
             html += `<div id="orderLink" style="margin-top: 12px;"></div>`;
+          } else if (code === '03') {
+            // Method selection + IMEI input + send button for WhatsApp
+            html += `
+              <form id="imeiForm" onsubmit="sendImeiOrder(event)" style="margin-top: 12px;">
+                <label for="methodSelect">Method</label>
+                <select id="methodSelect" required aria-label="Select method">
+                  <option value="">-- Select Method --</option>
+                  <option value="Postage">Postage</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Walk-in">Walk-in</option>
+                </select>
+                <label for="imeiInput">IMEI</label>
+                <input type="text" id="imeiInput" placeholder="Enter IMEI" required aria-required="true" pattern="[0-9]+" inputmode="numeric" />
+                <button type="submit" aria-label="Send IMEI order to WhatsApp">Send Order via WhatsApp</button>
+              </form>
+              <div id="imeiOrderMessage" style="margin-top: 12px; color: #7fff7f; font-weight: 600;"></div>
+            `;
           }
           html += `</article>`;
         }
@@ -462,30 +490,79 @@
       if (selectedTool) {
         const price = toolRentals[selectedTool];
         rentPriceDiv.textContent = `Price: ${price}`;
-        // Generate unique order number
         const orderNumber = generateOrderNumber();
-
-        // Prepare WhatsApp message with order details including CR LF (%0A)
         const messageText = `Order Number: ${orderNumber}\nSelected Tool: ${selectedTool}\nPrice: ${price}`;
         const encodedMessage = encodeURIComponent(messageText);
-
-        // WhatsApp API link (without plus sign, no spaces)
         const phoneNumber = '60178040403';
         const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-        // Create link
-        orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" style="display:inline-block; margin-top: 8px; padding: 12px 20px; background: #25D366; color: white; border-radius: 8px; font-weight: 700; text-decoration: none;">Send Order via WhatsApp</a>`;
+        orderLinkDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" class="whatsapp-button">Send Order via WhatsApp</a>`;
       } else {
         rentPriceDiv.textContent = '';
         orderLinkDiv.innerHTML = '';
       }
     };
 
+    function generateOrderNumber() {
+      const now = new Date();
+      const pad = (n) => n.toString().padStart(2, '0');
+      const year = now.getFullYear();
+      const month = pad(now.getMonth() + 1);
+      const day = pad(now.getDate());
+      const hours = pad(now.getHours());
+      const minutes = pad(now.getMinutes());
+      const seconds = pad(now.getSeconds());
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      return `${year}${month}${day}-${hours}${minutes}${seconds}-${rand}`;
+    }
+
+    window.sendImeiOrder = function(event) {
+      event.preventDefault();
+      const methodSelect = document.getElementById('methodSelect');
+      const imeiInput = document.getElementById('imeiInput');
+      const msgDiv = document.getElementById('imeiOrderMessage');
+      const phoneNumber = '60178040403';
+
+      if (!methodSelect.value) {
+        msgDiv.textContent = 'Please select a method.';
+        return;
+      }
+      if (!imeiInput.value || !/^\d+$/.test(imeiInput.value)) {
+        msgDiv.textContent = 'Please enter a valid IMEI number (digits only).';
+        return;
+      }
+
+      const orderNumber = generateOrderNumber();
+
+      const messageText = 
+        `Order Number: ${orderNumber}\n` +
+        `Code: 03 - Unlock Xiaomi account\n` +
+        `Method: ${methodSelect.value}\n` +
+        `IMEI: ${imeiInput.value}`;
+
+      const encodedMessage = encodeURIComponent(messageText);
+      const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+      msgDiv.innerHTML = `<a href="${whatsappURL}" target="_blank" rel="noopener" class="whatsapp-button">Send Order via WhatsApp</a>`;
+    };
+
+    const form = document.getElementById('accessForm');
+    const input = document.getElementById('accessCodes');
+    const resultArea = document.getElementById('resultArea');
+
     form.addEventListener('submit', e => {
       e.preventDefault();
       const codes = sanitizeInput(input.value);
       renderResults(codes);
     });
+
+    function sanitizeInput(text) {
+      return text
+        .toUpperCase()
+        .split(/[\s,]+/)
+        .map(c => c.trim())
+        .filter(c => c.length > 0 && /^[0-9]+$/.test(c));
+    }
+
   })();
 </script>
 </body>
