@@ -196,16 +196,6 @@
     </div>
 </div>
 
-<!-- Modal for IC Number Input -->
-<div id="icModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="closeICModal">&times;</span>
-        <h2>Enter IC Number</h2>
-        <input type="text" id="icNumberInput" placeholder="Enter your IC number" />
-        <button id="submitICBtn">Submit</button>
-    </div>
-</div>
-
 <script>
     // Service code mapping
     const serviceMap = {
@@ -299,8 +289,6 @@
                 resultLines.push(`${code}: ${serviceMap[code]}`);
                 if (code === "111") {
                     openDeviceModal();
-                } else if (code === "02") {
-                    openICModal();
                 }
             } else {
                 resultLines.push(`${code}: Invalid access code`);
@@ -318,7 +306,7 @@
     // Show device prices based on selection
     function showDevicePrices(brand) {
         const prices = devicePrices[brand].join('<br>');
-        document.getElementById('devicePrices').innerText = prices;
+        document.getElementById('devicePrices').innerHTML = prices;
         const terms = `
             <strong>Terms & Conditions:</strong><br>
             - HONOR and VIVO process need 1-14 days depending on available CPU to replace.<br>
@@ -328,29 +316,9 @@
         document.getElementById('termsConditions').innerHTML = terms;
     }
 
-    // Open IC number input modal
-    function openICModal() {
-        document.getElementById('icModal').style.display = "block";
-    }
-
-    // Handle IC number submission
-    document.getElementById('submitICBtn').onclick = function() {
-        const icNumber = document.getElementById('icNumberInput').value.trim();
-        if (icNumber) {
-            const whatsappLink = `https://wa.me/60178040403?text=IC Number: ${icNumber}`;
-            window.open(whatsappLink, '_blank');
-            document.getElementById('icModal').style.display = "none";
-        } else {
-            alert("Please enter your IC number.");
-        }
-    };
-
     // Close modals
     document.getElementById('closeDeviceModal').onclick = function() {
         document.getElementById('deviceModal').style.display = "none";
-    }
-    document.getElementById('closeICModal').onclick = function() {
-        document.getElementById('icModal').style.display = "none";
     }
 
     // Matrix code rain animation on canvas
