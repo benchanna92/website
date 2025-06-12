@@ -24,7 +24,6 @@
     flex-direction: column;
     align-items: center;
     padding: 40px 20px;
-    /* subtle matrix inspired background - subtle vertical lines */
     background-image:
       linear-gradient(90deg, rgba(0,255,0,0.04) 1px, transparent 1px),
       linear-gradient(0deg, rgba(0,255,0,0.04) 1px, transparent 1px);
@@ -35,7 +34,7 @@
     font-weight: 700;
     font-size: 2.5rem;
     margin-bottom: 24px;
-    color: #7fff7f; /* fresh green accent */
+    color: #7fff7f;
     text-align: center;
     text-shadow: 0 0 6px #00cc00;
   }
@@ -59,7 +58,7 @@
     color: #9ef09e;
   }
 
-  input[type="text"] {
+  input[type="text"], select {
     width: 100%;
     padding: 12px 16px;
     border-radius: 12px;
@@ -69,15 +68,15 @@
     font-size: 1rem;
     outline-offset: 2px;
     transition: border-color 0.3s ease;
+    margin-bottom: 16px;
   }
 
-  input[type="text"]:focus {
+  input[type="text"]:focus, select:focus {
     border-color: #7fff7f;
     box-shadow: 0 0 8px #7fff7f;
   }
 
   button {
-    margin-top: 16px;
     width: 100%;
     background: linear-gradient(135deg, #44ff44, #00cc00);
     border: none;
@@ -112,15 +111,13 @@
     border-radius: 12px;
     padding: 20px 24px;
     margin-bottom: 16px;
-    box-shadow:
-      0 0 8px rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .service-card:hover {
     transform: translateY(-4px);
-    box-shadow:
-      0 8px 20px rgba(0, 255, 0, 0.6);
+    box-shadow: 0 8px 20px rgba(0, 255, 0, 0.6);
   }
 
   .service-code {
@@ -194,12 +191,67 @@
       "10": "Samsung IMEI unlock by Server"
     };
 
+    const models = {
+      "REALME": {
+        "C21": "RM50",
+        "C20": "RM50",
+        "C53": "RM60",
+        "C55": "RM60",
+        "NOTE50": "RM100",
+        "NOTE60": "RM100",
+        "11 (ANDROID 14)": "RM80",
+        "11 (ANDROID 15)": "RM130",
+        "12X (ANDROID 14)": "RM150",
+        "12X (ANDROID 15)": "RM200",
+        "14X": "RM200",
+        "12": "RM200",
+        "13": "RM200",
+        "12 PRO": "RM250"
+      },
+      "VIVO": {
+        "Y03": "RM170",
+        "Y20": "RM70",
+        "Y16": "RM130",
+        "Y36": "RM180",
+        "Y27": "RM200",
+        "Y28S": "RM230",
+        "Y77": "RM200",
+        "Y30": "RM200",
+        "V23": "RM200",
+        "V40 LITE": "RM350"
+      },
+      "OPPO": {
+        "A16": "RM100",
+        "A16K": "RM100",
+        "A17": "RM100",
+        "A18": "RM100",
+        "A38 (ANDROID 14)": "RM100",
+        "A38 (ANDROID 15)": "RM150",
+        "A54": "RM100",
+        "A57": "RM100",
+        "A77": "RM100",
+        "A78": "RM150",
+        "A79": "RM150",
+        "RENO 5PRO": "RM150",
+        "RENO 6/6Z": "RM150",
+        "RENO 8": "RM150",
+        "RENO 8 PRO": "RM180",
+        "RENO 10": "RM150",
+        "RENO 11": "RM150",
+        "RENO 12 PRO": "RM180",
+        "RENO 11F": "RM150",
+        "RENO 12F": "RM200",
+        "RENO 13F (MEDIATEK)": "RM250",
+        "A3PRO/A60": "RM200",
+        "A3": "RM150"
+      }
+    };
+
     const form = document.getElementById('accessForm');
     const input = document.getElementById('accessCodes');
     const resultArea = document.getElementById('resultArea');
 
     function sanitizeInput(text) {
-      // Convert to uppercase, trim, split by space or comma and filter numbers only
       return text
         .toUpperCase()
         .split(/[\s,]+/)
@@ -210,15 +262,22 @@
     function renderResults(codes) {
       let html = '';
       let foundAny = false;
-      // Unique codes
       const uniqueCodes = [...new Set(codes)];
       uniqueCodes.forEach(code => {
         if (services[code]) {
           foundAny = true;
           html += `
             <article class="service-card">
-              <div class="service-code">Code ${code}</div>
-              <div class="service-description">${services[code]}</div>
+              <div class="service-code">Code ${code}: ${services[code]}</div>
+              <div class="service-description">Select Model:</div>
+              <select id="modelSelect" onchange="showPrices('${code}')">
+                <option value="">--Select Model--</option>
+                <option value="REALME">REALME</option>
+                <option value="VIVO">VIVO</option>
+                <option value="OPPO">OPPO</option>
+                <option value="HONOR">HONOR</option>
+              </select>
+              <div id="priceList"></div>
             </article>
           `;
         }
@@ -232,6 +291,24 @@
       }
     }
 
+    window.showPrices = function(code) {
+      const modelSelect = document.getElementById('modelSelect');
+      const priceList = document.getElementById('priceList');
+      const selectedModel = modelSelect.value;
+
+      if (selectedModel) {
+        let pricesHtml = '<h4>Price List:</h4><ul>';
+        const modelPrices = models[selectedModel];
+        for (const [model, price] of Object.entries(modelPrices)) {
+          pricesHtml += `<li>${model} - ${price}</li>`;
+        }
+        pricesHtml += '</ul>';
+        priceList.innerHTML = pricesHtml;
+      } else {
+        priceList.innerHTML = '';
+      }
+    };
+
     form.addEventListener('submit', e => {
       e.preventDefault();
       const codes = sanitizeInput(input.value);
@@ -241,4 +318,3 @@
 </script>
 </body>
 </html>
-
