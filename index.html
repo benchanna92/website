@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Encrypted Code Unlock Phone</title>
+<title>ZuuCaster encrypted code service's</title>
 <style>
   /* Import Google Fonts: 'Share Tech Mono' for matrix feel, and 'Inter' for clean text */
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap');
@@ -21,38 +21,21 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
   }
-  /* Matrix background animation */
-  body::before {
-    content: "";
+
+  /* Canvas background covers entire viewport behind content */
+  #matrixCanvas {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse at center, rgba(0,255,65,0.12) 0%, transparent 70%);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
     z-index: 0;
-  }
-  /* Subtle matrix falling code effect container */
-  .matrix-background {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    z-index: 0;
-    overflow: hidden;
     pointer-events: none;
-  }
-  .matrix-column {
-    position: absolute;
-    top: -100%;
-    font-size: 14px;
-    text-shadow: 0 0 5px #00ff41, 0 0 20px #00ff41;
-    user-select: none;
-    white-space: nowrap;
-    animation-name: matrixFall;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-  @keyframes matrixFall {
-    0% { top: -100%; }
-    100% { top: 110%; }
+    background: black;
   }
 
   /* Container max width and padding */
@@ -76,13 +59,6 @@
     font-size: 3rem;
     margin: 0 0 8px;
     text-shadow: 0 0 10px #00ff41;
-  }
-  header p {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 1.3rem;
-    color: #00ff41cc;
-    margin: 0;
   }
 
   /* Form styles */
@@ -210,13 +186,12 @@
 </head>
 <body>
 
-<!-- Matrix falling text background container and script -->
-<div class="matrix-background" aria-hidden="true"></div>
+<!-- Canvas matrix binary code animation background -->
+<canvas id="matrixCanvas" aria-hidden="true"></canvas>
 
 <div class="container" role="main">
   <header>
-    <h1>Encrypted Code Unlock Phone</h1>
-    <p>Enter the multiple access codes below to view the price list and unlock options</p>
+    <h1>ZuuCaster encrypted code service's</h1>
   </header>
 
   <form id="codeForm" aria-label="Access Code Entry Form">
@@ -236,43 +211,72 @@
 </div>
 
 <script>
-  // Matrix falling code background effect
+  // Matrix binary code animation on canvas
   (() => {
-    const container = document.querySelector('.matrix-background');
-    if (!container) return;
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
 
-    const chars = '01'.repeat(10) + '1234567890'.repeat(3) + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const columnsCount = Math.floor(window.innerWidth / 16);
-    const columns = [];
+    let width, height;
+    let columns;
+    const fontSize = 18;
+    const characters = '01';
 
-    for (let i = 0; i < columnsCount; i++) {
-      const col = document.createElement('div');
-      col.classList.add('matrix-column');
-      col.style.left = (i * 16) + 'px';
-      col.style.animationDuration = (10 + Math.random() * 10) + 's';
-      col.style.fontSize = '14px';
-      col.style.color = 'rgba(0,255,65,0.6)';
-      col.style.textShadow = '0 0 5px #00ff41';
-      container.appendChild(col);
-      columns.push(col);
+    // Array to track y position of drops for each column
+    let drops;
+
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      columns = Math.floor(width / fontSize);
+      drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * height;
+      }
     }
 
-    function randomChar() {
-      return chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+    function draw() {
+      // Semi-transparent black background to create trail effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+      ctx.fillRect(0, 0, width, height);
 
-    function update() {
-      columns.forEach(col => {
-        let text = '';
-        const len = 20 + Math.floor(Math.random() * 20);
-        for (let i = 0; i < len; i++) {
-          text += randomChar();
+      ctx.font = fontSize + 'px "Share Tech Mono", monospace';
+      ctx.textBaseline = 'top';
+
+      for (let i = 0; i < columns; i++) {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        // Bright head of the stream (white-green)
+        ctx.fillStyle = 'rgba(180, 255, 180, 1)';
+        ctx.fillText(text, x, y);
+
+        // Slightly transparent second character below head for tail effect
+        ctx.fillStyle = 'rgba(0, 255, 65, 0.7)';
+        ctx.fillText(text, x, y - fontSize);
+
+        // Regular green for trailing characters
+        ctx.fillStyle = '#00ff41';
+
+        drops[i] += 1.2 + Math.random() * 0.5;
+
+        // Reset drop to top randomly after it passes the bottom with some randomness
+        if (drops[i] * fontSize > height + Math.random() * 1000) {
+          drops[i] = 0;
         }
-        col.textContent = text;
-      });
+      }
+
+      requestAnimationFrame(draw);
     }
-    update();
-    setInterval(update, 3000);
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+    });
+
+    resizeCanvas();
+    draw();
   })();
 
   // Access codes and their descriptions/prices
@@ -356,14 +360,14 @@
       detailCard.style.backgroundColor = 'rgba(0, 255, 65, 0.08)';
 
       const title = document.createElement('h3');
-      title.textContent = `${code}. ${accessCodes[code].description}`;
+      title.textContent = \`\${code}. \${accessCodes[code].description}\`;
       title.style.margin = '0 0 8px';
       title.style.fontFamily = "'Share Tech Mono', monospace";
       title.style.color = '#00ff41';
       title.style.textShadow = '0 0 4px #00ff41';
 
       const price = document.createElement('p');
-      price.textContent = `Price: ${accessCodes[code].price}`;
+      price.textContent = \`Price: \${accessCodes[code].price}\`;
       price.style.fontWeight = '700';
       price.style.margin = '0 0 8px';
 
