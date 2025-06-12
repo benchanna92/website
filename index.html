@@ -3,491 +3,432 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ZuuCaster encrypted code service's</title>
+<title>Zuu Caster Encrypted Code - Matrix Access</title>
 <style>
-  /* Import Google Fonts: 'Share Tech Mono' for matrix feel, and 'Inter' for clean text */
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap');
+  /* Matrix theme - dark background with green text */
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+  :root {
+    --matrix-green: #00ff41;
+    --background-black: #000000;
+    --card-bg: rgba(0, 32, 0, 0.8);
+    --code-input-bg: #001a00;
+    --font-family-mono: 'Share Tech Mono', monospace, monospace;
+  }
 
   /* Reset and base */
-  *, *::before, *::after {
+  * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
   }
-  body {
-    margin: 0;
-    background: #000000;
-    color: #00ff41;
-    font-family: 'Share Tech Mono', monospace;
-    line-height: 1.6;
-    min-height: 100vh;
+
+  body, html {
+    height: 100%;
+    background-color: var(--background-black);
+    color: var(--matrix-green);
+    font-family: var(--font-family-mono);
     display: flex;
     flex-direction: column;
-    position: relative;
-    overflow-x: hidden;
+    justify-content: start;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px 16px;
   }
 
-  /* Canvas background covers entire viewport behind content */
-  #matrixCanvas {
+  /* Matrix falling code background */
+  #matrix-canvas {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: block;
-    z-index: 0;
-    pointer-events: none;
-    background: black;
-  }
-
-  /* Container max width and padding */
-  .container {
-    position: relative;
-    z-index: 10;
-    max-width: 900px;
-    width: 90%;
-    margin: 0 auto;
-    padding: 24px 16px 56px;
-    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: var(--background-black);
   }
 
   header {
-    margin-bottom: 56px;
+    padding-bottom: 24px;
     text-align: center;
   }
+
   header h1 {
-    font-family: 'Share Tech Mono', monospace;
-    font-weight: 700;
     font-size: 3rem;
-    margin: 0 0 8px;
-    text-shadow: 0 0 10px #00ff41;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px var(--matrix-green);
+    user-select: none;
   }
 
-  /* Form styles */
-  form {
-    background: rgba(0, 255, 65, 0.1);
-    border: 2px solid #00ff41;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 0 20px #00ff41aa;
+  header p {
+    margin-top: 8px;
+    font-size: 1.1rem;
+    color: #0f8a15;
+    user-select: none;
+  }
+
+  main {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 0 20px 3px rgba(0,255,65,0.4);
     display: flex;
     flex-direction: column;
     gap: 24px;
   }
 
   label {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 1.15rem;
-    color: #00ff41dd;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    display: block;
   }
 
-  textarea, input[type="text"] {
-    width: 100%;
-    min-height: 40px;
-    border: none;
+  input[type="text"], textarea {
+    font-family: var(--font-family-mono);
+    font-size: 1.1rem;
+    color: var(--matrix-green);
+    background-color: var(--code-input-bg);
+    border: 2px solid var(--matrix-green);
     border-radius: 8px;
     padding: 12px 16px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 1.15rem;
-    background: #001a00;
-    color: #00ff41;
-    box-shadow: inset 0 0 8px #00ff41aa;
-    resize: vertical;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    resize: none;
+    transition: border-color 0.3s ease;
   }
-  textarea {
-    min-height: 90px;
-  }
-  textarea:focus, input[type="text"]:focus {
+
+  input[type="text"]:focus, textarea:focus {
     outline: none;
-    background: #003300;
-    box-shadow: 0 0 12px #00ff41;
+    border-color: #00ff76;
+    box-shadow: 0 0 8px #00ff76;
   }
 
   button {
-    align-self: flex-start;
+    font-family: var(--font-family-mono);
+    font-size: 1.2rem;
     background-color: transparent;
-    border: 2px solid #00ff41;
+    border: 2px solid var(--matrix-green);
+    color: var(--matrix-green);
+    padding: 12px 24px;
     border-radius: 12px;
-    padding: 12px 32px;
-    color: #00ff41;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 1.15rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none;
   }
-  button:hover, button:focus {
-    background-color: #00ff41;
-    color: #001a00;
-    box-shadow: 0 0 20px #00ff41;
+
+  button:hover,
+  button:focus {
+    background-color: var(--matrix-green);
+    color: var(--background-black);
     outline: none;
   }
 
-  /* Pricelist container */
-  .pricelist {
-    margin-top: 40px;
+  section#result {
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: #001800cc;
     border-radius: 12px;
-    background: rgba(0,255,65,0.15);
-    box-shadow: 0 0 16px #00ff41aa;
-    padding: 24px;
-  }
-  .pricelist h2 {
-    margin-top: 0;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 2rem;
-    text-align: center;
-    margin-bottom: 24px;
-    text-shadow: 0 0 10px #00ff41;
+    padding: 16px;
+    border: 1px solid var(--matrix-green);
   }
 
-  .code-entry-list {
-    font-family: 'Share Tech Mono', monospace;
-    margin-bottom: 32px;
-  }
-  .code-item {
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    background: #002200dd;
-    border-radius: 8px;
-    padding: 12px 16px;
-    box-shadow: inset 0 0 10px #00ff41cc;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-  }
-  .code-item .desc {
-    color: #00ff41dd;
-  }
-  .code-item .code {
-    background: #004400;
-    padding: 4px 12px;
-    border-radius: 8px;
-    box-shadow: 0 0 8px #00ff41cc;
-    user-select: all;
+  section#result h2 {
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+    text-shadow: 0 0 6px var(--matrix-green);
   }
 
-  /* Special form for Tutup Blacklist Telco Kekal */
-  .blacklist-form {
-    background: rgba(0, 255, 65, 0.1);
-    border: 2px solid #00ff41;
-    border-radius: 12px;
-    padding: 24px;
-    margin-top: 24px;
-    box-shadow: 0 0 20px #00ff41aa;
-    max-width: 500px;
-    font-family: 'Inter', sans-serif;
-  }
-  .blacklist-form h3 {
-    font-family: 'Share Tech Mono', monospace;
-    font-weight: 700;
-    color: #00ff41;
-    margin-bottom: 16px;
-    text-shadow: 0 0 10px #00ff41;
-    font-size: 1.8rem;
-  }
-  .blacklist-form p.price {
-    font-weight: 700;
-    font-size: 1.3rem;
-    margin-bottom: 16px;
-    color: #00ff41cc;
-  }
-  .blacklist-form p.detail {
-    margin-bottom: 24px;
-    color: #00ff41cc;
-    line-height: 1.4;
-    font-size: 1rem;
-  }
-  .blacklist-form label {
-    font-weight: 600;
+  ul.pricelist {
+    list-style-type: none;
     font-size: 1.1rem;
-    color: #00ff41dd;
   }
-  .blacklist-form input[type="text"] {
-    min-height: 44px;
-    font-size: 1.15rem;
+
+  ul.pricelist li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    position: relative;
   }
-  .blacklist-form button {
-    margin-top: 16px;
+  ul.pricelist li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--matrix-green);
+  }
+
+  /* IC input section */
+  #ic-input-section {
+    margin-top: 24px;
+    padding: 20px;
+    background: rgba(0, 90, 0, 0.9);
+    border-radius: 12px;
+    border: 2px solid #00ff41;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  #ic-input-section label {
+    font-size: 1.2rem;
+  }
+
+  #ic-input-section input[type="text"] {
     width: 100%;
   }
-  .blacklist-form[hidden] {
-    display: none !important;
-  }
 
-  /* Responsive */
+  /* Responsive typography and layout */
   @media (max-width: 640px) {
+    main {
+      padding: 24px 16px;
+    }
     header h1 {
-      font-size: 2rem;
+      font-size: 2.2rem;
     }
-    button, .blacklist-form button {
+    button {
       width: 100%;
-      padding: 12px 0;
-      font-size: 1.1rem;
-    }
-    .blacklist-form {
-      max-width: 100%;
     }
   }
 
-  /* Accessibility focus */
-  button:focus-visible, textarea:focus-visible, input:focus-visible {
-    outline-offset: 2px;
-    outline: 3px solid #00ff41;
+  /* Material Icon style */
+  .material-symbols-outlined {
+    font-variation-settings:
+      'FILL' 0,
+      'wght' 700,
+      'GRAD' 0,
+      'opsz' 48;
+    vertical-align: middle;
+    margin-right: 8px;
+    color: var(--matrix-green);
   }
 </style>
-<!-- Material Icons CDN -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 <body>
+<canvas id="matrix-canvas" aria-hidden="true"></canvas>
 
-<!-- Canvas matrix binary code animation background -->
-<canvas id="matrixCanvas" aria-hidden="true"></canvas>
+<header role="banner">
+  <h1>Zuu Caster Encrypted Code</h1>
+  <p>Enter one or multiple access codes to view the pricelist</p>
+</header>
 
-<div class="container" role="main" tabindex="-1">
-  <header>
-    <h1>ZuuCaster encrypted code service's</h1>
-  </header>
-
-  <form id="codeForm" aria-label="Access Code Entry Form">
-    <label for="codesInput">Enter Access Codes (one per line):</label>
-    <textarea id="codesInput" placeholder="Enter one or more access codes"></textarea>
-
-    <button type="submit" aria-label="Submit access codes and view pricelist">
-      <span class="material-icons" aria-hidden="true" style="vertical-align: middle;">lock_open</span> Unlock
+<main role="main" aria-labelledby="mainHeading">
+  <form id="access-code-form" aria-describedby="formInstructions">
+    <label for="accessCodes">Access Code(s):</label>
+    <input
+      type="text"
+      id="accessCodes"
+      name="accessCodes"
+      autocomplete="off"
+      placeholder="E.g. 01, 007, 111, 04, 02"
+      aria-required="true"
+      aria-describedby="formInstructions"
+      required
+    />
+    <small id="formInstructions" style="color: #0f8a15; display: block; margin-bottom: 12px;">
+      You can enter multiple codes separated by comma or space
+    </small>
+    <button type="submit" aria-label="Submit access codes and show pricelist">
+      <span class="material-symbols-outlined" aria-hidden="true">key</span>Submit
     </button>
   </form>
 
-  <section id="pricelistSection" class="pricelist" aria-live="polite" aria-atomic="true" hidden>
-    <h2>Access Granted – Price List & Services</h2>
-    <div class="code-entry-list" id="enteredCodesList"></div>
-    <div class="service-details" id="serviceDetails"></div>
+  <section id="result" aria-live="polite" aria-atomic="true" tabindex="0" style="display:none;">
+    <h2>Pricelist for Entered Access Codes:</h2>
+    <ul class="pricelist" id="pricelist"></ul>
   </section>
 
-  <form id="blacklistForm" class="blacklist-form" aria-label="Tutup Blacklist Telco Kekal Request Form" hidden>
-    <h3>02. Tutup Blacklist Telco Kekal</h3>
-    <p class="price">Price: RM75</p>
-    <p class="detail">Permanent removal of Telco blacklist status on devices.</p>
-
-    <label for="icNumberInput">IC Number:</label>
-    <input type="text" id="icNumberInput" name="icNumber" placeholder="Enter your IC number" autocomplete="off" required aria-required="true" />
-
-    <button type="submit" aria-label="Submit IC Number and send WhatsApp message">
-      <span class="material-icons" aria-hidden="true" style="vertical-align: middle;">send</span> Submit and Send to WhatsApp
-    </button>
-  </form>
-</div>
+  <section id="ic-input-section" aria-live="polite" aria-atomic="true" tabindex="-1">
+    <form id="ic-form" aria-label="IC Number form for access code 02">
+      <label for="icNumber">IC number:</label>
+      <input type="text" id="icNumber" name="icNumber" autocomplete="off" placeholder="Enter your IC number" required />
+      <button type="submit" aria-label="Create case and open WhatsApp">
+        <span class="material-symbols-outlined" aria-hidden="true">send</span>Create Case &amp; WhatsApp
+      </button>
+    </form>
+  </section>
+</main>
 
 <script>
-  // Matrix binary code animation on canvas
   (() => {
-    const canvas = document.getElementById('matrixCanvas');
+    const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
 
     let width, height;
     let columns;
-    const fontSize = 18;
-    const characters = '01';
-
-    // Array to track y position of drops for each column
+    const fontSize = 16;
     let drops;
 
-    function resizeCanvas() {
+    const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*()*&^%'.split('');
+
+    function setup() {
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
       columns = Math.floor(width / fontSize);
-      drops = [];
-      for (let i = 0; i < columns; i++) {
-        drops[i] = Math.random() * height;
-      }
+      drops = new Array(columns).fill(1);
     }
 
     function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
       ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = '#0F0'; // green text
+      ctx.font = fontSize + 'px Share Tech Mono';
 
-      ctx.font = fontSize + 'px "Share Tech Mono", monospace';
-      ctx.textBaseline = 'top';
+      for(let i=0; i < columns; i++) {
+        let text = characters[Math.floor(Math.random() * characters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-      for (let i = 0; i < columns; i++) {
-        const text = characters.charAt(Math.floor(Math.random() * characters.length));
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-
-        ctx.fillStyle = 'rgba(180, 255, 180, 1)';
-        ctx.fillText(text, x, y);
-
-        ctx.fillStyle = 'rgba(0, 255, 65, 0.7)';
-        ctx.fillText(text, x, y - fontSize);
-
-        ctx.fillStyle = '#00ff41';
-
-        drops[i] += 1.2 + Math.random() * 0.5;
-
-        if (drops[i] * fontSize > height + Math.random() * 1000) {
+        if(drops[i] * fontSize > height && Math.random() > 0.975) {
           drops[i] = 0;
         }
+        drops[i]++;
       }
+    }
 
-      requestAnimationFrame(draw);
+    function loop() {
+      draw();
+      requestAnimationFrame(loop);
     }
 
     window.addEventListener('resize', () => {
-      resizeCanvas();
+      setup();
     });
 
-    resizeCanvas();
-    draw();
+    setup();
+    loop();
+
+    // Pricelist mapping for access codes
+    const accessCodePricelist = {
+      '01': {
+        description: 'Unlock FRP/Google',
+        price: 'RM 30',
+      },
+      '007': {
+        description: 'Check Telco iPhone',
+        price: 'RM 20',
+      },
+      '111': {
+        description: 'Unlock Telco',
+        price: 'RM 50',
+      },
+      '02': {
+        description: 'Tutup Blacklist Telco Kekal',
+        price: 'RM 150',
+      },
+      '04': {
+        description: 'Telco/Contract Device Access',
+        price: 'RM 80',
+      },
+    };
+
+    // Normalize access code keys to uppercase and no dots, trim spaces
+    function normalizeCode(code) {
+      return code.toString().trim().replace(/\./g, '').toUpperCase();
+    }
+
+    const form = document.getElementById('access-code-form');
+    const resultSection = document.getElementById('result');
+    const pricelistUl = document.getElementById('pricelist');
+    const accessCodesInput = document.getElementById('accessCodes');
+    const icSection = document.getElementById('ic-input-section');
+    const icForm = document.getElementById('ic-form');
+    const icInput = document.getElementById('icNumber');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      let input = accessCodesInput.value;
+      if (!input) {
+        alert('Please enter at least one access code.');
+        return;
+      }
+
+      // Split input by comma, space, or newlines, filter empty
+      let codes = input.split(/[\s,]+/).map(normalizeCode).filter(c => c.length > 0);
+
+      let matchedItems = [];
+
+      codes.forEach(code => {
+        if (accessCodePricelist.hasOwnProperty(code)) {
+          matchedItems.push({ code, ...accessCodePricelist[code] });
+        }
+      });
+
+      pricelistUl.innerHTML = '';
+
+      if(matchedItems.length === 0) {
+        pricelistUl.innerHTML = '<li>No matching access codes found.</li>';
+      } else {
+        matchedItems.forEach(item => {
+          let li = document.createElement('li');
+          li.textContent = `[${item.code}] ${item.description} - Price: ${item.price}`;
+          pricelistUl.appendChild(li);
+        });
+      }
+
+      // Show result section and focus for accessibility
+      resultSection.style.display = 'block';
+      resultSection.focus();
+
+      // Show or hide IC number input section if code '02' is present
+      if(codes.includes('02')) {
+        icSection.style.display = 'flex';
+        icInput.focus();
+      } else {
+        icSection.style.display = 'none';
+        icInput.value = '';
+      }
+    });
+
+    // Handle IC form submission to generate case number and open WhatsApp
+    icForm.addEventListener('submit', e => {
+      e.preventDefault();
+
+      const icNumber = icInput.value.trim();
+      if(!icNumber) {
+        alert('Please enter your IC number.');
+        icInput.focus();
+        return;
+      }
+
+      // Generate a case number: simple format "CASE" + current YYYYMMDDHHMMSS + random 3digits
+      const now = new Date();
+      const pad2 = n => n.toString().padStart(2,'0');
+      const pad3 = n => n.toString().padStart(3,'0');
+      const caseNumber = 'CASE' +
+        now.getFullYear().toString() +
+        pad2(now.getMonth()+1) +
+        pad2(now.getDate()) +
+        pad2(now.getHours()) +
+        pad2(now.getMinutes()) +
+        pad2(now.getSeconds()) +
+        pad3(Math.floor(Math.random() * 1000));
+
+      // WhatsApp URL with phone number +60178040403
+      const phone = '+60178040403';
+
+      // Message content template
+      const message = encodeURIComponent(
+        `Hello, I would like to create a case for access code 02 (Tutup Blacklist Telco Kekal).\nIC Number: ${icNumber}\nCase Number: ${caseNumber}\nPlease assist.`
+      );
+
+      const whatsappUrl = `https://wa.me/${phone.replace(/\D/g, '')}?text=${message}`;
+
+      // Open WhatsApp in new tab/window
+      window.open(whatsappUrl, '_blank', 'noopener');
+
+      // Optionally show alert or confirmation
+      alert(\`Case created with number: \${caseNumber}. Opening WhatsApp chat...\`);
+
+      // Reset IC number input and hide section
+      icInput.value = '';
+      icSection.style.display = 'none';
+    });
   })();
-
-  // Access codes and their descriptions/prices
-  const accessCodes = {
-    '01': {
-      description: 'Unlock FRP/Google',
-      price: '$20.00',
-      detail: 'Factory Reset Protection unlock services for Android devices.'
-    },
-    '007': {
-      description: 'Check Telco iPhone',
-      price: '$15.00',
-      detail: 'Telco contract and carrier check for iPhone models.'
-    },
-    '111': {
-      description: 'Unlock Telco/Contract Device',
-      price: '$40.00',
-      detail: 'Unlock service for Telco restricted or contract-locked devices.'
-    },
-    '02': {
-      description: 'Tutup Blacklist Telco Kekal',
-      price: 'RM75',
-      detail: 'Permanent removal of Telco blacklist status on devices.'
-    }
-  };
-
-  const form = document.getElementById('codeForm');
-  const textarea = document.getElementById('codesInput');
-  const pricelistSection = document.getElementById('pricelistSection');
-  const enteredCodesList = document.getElementById('enteredCodesList');
-  const serviceDetails = document.getElementById('serviceDetails');
-  const blacklistForm = document.getElementById('blacklistForm');
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const rawInput = textarea.value.trim();
-    if (!rawInput) {
-      alert('Please enter at least one access code.');
-      textarea.focus();
-      return;
-    }
-
-    // Split input lines, clean and uppercase
-    const enteredCodes = rawInput.split('\n').map(c => c.trim()).filter(c => c.length > 0);
-
-    // Validate codes, only keep valid ones
-    const validCodes = enteredCodes.filter(code => Object.keys(accessCodes).includes(code));
-
-    if (validCodes.length === 0) {
-      alert('No valid access codes entered. Please try again.');
-      textarea.focus();
-      blacklistForm.hidden = true;
-      pricelistSection.hidden = true;
-      return;
-    }
-
-    pricelistSection.hidden = false;
-
-    enteredCodesList.innerHTML = '';
-    validCodes.forEach(code => {
-      const item = document.createElement('div');
-      item.className = 'code-item';
-      const descSpan = document.createElement('span');
-      descSpan.className = 'desc';
-      descSpan.textContent = accessCodes[code].description;
-      const codeSpan = document.createElement('span');
-      codeSpan.className = 'code';
-      codeSpan.textContent = code;
-      item.appendChild(descSpan);
-      item.appendChild(codeSpan);
-      enteredCodesList.appendChild(item);
-    });
-
-    serviceDetails.innerHTML = '';
-    validCodes.forEach(code => {
-      const detailCard = document.createElement('article');
-      detailCard.style.marginBottom = '24px';
-      detailCard.style.padding = '16px';
-      detailCard.style.border = '1px solid #00ff41';
-      detailCard.style.borderRadius = '12px';
-      detailCard.style.backgroundColor = 'rgba(0, 255, 65, 0.08)';
-
-      const title = document.createElement('h3');
-      title.textContent = \`\${code}. \${accessCodes[code].description}\`;
-      title.style.margin = '0 0 8px';
-      title.style.fontFamily = "'Share Tech Mono', monospace";
-      title.style.color = '#00ff41';
-      title.style.textShadow = '0 0 4px #00ff41';
-
-      const price = document.createElement('p');
-      price.textContent = \`Price: \${accessCodes[code].price}\`;
-      price.style.fontWeight = '700';
-      price.style.margin = '0 0 8px';
-
-      const detail = document.createElement('p');
-      detail.textContent = accessCodes[code].detail;
-      detail.style.margin = 0;
-      detail.style.color = '#00ff41cc';
-
-      detailCard.appendChild(title);
-      detailCard.appendChild(price);
-      detailCard.appendChild(detail);
-
-      serviceDetails.appendChild(detailCard);
-    });
-
-    // Show blacklist form only if code '02' is included
-    if (validCodes.includes('02')) {
-      blacklistForm.hidden = false;
-      blacklistForm.scrollIntoView({behavior: 'smooth'});
-      document.getElementById('icNumberInput').focus();
-    } else {
-      blacklistForm.hidden = true;
-    }
-
-    pricelistSection.scrollIntoView({ behavior: 'smooth' });
-  });
-
-
-  // Handle blacklist form submit to send WhatsApp message
-  blacklistForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const icInput = document.getElementById('icNumberInput');
-    const icNumber = icInput.value.trim();
-
-    if (!icNumber) {
-      alert('Please enter your IC number.');
-      icInput.focus();
-      return;
-    }
-
-    const phoneNumber = '+60178040403';
-
-    const message = \`Hello ZuuCaster,
-
-I want to request the service: 02. Tutup Blacklist Telco Kekal
-Price: RM75
-
-My IC Number is: \${icNumber}
-
-Please provide further instructions. Thank you!\`;
-
-    const encodedMessage = encodeURIComponent(message);
-
-    // Open WhatsApp url in new tab/window
-    const whatsappURL = \`https://wa.me/\${phoneNumber.replace(/\\D/g, '')}?text=\${encodedMessage}\`;
-    window.open(whatsappURL, '_blank');
-  });
 </script>
-
 </body>
 </html>
+
