@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Encrypted Price List Access</title>
+<title>SOROK BLACKLIST TELCO Price List</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
@@ -90,7 +90,7 @@
     user-select: none;
   }
 
-  input[type="password"] {
+  input[type="text"] {
     padding: 12px 16px;
     border-radius: 12px;
     border: none;
@@ -101,14 +101,15 @@
     text-shadow: 0 0 3px #00ff00;
     outline-offset: 2px;
     transition: background-color 0.3s ease;
+    text-transform: uppercase;
   }
 
-  input[type="password"]::placeholder {
+  input[type="text"]::placeholder {
     color: #99ff99aa;
     font-weight: 400;
   }
 
-  input[type="password"]:focus {
+  input[type="text"]:focus {
     background: rgba(255 255 255 / 0.25);
   }
 
@@ -153,13 +154,12 @@
     border-radius: 16px;
     box-shadow: 0 6px 15px rgb(0 255 70 / 0.3);
     color: #b0ffb0;
-    max-height: 400px;
-    overflow-y: auto;
+    text-align: center;
   }
 
   #price-list h2 {
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 2.25rem;
     margin-bottom: 24px;
     color: #00ff00;
     text-shadow:
@@ -167,49 +167,48 @@
       0 0 12px #00ff00;
   }
 
-  table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 12px;
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-
-  thead th {
-    text-align: left;
-    padding-bottom: 8px;
-    border-bottom: 1.5px solid #009900;
+  #price-list .price {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 24px;
     color: #99ff99;
+    letter-spacing: 1.8px;
   }
 
-  tbody tr {
-    background: rgba(0 255 0 / 0.12);
-    border-radius: 12px;
+  #price-list .desc {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 36px;
+    color: #a0ffa0cc;
   }
 
-  tbody td {
-    padding: 12px 16px;
-    vertical-align: middle;
+  #price-list a.whatsapp-link {
+    display: inline-block;
+    padding: 14px 36px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 28px;
+    background: #25d366;
+    color: #fafafa;
+    text-decoration: none;
+    box-shadow: 0 0 20px #25d366aa;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
   }
 
-  tbody tr:hover {
-    background: rgba(0 255 0 / 0.3);
-    cursor: default;
+  #price-list a.whatsapp-link:hover,
+  #price-list a.whatsapp-link:focus-visible {
+    background: #1ebe57;
+    box-shadow: 0 0 28px #1ebe57cc;
+    outline: none;
   }
 
-  /* Scrollbar styling */
-  #price-list::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  #price-list::-webkit-scrollbar-track {
-    background: rgba(0, 255, 0, 0.1);
-    border-radius: 8px;
-  }
-
-  #price-list::-webkit-scrollbar-thumb {
-    background: rgba(0, 255, 0, 0.4);
-    border-radius: 8px;
+  /* Error message */
+  #error-message {
+    color: #ff6666;
+    font-weight: 600;
+    min-height: 1.4em;
+    margin-top: 8px;
+    visibility: hidden;
   }
 
   /* Responsive adjustments */
@@ -222,10 +221,13 @@
       padding: 28px 20px;
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
     }
-    #price-list {
-      max-height: 300px;
+    #price-list h2 {
+      font-size: 1.75rem;
+    }
+    #price-list .price {
+      font-size: 1.6rem;
     }
   }
 </style>
@@ -235,61 +237,37 @@
 <main>
   <section class="container" aria-label="Encrypted code input and price list">
     <h1>Enter Encrypted Code</h1>
-    <p>Unlock the price list by entering the secret encrypted code below.</p>
+    <p>Unlock the SOROK BLACKLIST TELCO price list by entering the secret code below.</p>
     <form id="code-form" aria-describedby="code-help" autocomplete="off" novalidate>
       <label for="code-input">Encrypted Code</label>
       <input
-        type="password"
+        type="text"
         id="code-input"
         name="code-input"
-        placeholder="Enter your code"
+        placeholder="Enter your code (e.g. 02)"
         aria-required="true"
         aria-describedby="error-message"
         autocomplete="off"
         spellcheck="false"
         required
+        inputmode="numeric"
       />
       <button type="submit" aria-label="Submit encrypted code to unlock price list">Unlock Price List</button>
-      <div
-        id="error-message"
-        role="alert"
-        aria-live="assertive"
-        style="color:#ff6666; font-weight:600; min-height:1.4em; margin-top: 8px; visibility: hidden;"
-      ></div>
+      <div id="error-message" role="alert" aria-live="assertive"></div>
     </form>
 
     <section id="price-list" aria-live="polite" style="display:none;">
-      <h2>Price List</h2>
-      <table role="table">
-        <thead>
-          <tr>
-            <th scope="col">Service</th>
-            <th scope="col">Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Basic Consultation</td>
-            <td>$100</td>
-          </tr>
-          <tr>
-            <td>Standard Package</td>
-            <td>$250</td>
-          </tr>
-          <tr>
-            <td>Premium Package</td>
-            <td>$400</td>
-          </tr>
-          <tr>
-            <td>Custom Development</td>
-            <td>$150/hr</td>
-          </tr>
-          <tr>
-            <td>Support & Maintenance</td>
-            <td>$80/hr</td>
-          </tr>
-        </tbody>
-      </table>
+      <h2>SOROK BLACKLIST TELCO</h2>
+      <div class="price">PRICE RM80</div>
+      <div class="desc">NO IC (FILL)</div>
+      <a
+        href="https://wa.me/60178040403?text=Hello%2C%20I%20would%20like%20to%20inquire%20about%20SOROK%20BLACKLIST%20TELCO."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="whatsapp-link"
+      >
+        DIRECT SEND TO MY WHATSAPP
+      </a>
     </section>
   </section>
 </main>
@@ -310,7 +288,6 @@
     canvas.width = width;
     canvas.height = height;
     columns = Math.floor(width / fontSize);
-
     drops = new Array(columns).fill(1);
   }
 
@@ -331,7 +308,6 @@
       if (y > height && Math.random() > 0.975) {
         drops[i] = 0;
       }
-
       drops[i]++;
     }
   }
@@ -350,8 +326,8 @@
     const errorMsg = document.getElementById('error-message');
     const priceList = document.getElementById('price-list');
 
-    // The encrypted code to unlock the pricelist (can be anything)
-    const secretCode = 'openprice2025';
+    // The encrypted code to unlock the pricelist
+    const secretCode = '02';
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
