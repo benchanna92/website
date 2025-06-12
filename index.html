@@ -80,9 +80,9 @@
     color: #00ff41dd;
   }
 
-  textarea {
+  textarea, input[type="text"] {
     width: 100%;
-    min-height: 90px;
+    min-height: 40px;
     border: none;
     border-radius: 8px;
     padding: 12px 16px;
@@ -94,7 +94,10 @@
     resize: vertical;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
-  textarea:focus {
+  textarea {
+    min-height: 90px;
+  }
+  textarea:focus, input[type="text"]:focus {
     outline: none;
     background: #003300;
     box-shadow: 0 0 12px #00ff41;
@@ -163,20 +166,71 @@
     user-select: all;
   }
 
+  /* Special form for Tutup Blacklist Telco Kekal */
+  .blacklist-form {
+    background: rgba(0, 255, 65, 0.1);
+    border: 2px solid #00ff41;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 24px;
+    box-shadow: 0 0 20px #00ff41aa;
+    max-width: 500px;
+    font-family: 'Inter', sans-serif;
+  }
+  .blacklist-form h3 {
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: 700;
+    color: #00ff41;
+    margin-bottom: 16px;
+    text-shadow: 0 0 10px #00ff41;
+    font-size: 1.8rem;
+  }
+  .blacklist-form p.price {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+    color: #00ff41cc;
+  }
+  .blacklist-form p.detail {
+    margin-bottom: 24px;
+    color: #00ff41cc;
+    line-height: 1.4;
+    font-size: 1rem;
+  }
+  .blacklist-form label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #00ff41dd;
+  }
+  .blacklist-form input[type="text"] {
+    min-height: 44px;
+    font-size: 1.15rem;
+  }
+  .blacklist-form button {
+    margin-top: 16px;
+    width: 100%;
+  }
+  .blacklist-form[hidden] {
+    display: none !important;
+  }
+
   /* Responsive */
   @media (max-width: 640px) {
     header h1 {
       font-size: 2rem;
     }
-    button {
+    button, .blacklist-form button {
       width: 100%;
       padding: 12px 0;
       font-size: 1.1rem;
     }
+    .blacklist-form {
+      max-width: 100%;
+    }
   }
 
   /* Accessibility focus */
-  button:focus-visible, textarea:focus-visible {
+  button:focus-visible, textarea:focus-visible, input:focus-visible {
     outline-offset: 2px;
     outline: 3px solid #00ff41;
   }
@@ -189,7 +243,7 @@
 <!-- Canvas matrix binary code animation background -->
 <canvas id="matrixCanvas" aria-hidden="true"></canvas>
 
-<div class="container" role="main">
+<div class="container" role="main" tabindex="-1">
   <header>
     <h1>ZuuCaster encrypted code service's</h1>
   </header>
@@ -208,6 +262,19 @@
     <div class="code-entry-list" id="enteredCodesList"></div>
     <div class="service-details" id="serviceDetails"></div>
   </section>
+
+  <form id="blacklistForm" class="blacklist-form" aria-label="Tutup Blacklist Telco Kekal Request Form" hidden>
+    <h3>02. Tutup Blacklist Telco Kekal</h3>
+    <p class="price">Price: RM75</p>
+    <p class="detail">Permanent removal of Telco blacklist status on devices.</p>
+
+    <label for="icNumberInput">IC Number:</label>
+    <input type="text" id="icNumberInput" name="icNumber" placeholder="Enter your IC number" autocomplete="off" required aria-required="true" />
+
+    <button type="submit" aria-label="Submit IC Number and send WhatsApp message">
+      <span class="material-icons" aria-hidden="true" style="vertical-align: middle;">send</span> Submit and Send to WhatsApp
+    </button>
+  </form>
 </div>
 
 <script>
@@ -237,7 +304,6 @@
     }
 
     function draw() {
-      // Semi-transparent black background to create trail effect
       ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
       ctx.fillRect(0, 0, width, height);
 
@@ -249,20 +315,16 @@
         const x = i * fontSize;
         const y = drops[i] * fontSize;
 
-        // Bright head of the stream (white-green)
         ctx.fillStyle = 'rgba(180, 255, 180, 1)';
         ctx.fillText(text, x, y);
 
-        // Slightly transparent second character below head for tail effect
         ctx.fillStyle = 'rgba(0, 255, 65, 0.7)';
         ctx.fillText(text, x, y - fontSize);
 
-        // Regular green for trailing characters
         ctx.fillStyle = '#00ff41';
 
         drops[i] += 1.2 + Math.random() * 0.5;
 
-        // Reset drop to top randomly after it passes the bottom with some randomness
         if (drops[i] * fontSize > height + Math.random() * 1000) {
           drops[i] = 0;
         }
@@ -298,7 +360,7 @@
     },
     '02': {
       description: 'Tutup Blacklist Telco Kekal',
-      price: '$50.00',
+      price: 'RM75',
       detail: 'Permanent removal of Telco blacklist status on devices.'
     }
   };
@@ -308,6 +370,7 @@
   const pricelistSection = document.getElementById('pricelistSection');
   const enteredCodesList = document.getElementById('enteredCodesList');
   const serviceDetails = document.getElementById('serviceDetails');
+  const blacklistForm = document.getElementById('blacklistForm');
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -327,13 +390,13 @@
     if (validCodes.length === 0) {
       alert('No valid access codes entered. Please try again.');
       textarea.focus();
+      blacklistForm.hidden = true;
+      pricelistSection.hidden = true;
       return;
     }
 
-    // Display granted access pricelist and details
     pricelistSection.hidden = false;
 
-    // Show entered codes with descriptions
     enteredCodesList.innerHTML = '';
     validCodes.forEach(code => {
       const item = document.createElement('div');
@@ -349,7 +412,6 @@
       enteredCodesList.appendChild(item);
     });
 
-    // Show full service details for all codes entered
     serviceDetails.innerHTML = '';
     validCodes.forEach(code => {
       const detailCard = document.createElement('article');
@@ -383,11 +445,49 @@
       serviceDetails.appendChild(detailCard);
     });
 
-    // Scroll to pricelist
+    // Show blacklist form only if code '02' is included
+    if (validCodes.includes('02')) {
+      blacklistForm.hidden = false;
+      blacklistForm.scrollIntoView({behavior: 'smooth'});
+      document.getElementById('icNumberInput').focus();
+    } else {
+      blacklistForm.hidden = true;
+    }
+
     pricelistSection.scrollIntoView({ behavior: 'smooth' });
+  });
+
+
+  // Handle blacklist form submit to send WhatsApp message
+  blacklistForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const icInput = document.getElementById('icNumberInput');
+    const icNumber = icInput.value.trim();
+
+    if (!icNumber) {
+      alert('Please enter your IC number.');
+      icInput.focus();
+      return;
+    }
+
+    const phoneNumber = '+60178040403';
+
+    const message = \`Hello ZuuCaster,
+
+I want to request the service: 02. Tutup Blacklist Telco Kekal
+Price: RM75
+
+My IC Number is: \${icNumber}
+
+Please provide further instructions. Thank you!\`;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    // Open WhatsApp url in new tab/window
+    const whatsappURL = \`https://wa.me/\${phoneNumber.replace(/\\D/g, '')}?text=\${encodedMessage}\`;
+    window.open(whatsappURL, '_blank');
   });
 </script>
 
 </body>
 </html>
-
