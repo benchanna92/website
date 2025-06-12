@@ -1,271 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Telco Unlock Price List</title>
-<style>
-  /* Reset and base */
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
-  }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Telco Unlock Price List</title>
+    <style>
+        /* Reset and base */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
 
-  body, html {
-    height: 100%;
-    background-color: black;
-    overflow: hidden;
-    font-family: 'Courier New', Courier, monospace;
-    color: #00ff00;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
+        body, html {
+            height: 100%;
+            background-color: black;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ff00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-  /* Matrix Binary Animation Container */
-  #matrix {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    background: black;
-  }
+        /* Matrix Binary Animation Container */
+        #matrix {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: black;
+        }
 
-  /* Content container */
-  .container {
-    position: relative;
-    background: rgba(0, 0, 0, 0.75);
-    border-radius: 12px;
-    max-width: 600px;
-    padding: 24px 32px;
-    box-shadow: 0 8px 24px rgba(0,255,0,0.3);
-  }
+        /* Content container */
+        .container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.75);
+            border-radius: 12px;
+            max-width: 600px;
+            padding: 24px 32px;
+            box-shadow: 0 8px 24px rgba(0,255,0,0.3);
+        }
 
-  h1 {
-    text-align: center;
-    margin-bottom: 24px;
-    font-weight: 700;
-    font-size: 2rem;
-  }
+        h1 {
+            text-align: center;
+            margin-bottom: 24px;
+            font-weight: 700;
+            font-size: 2rem;
+        }
 
-  input[type="text"] {
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 1.2rem;
-    border: 2px solid #00ff00;
-    border-radius: 8px;
-    background: black;
-    color: #00ff00;
-    outline-offset: 2px;
-    margin-bottom: 16px;
-    font-family: 'Courier New', Courier, monospace;
-  }
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1.2rem;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            background: black;
+            color: #00ff00;
+            outline-offset: 2px;
+            margin-bottom: 16px;
+            font-family: 'Courier New', Courier, monospace;
+        }
 
-  input[type="text"]::placeholder {
-    color: #007700;
-  }
+        input[type="text"]::placeholder {
+            color: #007700;
+        }
 
-  button {
-    width: 100%;
-    padding: 14px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    background: transparent;
-    border: 2px solid #00ff00;
-    border-radius: 8px;
-    color: #00ff00;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-family: 'Courier New', Courier, monospace;
-  }
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: transparent;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            color: #00ff00;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: 'Courier New', Courier, monospace;
+        }
 
-  button:hover, button:focus {
-    background-color: #00ff00;
-    color: black;
-  }
+        button:hover, button:focus {
+            background-color: #00ff00;
+            color: black;
+        }
 
-  .price-list {
-    margin-top: 24px;
-    max-height: 60vh;
-    overflow-y: auto;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-top: 2px solid #00ff00;
-    padding-top: 16px;
-  }
+        .price-list {
+            margin-top: 24px;
+            max-height: 60vh;
+            overflow-y: auto;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-top: 2px solid #00ff00;
+            padding-top: 16px;
+        }
 
-  ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
 
-  .price-list h2 {
-    margin-bottom: 12px;
-    font-weight: 700;
-  }
+        .price-list h2 {
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
 
-  .price-list li {
-    margin-bottom: 6px;
-  }
+        .price-list li {
+            margin-bottom: 6px;
+        }
 
-  .error {
-    color: #ff4444;
-    text-align: center;
-    margin-top: 16px;
-    font-weight: 700;
-  }
+        .error {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 16px;
+            font-weight: 700;
+        }
 
-  /* Scrollbar styles for price list */
-  .price-list::-webkit-scrollbar {
-    width: 8px;
-  }
-  .price-list::-webkit-scrollbar-thumb {
-    background: #004400;
-    border-radius: 4px;
-  }
+        /* Scrollbar styles for price list */
+        .price-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .price-list::-webkit-scrollbar-thumb {
+            background: #004400;
+            border-radius: 4px;
+        }
 
-</style>
+    </style>
 </head>
 <body>
 <canvas id="matrix"></canvas>
 
 <div class="container" role="main" aria-label="Telco Unlock Price List code entry">
-  <h1>Enter Encrypted Code</h1>
-  <input id="code-input" type="text" placeholder="Enter encrypted code" aria-label="Encrypted code input" autocomplete="off" />
-  <button id="submit-btn" type="button" aria-label="Submit code to view price list">Submit</button>
-  <div id="error-msg" class="error" role="alert" aria-live="assertive"></div>
-  <div id="price-list" class="price-list" hidden aria-live="polite"></div>
+    <h1>Enter Encrypted Code</h1>
+    <input id="code-input" type="text" placeholder="Enter encrypted code" aria-label="Encrypted code input" autocomplete="off" />
+    <select id="model-select" aria-label="Select model">
+        <option value="">Select Model</option>
+        <option value="OPPO">OPPO</option>
+        <option value="REALME">REALME</option>
+        <option value="VIVO">VIVO</option>
+        <option value="HONOR">HONOR</option>
+    </select>
+    <button id="submit-btn" type="button" aria-label="Submit code to view price list">Submit</button>
+    <div id="error-msg" class="error" role="alert" aria-live="assertive"></div>
+    <div id="price-list" class="price-list" hidden aria-live="polite"></div>
 </div>
 
 <script>
-  // Matrix Animation
-  const canvas = document.getElementById('matrix');
-  const ctx = canvas.getContext('2d');
+    // Matrix Animation
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
 
-  let width, height;
-  let columns;
-  let drops = [];
+    let width, height;
+    let columns;
+    let drops = [];
 
-  const binaryChars = ['0', '1'];
+    const binaryChars = ['0', '1'];
 
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    columns = Math.floor(width / 20);
-    drops = [];
-    for (let x = 0; x < columns; x++) {
-      drops[x] = Math.random() * height;
+    function resize() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        columns = Math.floor(width / 20);
+        drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = Math.random() * height;
+        }
     }
-  }
 
-  function draw() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-    ctx.fillRect(0, 0, width, height);
+    function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, width, height);
 
-    ctx.fillStyle = '#00ff00';
-    ctx.font = '16px Courier New';
+        ctx.fillStyle = '#00ff00';
+        ctx.font = '16px Courier New';
 
-    for (let i = 0; i < drops.length; i++) {
-      const text = binaryChars[Math.floor(Math.random() * binaryChars.length)];
-      ctx.fillText(text, i * 20, drops[i] * 16);
-      if (drops[i] * 16 > height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i] += 0.9;
+        for (let i = 0; i < drops.length; i++) {
+            const text = binaryChars[Math.floor(Math.random() * binaryChars.length)];
+            ctx.fillText(text, i * 20, drops[i] * 16);
+            if (drops[i] * 16 > height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i] += 0.9;
+        }
     }
-  }
 
-  window.addEventListener('resize', resize);
-  resize();
+    window.addEventListener('resize', resize);
+    resize();
 
-  function animate() {
-    draw();
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-
-
-  // Price List Data
-  const priceListHTML = `
-    <h2>Telco Unlock Price List</h2>
-    <h3>OPPO Models</h3>
-    <ul>
-      <li>OPPO A16 - RM100</li>
-      <li>OPPO A16K - RM100</li>
-      <li>OPPO A17 - RM100</li>
-      <li>OPPO A18 - RM100</li>
-      <li>OPPO A38 - RM100 (ANDROID 14)</li>
-      <li>OPPO A38 - RM150 (ANDROID 15)</li>
-      <li>OPPO A54 - RM100</li>
-      <li>OPPO A57 - RM100</li>
-      <li>OPPO A77 - RM100</li>
-      <li>OPPO A78 - RM150</li>
-      <li>OPPO A79 - RM150</li>
-      <li>OPPO RENO 5PRO - RM150</li>
-      <li>OPPO RENO 6/6Z - RM150</li>
-      <li>OPPO RENO 8 - RM150</li>
-      <li>OPPO RENO 8 PRO - RM180</li>
-      <li>OPPO RENO 10 - RM150</li>
-      <li>OPPO RENO 11 - RM150</li>
-      <li>OPPO RENO 12 PRO - RM180</li>
-      <li>OPPO RENO 11F - RM150</li>
-      <li>OPPO RENO 12F - RM200</li>
-      <li>OPPO RENO 13F (MEDIATEK) - RM250</li>
-      <li>OPPO A3PRO/A60 - RM200</li>
-      <li>OPPO A3 - RM150</li>
-    </ul>
-    <h3>VIVO Models</h3>
-    <ul>
-      <li>VIVO Y03 - RM170</li>
-      <li>VIVO Y20 - RM70</li>
-      <li>VIVO Y16 - RM130</li>
-      <li>VIVO Y36 - RM180</li>
-      <li>VIVO Y27 - RM200</li>
-      <li>VIVO Y28S - RM230</li>
-      <li>VIVO Y77 - RM200</li>
-      <li>VIVO Y30 - RM200</li>
-      <li>VIVO V23 - RM200</li>
-      <li>VIVO V40 LITE - RM350</li>
-    </ul>
-    <p><strong>Note:</strong></p>
-    <ul>
-      <li>HONOR and VIVO process need 1-14 days depending on CPU availability for replacement.</li>
-      <li>No refund after processing.</li>
-      <li>No cancellation after service in progress.</li>
-    </ul>
-  `;
-
-  // Handle submit button
-  const submitBtn = document.getElementById('submit-btn');
-  const codeInput = document.getElementById('code-input');
-  const priceListDiv = document.getElementById('price-list');
-  const errorMsg = document.getElementById('error-msg');
-
-  submitBtn.addEventListener('click', () => {
-    const code = codeInput.value.trim();
-
-    if (code === '02') {
-      errorMsg.textContent = '';
-      priceListDiv.innerHTML = priceListHTML;
-      priceListDiv.hidden = false;
-    } else {
-      priceListDiv.hidden = true;
-      errorMsg.textContent = 'Invalid code. Please try again.';
+    function animate() {
+        draw();
+        requestAnimationFrame(animate);
     }
-  });
 
-  // Also allow pressing Enter key to submit
-  codeInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      submitBtn.click();
-    }
-  });
+    animate();
+
+    // Price List Data
+    const priceLists = {
+        OPPO: `
+            <h2>Price List for OPPO</h2>
+            <ul>
+                <li>OPPO A16 - RM100</li>
+                <li>OPPO A16K - RM100</li>
+                <li>OPPO A17 - RM100</li>
+                <li>OPPO A18 - RM100</li>
+                <li>OPPO A38 - RM100 (ANDROID 14)</li>
+                <li>OPPO A38 - RM150 (ANDROID 15)</li>
+                <li>OPPO A54 - RM100</li>
+                <li>OPPO A57 - RM100</li>
+                <li>OPPO A77 - RM100</li>
+                <li>OPPO A78 - RM150</li>
+                <li>OPPO A79 - RM150</li>
+                <li>OPPO RENO 5PRO - RM150</li>
+                <li>OPPO RENO 6/6Z - RM150</li>
+                <li>OPPO RENO 8 - RM150</li>
+                <li>OPPO RENO 8 PRO - RM180</li>
+                <li>OPPO RENO 10 - RM150</li>
+                <li>OPPO RENO 11 - RM150</li>
+                <li>OPPO RENO 12 PRO - RM180</li>
+                <li>OPPO RENO 11F - RM150</li>
+                <li>OPPO RENO 12F - RM200</li>
+                <li>OPPO RENO 13F (MEDIATEK) - RM250</li>
+                <li>OPPO A3PRO/A60 - RM200</li>
+                <li>OPPO A3 - RM150</li>
+            </ul>
+        `,
+        REALME: `
+            <h2>Price List for REALME</h2>
+            <ul>
+                <li>REALME C21 - RM50</li>
+                <li>REALME C20 - RM50</li>
+                <li>REALME C53 - RM60</li>
+                <li>REALME C55 - RM60</li>
+                <li>REALME NOTE50 - RM100</li>
+                <li>REALME NOTE60 - RM100</li>
+                <li>REALME 11 - RM80 (ANDROID 14)</li>
+                <li>REALME 11 - RM130 (ANDROID 15)</li>
+                <li>REALME 12X - RM150 (ANDROID 14)</li>
+                <li>REALME 12X - RM200 (ANDROID 15)</li>
+                <li>REALME 14X - RM200</li>
+                <li>REALME 12 - RM200</li>
+                <li>REALME 13 - RM200</li>
+                <li>REALME 12 PRO - RM250</li>
+            </ul>
+        `,
+        VIVO: `
+            <h2>Price List for VIVO</h2>
+            <ul>
+                <li>VIVO Y03 - RM170</li>
+                <li>VIVO Y20 - RM70</li>
+                <li>VIVO Y16 - RM130</li>
+                <li>VIVO Y36 - RM180</li>
+                <li>VIVO Y27 - RM200</li>
+                <li>VIVO Y28S - RM230</li>
+                <li>VIVO Y77 - RM200</li>
+                <li>VIVO Y30 - RM200</li>
+                <li>VIVO V23 - RM200</li>
+                <li>VIVO V40 LITE - RM350</li>
+            </ul>
+        `,
+        HONOR: `
+            <h2>Price List for HONOR</h2>
+            <p>HONOR models are currently not available.</p>
+        `
+    };
+
+    // Handle submit button
+    const submitBtn = document.getElementById('submit-btn');
+    const codeInput = document.getElementById('code-input');
+    const modelSelect = document.getElementById('model-select');
+    const priceListDiv = document.getElementById('price-list');
+    const errorMsg = document.getElementById('error-msg');
+
+    submitBtn.addEventListener('click', () => {
+        const code = codeInput.value.trim();
+        const selectedModel = modelSelect.value;
+
+        if (code === '007' && selectedModel) {
+            errorMsg.textContent = '';
+            priceListDiv.innerHTML = priceLists[selectedModel];
+            priceListDiv.hidden = false;
+        } else {
+            priceListDiv.hidden = true;
+            errorMsg.textContent = 'Invalid code or model. Please try again.';
+        }
+    });
+
+    // Also allow pressing Enter key to submit
+    codeInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            submitBtn.click();
+        }
+    });
 
 </script>
 </body>
 </html>
-
