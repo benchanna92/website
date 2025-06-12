@@ -3,429 +3,381 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Zuu Caster Encrypted Code - Matrix Access</title>
+<title>Encrypted Price List Access</title>
 <style>
-  /* Matrix theme - dark background with green text */
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
-
-  :root {
-    --matrix-green: #00ff41;
-    --background-black: #000000;
-    --card-bg: rgba(0, 32, 0, 0.8);
-    --code-input-bg: #001a00;
-    --font-family-mono: 'Share Tech Mono', monospace, monospace;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
   /* Reset and base */
-  * {
-    margin: 0;
-    padding: 0;
+  *, *::before, *::after {
     box-sizing: border-box;
   }
 
-  body, html {
+  html, body {
+    margin: 0;
     height: 100%;
-    background-color: var(--background-black);
-    color: var(--matrix-green);
-    font-family: var(--font-family-mono);
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-    min-height: 100vh;
-    padding: 24px 16px;
+    font-family: 'Inter', sans-serif;
+    background-color: #000000; /* fallback */
+    color: #e0e0e0;
+    overflow-x: hidden;
   }
 
-  /* Matrix falling code background */
+  body {
+    position: relative;
+    min-height: 100vh;
+  }
+
+  /* Canvas Cover */
   #matrix-canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
-    background: var(--background-black);
-  }
-
-  header {
-    padding-bottom: 24px;
-    text-align: center;
-  }
-
-  header h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px var(--matrix-green);
-    user-select: none;
-  }
-
-  header p {
-    margin-top: 8px;
-    font-size: 1.1rem;
-    color: #0f8a15;
-    user-select: none;
+    z-index: 0;
+    background-color: #000; /* fallback in case animation fails */
   }
 
   main {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 32px;
-    max-width: 600px;
-    width: 100%;
-    box-shadow: 0 0 20px 3px rgba(0,255,65,0.4);
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  label {
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-    display: block;
-  }
-
-  input[type="text"], textarea {
-    font-family: var(--font-family-mono);
-    font-size: 1.1rem;
-    color: var(--matrix-green);
-    background-color: var(--code-input-bg);
-    border: 2px solid var(--matrix-green);
-    border-radius: 8px;
-    padding: 12px 16px;
-    width: 100%;
-    resize: none;
-    transition: border-color 0.3s ease;
-  }
-
-  input[type="text"]:focus, textarea:focus {
-    outline: none;
-    border-color: #00ff76;
-    box-shadow: 0 0 8px #00ff76;
-  }
-
-  button {
-    font-family: var(--font-family-mono);
-    font-size: 1.2rem;
-    background-color: transparent;
-    border: 2px solid var(--matrix-green);
-    color: var(--matrix-green);
-    padding: 12px 24px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    user-select: none;
-  }
-
-  button:hover,
-  button:focus {
-    background-color: var(--matrix-green);
-    color: var(--background-black);
-    outline: none;
-  }
-
-  section#result {
-    max-height: 400px;
-    overflow-y: auto;
-    background-color: #001800cc;
-    border-radius: 12px;
-    padding: 16px;
-    border: 1px solid var(--matrix-green);
-  }
-
-  section#result h2 {
-    font-size: 1.6rem;
-    margin-bottom: 16px;
-    text-shadow: 0 0 6px var(--matrix-green);
-  }
-
-  ul.pricelist {
-    list-style-type: none;
-    font-size: 1.1rem;
-  }
-
-  ul.pricelist li {
-    margin-bottom: 10px;
-    padding-left: 20px;
     position: relative;
-  }
-  ul.pricelist li::before {
-    content: "▸";
-    position: absolute;
-    left: 0;
-    color: var(--matrix-green);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 48px 16px 80px;
   }
 
-  /* IC input section */
-  #ic-input-section {
-    margin-top: 24px;
-    padding: 20px;
-    background: rgba(0, 90, 0, 0.9);
-    border-radius: 12px;
-    border: 2px solid #00ff41;
-    display: none;
+  .container {
+    background: rgba(255 255 255 / 0.05);
+    backdrop-filter: blur(14px);
+    border-radius: 16px;
+    max-width: 480px;
+    width: 100%;
+    padding: 32px 28px;
+    box-shadow: 0 8px 24px rgb(0 255 70 / 0.4);
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2.75rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #00ff00;
+    text-shadow:
+      0 0 8px #00ff00,
+      0 0 16px #00ff00;
+  }
+
+  p {
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 28px;
+    color: #a0ffa0cc;
+    line-height: 1.4;
+  }
+
+  form {
+    display: flex;
     flex-direction: column;
     gap: 16px;
   }
 
-  #ic-input-section label {
+  label {
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: left;
+    color: #90ff90;
+    user-select: none;
+  }
+
+  input[type="password"] {
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: rgba(255 255 255 / 0.15);
+    color: #d0ffd0;
+    text-shadow: 0 0 3px #00ff00;
+    outline-offset: 2px;
+    transition: background-color 0.3s ease;
+  }
+
+  input[type="password"]::placeholder {
+    color: #99ff99aa;
+    font-weight: 400;
+  }
+
+  input[type="password"]:focus {
+    background: rgba(255 255 255 / 0.25);
+  }
+
+  button {
+    padding: 14px 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #00ff00 0%, #009900 100%);
+    border: none;
     font-size: 1.2rem;
+    font-weight: 700;
+    color: #001100;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    box-shadow:
+      0 0 10px #00ff00,
+      0 0 20px #00ff00 inset;
+    transition: background 0.3s ease, filter 0.3s ease;
   }
 
-  #ic-input-section input[type="text"] {
+  button:hover,
+  button:focus-visible {
+    filter: brightness(1.2);
+    outline: none;
+    box-shadow:
+      0 0 18px #00ff00,
+      0 0 28px #00ff00 inset;
+  }
+
+  button:disabled {
+    background: #003300;
+    color: #006600;
+    cursor: default;
+    box-shadow: none;
+    filter: none;
+  }
+
+  /* Price list container */
+  #price-list {
+    margin-top: 40px;
+    background: rgba(255 255 255 / 0.12);
+    padding: 28px 24px;
+    border-radius: 16px;
+    box-shadow: 0 6px 15px rgb(0 255 70 / 0.3);
+    color: #b0ffb0;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  #price-list h2 {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 24px;
+    color: #00ff00;
+    text-shadow:
+      0 0 6px #00ff00,
+      0 0 12px #00ff00;
+  }
+
+  table {
     width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
   }
 
-  /* Responsive typography and layout */
-  @media (max-width: 640px) {
+  thead th {
+    text-align: left;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid #009900;
+    color: #99ff99;
+  }
+
+  tbody tr {
+    background: rgba(0 255 0 / 0.12);
+    border-radius: 12px;
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    vertical-align: middle;
+  }
+
+  tbody tr:hover {
+    background: rgba(0 255 0 / 0.3);
+    cursor: default;
+  }
+
+  /* Scrollbar styling */
+  #price-list::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #price-list::-webkit-scrollbar-track {
+    background: rgba(0, 255, 0, 0.1);
+    border-radius: 8px;
+  }
+
+  #price-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 0, 0.4);
+    border-radius: 8px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 480px) {
     main {
-      padding: 24px 16px;
+      padding: 32px 12px 64px;
     }
-    header h1 {
+    .container {
+      max-width: 100%;
+      padding: 28px 20px;
+    }
+    h1 {
       font-size: 2.2rem;
     }
-    button {
-      width: 100%;
+    #price-list {
+      max-height: 300px;
     }
   }
-
-  /* Material Icon style */
-  .material-symbols-outlined {
-    font-variation-settings:
-      'FILL' 0,
-      'wght' 700,
-      'GRAD' 0,
-      'opsz' 48;
-    vertical-align: middle;
-    margin-right: 8px;
-    color: var(--matrix-green);
-  }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 <body>
 <canvas id="matrix-canvas" aria-hidden="true"></canvas>
-
-<header role="banner">
-  <h1>Zuu Caster Encrypted Code</h1>
-  <p>Enter one or multiple access codes to view the pricelist</p>
-</header>
-
-<main role="main" aria-labelledby="mainHeading">
-  <form id="access-code-form" aria-describedby="formInstructions">
-    <label for="accessCodes">Access Code(s):</label>
-    <input
-      type="text"
-      id="accessCodes"
-      name="accessCodes"
-      autocomplete="off"
-      placeholder="E.g. 01, 007, 111, 04, 02"
-      aria-required="true"
-      aria-describedby="formInstructions"
-      required
-    />
-    <small id="formInstructions" style="color: #0f8a15; display: block; margin-bottom: 12px;">
-      You can enter multiple codes separated by comma or space
-    </small>
-    <button type="submit" aria-label="Submit access codes and show pricelist">
-      <span class="material-symbols-outlined" aria-hidden="true">key</span>Submit
-    </button>
-  </form>
-
-  <section id="result" aria-live="polite" aria-atomic="true" tabindex="0" style="display:none;">
-    <h2>Pricelist for Entered Access Codes:</h2>
-    <ul class="pricelist" id="pricelist"></ul>
-  </section>
-
-  <section id="ic-input-section" aria-live="polite" aria-atomic="true" tabindex="-1">
-    <form id="ic-form" aria-label="IC Number form for access code 02">
-      <label for="icNumber">IC number:</label>
-      <input type="text" id="icNumber" name="icNumber" autocomplete="off" placeholder="Enter your IC number" required />
-      <button type="submit" aria-label="Create case and open WhatsApp">
-        <span class="material-symbols-outlined" aria-hidden="true">send</span>Create Case &amp; WhatsApp
-      </button>
+<main>
+  <section class="container" aria-label="Encrypted code input and price list">
+    <h1>Enter Encrypted Code</h1>
+    <p>Unlock the price list by entering the secret encrypted code below.</p>
+    <form id="code-form" aria-describedby="code-help" autocomplete="off" novalidate>
+      <label for="code-input">Encrypted Code</label>
+      <input
+        type="password"
+        id="code-input"
+        name="code-input"
+        placeholder="Enter your code"
+        aria-required="true"
+        aria-describedby="error-message"
+        autocomplete="off"
+        spellcheck="false"
+        required
+      />
+      <button type="submit" aria-label="Submit encrypted code to unlock price list">Unlock Price List</button>
+      <div
+        id="error-message"
+        role="alert"
+        aria-live="assertive"
+        style="color:#ff6666; font-weight:600; min-height:1.4em; margin-top: 8px; visibility: hidden;"
+      ></div>
     </form>
+
+    <section id="price-list" aria-live="polite" style="display:none;">
+      <h2>Price List</h2>
+      <table role="table">
+        <thead>
+          <tr>
+            <th scope="col">Service</th>
+            <th scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Basic Consultation</td>
+            <td>$100</td>
+          </tr>
+          <tr>
+            <td>Standard Package</td>
+            <td>$250</td>
+          </tr>
+          <tr>
+            <td>Premium Package</td>
+            <td>$400</td>
+          </tr>
+          <tr>
+            <td>Custom Development</td>
+            <td>$150/hr</td>
+          </tr>
+          <tr>
+            <td>Support & Maintenance</td>
+            <td>$80/hr</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </section>
 </main>
-
 <script>
-  (() => {
-    const canvas = document.getElementById('matrix-canvas');
-    const ctx = canvas.getContext('2d');
+  // Matrix binary rain animation on canvas
+  const canvas = document.getElementById('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let columns;
+  const fontSize = 18;
+  let drops = [];
 
-    let width, height;
-    let columns;
-    const fontSize = 16;
-    let drops;
+  const binaryChars = ['0', '1'];
 
-    const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*()*&^%'.split('');
+  function initCanvas() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    columns = Math.floor(width / fontSize);
 
-    function setup() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-      columns = Math.floor(width / fontSize);
-      drops = new Array(columns).fill(1);
-    }
+    drops = new Array(columns).fill(1);
+  }
 
-    function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = '#0F0'; // green text
-      ctx.font = fontSize + 'px Share Tech Mono';
+  function draw() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.13)';
+    ctx.fillRect(0, 0, width, height);
 
-      for(let i=0; i < columns; i++) {
-        let text = characters[Math.floor(Math.random() * characters.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    ctx.fillStyle = '#00ff00';
+    ctx.font = fontSize + 'px monospace';
 
-        if(drops[i] * fontSize > height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
+    for (let i = 0; i < drops.length; i++) {
+      const text = binaryChars[Math.floor(Math.random() * binaryChars.length)];
+      const x = i * fontSize;
+      const y = drops[i] * fontSize;
+
+      ctx.fillText(text, x, y);
+
+      if (y > height && Math.random() > 0.975) {
+        drops[i] = 0;
       }
+
+      drops[i]++;
     }
+  }
 
-    function loop() {
-      draw();
-      requestAnimationFrame(loop);
-    }
+  initCanvas();
+  setInterval(draw, 40);
 
-    window.addEventListener('resize', () => {
-      setup();
-    });
+  window.addEventListener('resize', () => {
+    initCanvas();
+  });
 
-    setup();
-    loop();
+  // Code validation and form handling
+  (function () {
+    const form = document.getElementById('code-form');
+    const input = document.getElementById('code-input');
+    const errorMsg = document.getElementById('error-message');
+    const priceList = document.getElementById('price-list');
 
-    // Pricelist mapping for access codes
-    const accessCodePricelist = {
-      '01': {
-        description: 'Unlock FRP/Google',
-        price: 'RM 30',
-      },
-      '007': {
-        description: 'Check Telco iPhone',
-        price: 'RM 20',
-      },
-      '111': {
-        description: 'Unlock Telco',
-        price: 'RM 50',
-      },
-      '02': {
-        description: 'Tutup Blacklist Telco Kekal',
-        price: 'RM 150',
-      },
-      '04': {
-        description: 'Telco/Contract Device Access',
-        price: 'RM 80',
-      },
-    };
+    // The encrypted code to unlock the pricelist (can be anything)
+    const secretCode = 'openprice2025';
 
-    // Normalize access code keys to uppercase and no dots, trim spaces
-    function normalizeCode(code) {
-      return code.toString().trim().replace(/\./g, '').toUpperCase();
-    }
-
-    const form = document.getElementById('access-code-form');
-    const resultSection = document.getElementById('result');
-    const pricelistUl = document.getElementById('pricelist');
-    const accessCodesInput = document.getElementById('accessCodes');
-    const icSection = document.getElementById('ic-input-section');
-    const icForm = document.getElementById('ic-form');
-    const icInput = document.getElementById('icNumber');
-
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
+      const val = input.value.trim();
 
-      let input = accessCodesInput.value;
-      if (!input) {
-        alert('Please enter at least one access code.');
+      if (!val) {
+        errorMsg.textContent = 'Please enter the encrypted code.';
+        errorMsg.style.visibility = 'visible';
+        priceList.style.display = 'none';
         return;
       }
 
-      // Split input by comma, space, or newlines, filter empty
-      let codes = input.split(/[\s,]+/).map(normalizeCode).filter(c => c.length > 0);
-
-      let matchedItems = [];
-
-      codes.forEach(code => {
-        if (accessCodePricelist.hasOwnProperty(code)) {
-          matchedItems.push({ code, ...accessCodePricelist[code] });
-        }
-      });
-
-      pricelistUl.innerHTML = '';
-
-      if(matchedItems.length === 0) {
-        pricelistUl.innerHTML = '<li>No matching access codes found.</li>';
+      if (val === secretCode) {
+        errorMsg.style.visibility = 'hidden';
+        priceList.style.display = 'block';
+        input.value = '';
+        input.disabled = true;
+        this.querySelector('button').disabled = true;
+        input.setAttribute('aria-disabled', 'true');
+        input.setAttribute('aria-readonly', 'true');
+        this.setAttribute('aria-hidden', 'true');
       } else {
-        matchedItems.forEach(item => {
-          let li = document.createElement('li');
-          li.textContent = `[${item.code}] ${item.description} - Price: ${item.price}`;
-          pricelistUl.appendChild(li);
-        });
+        errorMsg.textContent = 'Invalid code. Please try again.';
+        errorMsg.style.visibility = 'visible';
+        priceList.style.display = 'none';
       }
-
-      // Show result section and focus for accessibility
-      resultSection.style.display = 'block';
-      resultSection.focus();
-
-      // Show or hide IC number input section if code '02' is present
-      if(codes.includes('02')) {
-        icSection.style.display = 'flex';
-        icInput.focus();
-      } else {
-        icSection.style.display = 'none';
-        icInput.value = '';
-      }
-    });
-
-    // Handle IC form submission to generate case number and open WhatsApp
-    icForm.addEventListener('submit', e => {
-      e.preventDefault();
-
-      const icNumber = icInput.value.trim();
-      if(!icNumber) {
-        alert('Please enter your IC number.');
-        icInput.focus();
-        return;
-      }
-
-      // Generate a case number: simple format "CASE" + current YYYYMMDDHHMMSS + random 3digits
-      const now = new Date();
-      const pad2 = n => n.toString().padStart(2,'0');
-      const pad3 = n => n.toString().padStart(3,'0');
-      const caseNumber = 'CASE' +
-        now.getFullYear().toString() +
-        pad2(now.getMonth()+1) +
-        pad2(now.getDate()) +
-        pad2(now.getHours()) +
-        pad2(now.getMinutes()) +
-        pad2(now.getSeconds()) +
-        pad3(Math.floor(Math.random() * 1000));
-
-      // WhatsApp URL with phone number +60178040403
-      const phone = '+60178040403';
-
-      // Message content template
-      const message = encodeURIComponent(
-        `Hello, I would like to create a case for access code 02 (Tutup Blacklist Telco Kekal).\nIC Number: ${icNumber}\nCase Number: ${caseNumber}\nPlease assist.`
-      );
-
-      const whatsappUrl = `https://wa.me/${phone.replace(/\D/g, '')}?text=${message}`;
-
-      // Open WhatsApp in new tab/window
-      window.open(whatsappUrl, '_blank', 'noopener');
-
-      // Optionally show alert or confirmation
-      alert(\`Case created with number: \${caseNumber}. Opening WhatsApp chat...\`);
-
-      // Reset IC number input and hide section
-      icInput.value = '';
-      icSection.style.display = 'none';
     });
   })();
 </script>
