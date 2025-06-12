@@ -1,477 +1,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Matrix-Themed Pricelist Access</title>
-    <style>
-        /* Reset and base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body, html {
-            height: 100%;
-            overflow: hidden;
-            background: black;
-            font-family: 'Courier New', Courier, monospace;
-            color: #00ff00;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Encrypted Code Unlock Phone</title>
+<style>
+  /* Import Google Fonts: 'Share Tech Mono' for matrix feel, and 'Inter' for clean text */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Share+Tech+Mono&display=swap');
 
-        /* Matrix background canvas */
-        canvas#matrix-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            display: block;
-            background: black;
-        }
+  /* Reset and base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background: #000000;
+    color: #00ff41;
+    font-family: 'Share Tech Mono', monospace;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Matrix background animation */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(0,255,65,0.12) 0%, transparent 70%);
+    z-index: 0;
+  }
+  /* Subtle matrix falling code effect container */
+  .matrix-background {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .matrix-column {
+    position: absolute;
+    top: -100%;
+    font-size: 14px;
+    text-shadow: 0 0 5px #00ff41, 0 0 20px #00ff41;
+    user-select: none;
+    white-space: nowrap;
+    animation-name: matrixFall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes matrixFall {
+    0% { top: -100%; }
+    100% { top: 110%; }
+  }
 
-        /* Main container */
-        #app {
-            position: relative;
-            z-index: 10;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
-            text-align: center;
-        }
+  /* Container max width and padding */
+  .container {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 24px 16px 56px;
+    flex-grow: 1;
+  }
 
-        h1 {
-            font-weight: 900;
-            font-size: 3rem;
-            margin-bottom: 32px;
-            text-shadow: 0 0 8px #00ff00aa;
-        }
+  header {
+    margin-bottom: 56px;
+    text-align: center;
+  }
+  header h1 {
+    font-family: 'Share Tech Mono', monospace;
+    font-weight: 700;
+    font-size: 3rem;
+    margin: 0 0 8px;
+    text-shadow: 0 0 10px #00ff41;
+  }
+  header p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #00ff41cc;
+    margin: 0;
+  }
 
-        #inputArea {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 16px;
-            max-width: 480px;
-            width: 100%;
-            margin-bottom: 24px;
-        }
+  /* Form styles */
+  form {
+    background: rgba(0, 255, 65, 0.1);
+    border: 2px solid #00ff41;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 0 20px #00ff41aa;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
 
-        input#accessCodeInput {
-            flex-grow: 1;
-            padding: 14px 16px;
-            font-size: 1.2rem;
-            background: #001a00;
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            color: #00ff00;
-            outline-offset: 4px;
-            transition: border-color 0.3s ease;
-            min-width: 220px;
-        }
-        input#accessCodeInput:focus {
-            border-color: #66ff66;
-        }
+  label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: #00ff41dd;
+  }
 
-        button#submitBtn {
-            padding: 14px 24px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            background: #004400;
-            color: #00ff00;
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            min-width: 120px;
-        }
-        button#submitBtn:hover,
-        button#submitBtn:focus {
-            background: #00ff00;
-            color: #000;
-            outline: none;
-        }
+  textarea {
+    width: 100%;
+    min-height: 90px;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.15rem;
+    background: #001a00;
+    color: #00ff41;
+    box-shadow: inset 0 0 8px #00ff41aa;
+    resize: vertical;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  textarea:focus {
+    outline: none;
+    background: #003300;
+    box-shadow: 0 0 12px #00ff41;
+  }
 
-        #outputArea {
-            white-space: pre-wrap;
-            font-size: 1.15rem;
-            font-weight: 600;
-            max-width: 480px;
-            text-align: left;
-            background: #001a001a;
-            border: 1.5px solid #00ff0066;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 0 12px #00ff0055;
-            user-select: text;
-        }
+  button {
+    align-self: flex-start;
+    background-color: transparent;
+    border: 2px solid #00ff41;
+    border-radius: 12px;
+    padding: 12px 32px;
+    color: #00ff41;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  button:hover, button:focus {
+    background-color: #00ff41;
+    color: #001a00;
+    box-shadow: 0 0 20px #00ff41;
+    outline: none;
+  }
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: #222;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #00ff00;
-            width: 80%;
-            max-width: 600px;
-            color: #00ff00;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .close {
-            align-self: flex-end;
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-        .close:hover,
-        .close:focus {
-            color: #fff;
-            text-decoration: none;
-        }
-        button.brand-btn {
-            margin: 5px;
-            padding: 10px 16px;
-            border: 2px solid #00ff00;
-            background: transparent;
-            color: #00ff00;
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        button.brand-btn:hover {
-            background: #00ff00;
-            color: #000;
-        }
-        #devicePrices, #termsConditions {
-            margin-top: 20px;
-            width: 100%;
-            overflow-wrap: break-word;
-        }
+  /* Pricelist container */
+  .pricelist {
+    margin-top: 40px;
+    border-radius: 12px;
+    background: rgba(0,255,65,0.15);
+    box-shadow: 0 0 16px #00ff41aa;
+    padding: 24px;
+  }
+  .pricelist h2 {
+    margin-top: 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 24px;
+    text-shadow: 0 0 10px #00ff41;
+  }
 
-        #icModal input[type="text"] {
-            padding: 12px;
-            font-size: 1.2rem;
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            width: 100%;
-            color: #00ff00;
-            background-color: #001a00;
-            outline-offset: 4px;
-            margin-bottom: 16px;
-        }
-        #icModal button#submitICBtn {
-            padding: 12px 24px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            background: #004400;
-            color: #00ff00;
-            border: 2px solid #00ff00;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-        }
-        #icModal button#submitICBtn:hover {
-            background: #00ff00;
-            color: #000;
-            outline: none;
-        }
+  .code-entry-list {
+    font-family: 'Share Tech Mono', monospace;
+    margin-bottom: 32px;
+  }
+  .code-item {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    background: #002200dd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: inset 0 0 10px #00ff41cc;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .code-item .desc {
+    color: #00ff41dd;
+  }
+  .code-item .code {
+    background: #004400;
+    padding: 4px 12px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px #00ff41cc;
+    user-select: all;
+  }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            #inputArea {
-                flex-direction: column;
-            }
-            input#accessCodeInput,
-            button#submitBtn {
-                width: 100%;
-                min-width: auto;
-                text-align: center;
-            }
-            .modal-content {
-                width: 90%;
-            }
-        }
-    </style>
+  /* Responsive */
+  @media (max-width: 640px) {
+    header h1 {
+      font-size: 2rem;
+    }
+    button {
+      width: 100%;
+      padding: 12px 0;
+      font-size: 1.1rem;
+    }
+  }
+
+  /* Accessibility focus */
+  button:focus-visible, textarea:focus-visible {
+    outline-offset: 2px;
+    outline: 3px solid #00ff41;
+  }
+</style>
+<!-- Material Icons CDN -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
 
-<canvas id="matrix-canvas"></canvas>
+<!-- Matrix falling text background container and script -->
+<div class="matrix-background" aria-hidden="true"></div>
 
-<div id="app" role="main" aria-label="Matrix themed pricelist access application">
-    <h1>Software Developer Services Access</h1>
-    <form id="accessForm" aria-describedby="instructionText">
-        <div id="inputArea">
-            <label for="accessCodeInput" class="visually-hidden">Enter access codes separated by commas or spaces</label>
-            <input aria-required="true" id="accessCodeInput" name="accessCodes" type="text" autocomplete="off" placeholder="Enter access codes e.g. 01, 111" />
-            <button type="submit" id="submitBtn" aria-label="Submit access codes">Submit</button>
-        </div>
-        <p id="instructionText" style="color:#00ff00cc; font-size:0.9rem; margin-top:-12px;">
-            Multiple codes separated by comma or space (e.g. 01, 111)
-        </p>
-    </form>
-    <pre id="outputArea" aria-live="polite" aria-atomic="true" tabindex="0"></pre>
-</div>
+<div class="container" role="main">
+  <header>
+    <h1>Encrypted Code Unlock Phone</h1>
+    <p>Enter the multiple access codes below to view the price list and unlock options</p>
+  </header>
 
-<!-- Modal for Device Selection -->
-<div id="deviceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="deviceModalTitle">
-    <div class="modal-content">
-        <span class="close" id="closeDeviceModal" role="button" aria-label="Close device selection">&times;</span>
-        <h2 id="deviceModalTitle">Select Device Brand</h2>
-        <div>
-            <button class="brand-btn" onclick="showDevicePrices('REALME')">REALME</button>
-            <button class="brand-btn" onclick="showDevicePrices('VIVO')">VIVO</button>
-            <button class="brand-btn" onclick="showDevicePrices('OPPO')">OPPO</button>
-            <button class="brand-btn" onclick="showDevicePrices('HONOR')">HONOR</button>
-        </div>
-        <div id="devicePrices"></div>
-        <div id="termsConditions"></div>
-    </div>
-</div>
+  <form id="codeForm" aria-label="Access Code Entry Form">
+    <label for="codesInput">Enter Access Codes (one per line):</label>
+    <textarea id="codesInput" placeholder="Enter one or more access codes"></textarea>
 
-<!-- Modal for IC Number Input -->
-<div id="icModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="icModalTitle">
-    <div class="modal-content">
-        <span class="close" id="closeICModal" role="button" aria-label="Close IC input">&times;</span>
-        <h2 id="icModalTitle">Enter IC Number</h2>
-        <input type="text" id="icNumberInput" placeholder="Enter your IC number" aria-required="true" />
-        <button id="submitICBtn" aria-label="Submit IC number">Submit</button>
-    </div>
+    <button type="submit" aria-label="Submit access codes and view pricelist">
+      <span class="material-icons" aria-hidden="true" style="vertical-align: middle;">lock_open</span> Unlock
+    </button>
+  </form>
+
+  <section id="pricelistSection" class="pricelist" aria-live="polite" aria-atomic="true" hidden>
+    <h2>Access Granted – Price List & Services</h2>
+    <div class="code-entry-list" id="enteredCodesList"></div>
+    <div class="service-details" id="serviceDetails"></div>
+  </section>
 </div>
 
 <script>
-    // Service code mapping
-    const serviceMap = {
-        "01": "Unlock FRP/Google",
-        "111": "Unlock Telco/Contract device",
-        "07": "Rent tool software",
-        "02": "TUTUP BLACKLIST TELCO KEKAL",
-        "09": "AUTH FLASHER + FILE REQUEST"
-    };
+  // Matrix falling code background effect
+  (() => {
+    const container = document.querySelector('.matrix-background');
+    if (!container) return;
 
-    // Device prices
-    const devicePrices = {
-        REALME: [
-            "REALME C21 - RM50",
-            "REALME C20 - RM50",
-            "REALME C53 - RM60",
-            "REALME C55 - RM60",
-            "REALME NOTE50 - RM100",
-            "REALME NOTE60 - RM100",
-            "REALME 11 - RM80 (ANDROID 14)",
-            "REALME 11 - RM130 (ANDROID 15)",
-            "REALME 12X - RM150 (ANDROID 14)",
-            "REALME 12X - RM200 (ANDROID 15)",
-            "REALME 14X - RM200",
-            "REALME 12 - RM200",
-            "REALME 13 - RM200",
-            "REALME 12 PRO - RM250"
-        ],
-        VIVO: [
-            "VIVO Y03 - RM170",
-            "VIVO Y20 - RM70",
-            "VIVO Y16 - RM130",
-            "VIVO Y36 - RM180",
-            "VIVO Y27 - RM200",
-            "VIVO Y28S - RM230",
-            "VIVO Y77 - RM200",
-            "VIVO Y30 - RM200",
-            "VIVO V23 - RM200",
-            "VIVO V40 LITE - RM350"
-        ],
-        OPPO: [
-            "OPPO A16 - RM100",
-            "OPPO A16K - RM100",
-            "OPPO A17 - RM100",
-            "OPPO A18 - RM100",
-            "OPPO A38 - RM100 (ANDROID 14)",
-            "OPPO A38 - RM150 (ANDROID 15)",
-            "OPPO A54 - RM100",
-            "OPPO A57 - RM100",
-            "OPPO A77 - RM100",
-            "OPPO A78 - RM150",
-            "OPPO A79 - RM150",
-            "OPPO RENO 5PRO - RM150",
-            "OPPO RENO 6/6Z - RM150",
-            "OPPO RENO 8 - RM150",
-            "OPPO RENO 8 PRO - RM180",
-            "OPPO RENO 10 - RM150",
-            "OPPO RENO 11 - RM150",
-            "OPPO RENO 12 PRO - RM180",
-            "OPPO RENO 11F - RM150",
-            "OPPO RENO 12F - RM200",
-            "OPPO RENO 13F (MEDIATEK) - RM250",
-            "OPPO A3PRO/A60 - RM200",
-            "OPPO A3 - RM150"
-        ],
-        HONOR: [
-            "HONOR devices may take 1-14 days depending on available CPU to replace."
-        ]
-    };
+    const chars = '01'.repeat(10) + '1234567890'.repeat(3) + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const columnsCount = Math.floor(window.innerWidth / 16);
+    const columns = [];
 
-    // Handle form submission
-    const form = document.getElementById('accessForm');
-    const input = document.getElementById('accessCodeInput');
-    const output = document.getElementById('outputArea');
+    for (let i = 0; i < columnsCount; i++) {
+      const col = document.createElement('div');
+      col.classList.add('matrix-column');
+      col.style.left = (i * 16) + 'px';
+      col.style.animationDuration = (10 + Math.random() * 10) + 's';
+      col.style.fontSize = '14px';
+      col.style.color = 'rgba(0,255,65,0.6)';
+      col.style.textShadow = '0 0 5px #00ff41';
+      container.appendChild(col);
+      columns.push(col);
+    }
 
-    form.addEventListener('submit', e => {
-        e.preventDefault();
+    function randomChar() {
+      return chars.charAt(Math.floor(Math.random() * chars.length));
+    }
 
-        let rawCodes = input.value.trim();
-        if (!rawCodes) {
-            output.textContent = 'Please enter at least one access code.';
-            output.focus();
-            return;
+    function update() {
+      columns.forEach(col => {
+        let text = '';
+        const len = 20 + Math.floor(Math.random() * 20);
+        for (let i = 0; i < len; i++) {
+          text += randomChar();
         }
-        const codes = rawCodes.split(/[\s,]+/);
-        let resultLines = [];
+        col.textContent = text;
+      });
+    }
+    update();
+    setInterval(update, 3000);
+  })();
 
-        codes.forEach(code => {
-            if (!code) return;
-            if (serviceMap.hasOwnProperty(code)) {
-                resultLines.push(`${code}: ${serviceMap[code]}`);
-                if (code === "111") {
-                    openDeviceModal();
-                }
-                else if(code === "02") {
-                    openICModal();
-                }
-            } else {
-                resultLines.push(`${code}: Invalid access code`);
-            }
-        });
-        output.textContent = resultLines.join('\n');
-        output.focus();
+  // Access codes and their descriptions/prices
+  const accessCodes = {
+    '01': {
+      description: 'Unlock FRP/Google',
+      price: '$20.00',
+      detail: 'Factory Reset Protection unlock services for Android devices.'
+    },
+    '007': {
+      description: 'Check Telco iPhone',
+      price: '$15.00',
+      detail: 'Telco contract and carrier check for iPhone models.'
+    },
+    '111': {
+      description: 'Unlock Telco/Contract Device',
+      price: '$40.00',
+      detail: 'Unlock service for Telco restricted or contract-locked devices.'
+    },
+    '02': {
+      description: 'Tutup Blacklist Telco Kekal',
+      price: '$50.00',
+      detail: 'Permanent removal of Telco blacklist status on devices.'
+    }
+  };
+
+  const form = document.getElementById('codeForm');
+  const textarea = document.getElementById('codesInput');
+  const pricelistSection = document.getElementById('pricelistSection');
+  const enteredCodesList = document.getElementById('enteredCodesList');
+  const serviceDetails = document.getElementById('serviceDetails');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const rawInput = textarea.value.trim();
+    if (!rawInput) {
+      alert('Please enter at least one access code.');
+      textarea.focus();
+      return;
+    }
+
+    // Split input lines, clean and uppercase
+    const enteredCodes = rawInput.split('\n').map(c => c.trim()).filter(c => c.length > 0);
+
+    // Validate codes, only keep valid ones
+    const validCodes = enteredCodes.filter(code => Object.keys(accessCodes).includes(code));
+
+    if (validCodes.length === 0) {
+      alert('No valid access codes entered. Please try again.');
+      textarea.focus();
+      return;
+    }
+
+    // Display granted access pricelist and details
+    pricelistSection.hidden = false;
+
+    // Show entered codes with descriptions
+    enteredCodesList.innerHTML = '';
+    validCodes.forEach(code => {
+      const item = document.createElement('div');
+      item.className = 'code-item';
+      const descSpan = document.createElement('span');
+      descSpan.className = 'desc';
+      descSpan.textContent = accessCodes[code].description;
+      const codeSpan = document.createElement('span');
+      codeSpan.className = 'code';
+      codeSpan.textContent = code;
+      item.appendChild(descSpan);
+      item.appendChild(codeSpan);
+      enteredCodesList.appendChild(item);
     });
 
-    // Modal controls
-    const deviceModal = document.getElementById('deviceModal');
-    const icModal = document.getElementById('icModal');
-    document.getElementById('closeDeviceModal').onclick = () => deviceModal.style.display = 'none';
-    document.getElementById('closeICModal').onclick = () => icModal.style.display = 'none';
-    
-    window.onclick = function(event) {
-        if (event.target === deviceModal) deviceModal.style.display = 'none';
-        if (event.target === icModal) icModal.style.display = 'none';
-    }
+    // Show full service details for all codes entered
+    serviceDetails.innerHTML = '';
+    validCodes.forEach(code => {
+      const detailCard = document.createElement('article');
+      detailCard.style.marginBottom = '24px';
+      detailCard.style.padding = '16px';
+      detailCard.style.border = '1px solid #00ff41';
+      detailCard.style.borderRadius = '12px';
+      detailCard.style.backgroundColor = 'rgba(0, 255, 65, 0.08)';
 
-    // Show device prices
-    function showDevicePrices(brand) {
-        const pricesHtml = devicePrices[brand].map(item => `<div>${item}</div>`).join('');
-        document.getElementById('devicePrices').innerHTML = pricesHtml;
-        const termsHtml = `
-            <p><strong>Terms & Conditions:</strong></p>
-            <ul style="text-align:left;">
-              <li>HONOR and VIVO process need 1-14 days depending on available CPU to replace.</li>
-              <li>No refund after processing.</li>
-              <li>No cancellation after service in progress.</li>
-            </ul>
-        `;
-        document.getElementById('termsConditions').innerHTML = termsHtml;
-    }
+      const title = document.createElement('h3');
+      title.textContent = `${code}. ${accessCodes[code].description}`;
+      title.style.margin = '0 0 8px';
+      title.style.fontFamily = "'Share Tech Mono', monospace";
+      title.style.color = '#00ff41';
+      title.style.textShadow = '0 0 4px #00ff41';
 
-    // Open modals
-    function openDeviceModal() {
-        deviceModal.style.display = 'block';
-        // Clear prices and terms initially
-        document.getElementById('devicePrices').innerHTML = '';
-        document.getElementById('termsConditions').innerHTML = '';
-    }
-    function openICModal() {
-        icModal.style.display = 'block';
-        document.getElementById('icNumberInput').value = '';
-        document.getElementById('icNumberInput').focus();
-    }
+      const price = document.createElement('p');
+      price.textContent = `Price: ${accessCodes[code].price}`;
+      price.style.fontWeight = '700';
+      price.style.margin = '0 0 8px';
 
-    // Submit IC Number button
-    document.getElementById('submitICBtn').addEventListener('click', () => {
-        const icNumber = document.getElementById('icNumberInput').value.trim();
-        if (!icNumber) {
-            alert('Please enter your IC number.');
-            document.getElementById('icNumberInput').focus();
-            return;
-        }
-        // Encode to URI component for WhatsApp
-        const message = encodeURIComponent(`IC Number for blacklist case: ${icNumber}`);
-        const whatsappUrl = `https://wa.me/60178040403?text=${message}`;
-        window.open(whatsappUrl, '_blank');
-        icModal.style.display = 'none';
+      const detail = document.createElement('p');
+      detail.textContent = accessCodes[code].detail;
+      detail.style.margin = 0;
+      detail.style.color = '#00ff41cc';
+
+      detailCard.appendChild(title);
+      detailCard.appendChild(price);
+      detailCard.appendChild(detail);
+
+      serviceDetails.appendChild(detailCard);
     });
 
-    // Matrix animation script
-    (function matrixAnimation(){
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*+-=<>'.split('');
-        const fontSize = 16;
-        const columns = Math.floor(canvas.width / fontSize);
-        const drops = [];
-
-        for (let i = 0; i < columns; i++) {
-            drops[i] = Math.random() * -1000;
-        }
-
-        function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#00ff00';
-            ctx.font = fontSize + 'px Courier New';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = characters[Math.floor(Math.random() * characters.length)];
-                const x = i * fontSize;
-                const y = drops[i] * fontSize;
-
-                ctx.shadowColor = '#00ff00';
-                ctx.shadowBlur = 8;
-                ctx.fillText(text, x, y);
-
-                if (y > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                } else {
-                    drops[i]++;
-                }
-                ctx.shadowBlur = 0;
-            }
-            requestAnimationFrame(draw);
-        }
-
-        draw();
-    })();
+    // Scroll to pricelist
+    pricelistSection.scrollIntoView({ behavior: 'smooth' });
+  });
 </script>
 
 </body>
 </html>
+
