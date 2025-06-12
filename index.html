@@ -157,7 +157,7 @@
         <input type="text" id="imei-input" placeholder="Enter IC or IMEI number" aria-required="true" required
             pattern="[a-zA-Z0-9\- ]+" title="Alphanumeric characters, spaces, and dashes only" />
 
-        <button type="submit" aria-label="Send service request via WhatsApp">Send Request to WhatsApp</button>
+        <button type="submit" aria-label="Send service request via Telegram">Send Request to Telegram</button>
     </form>
 </div>
 
@@ -338,7 +338,7 @@
         }
     });
 
-    // Handle model selection submit for code 007
+    // Handle model selection for '007' code
     selectorArea.addEventListener('change', e => {
         if (e.target && e.target.id === 'model-select') {
             const selectedModel = e.target.value;
@@ -351,7 +351,7 @@
         }
     });
 
-    // Handle service request form submission (code 111)
+    // Handle service request form submission (code '111')
     serviceRequestForm.addEventListener('submit', e => {
         e.preventDefault();
         errorMsg.textContent = '';
@@ -368,19 +368,18 @@
             return;
         }
 
-        const phoneNumber = '60178040403'; // without + sign
+        const telegramLink = 'https://t.me/+aJp4vttzBAlkZTdl';
         const message =
             `Service Request from ZUUCASTER GSM\n` +
             `Service: ${service}\n` +
             `IC/IMEI Number: ${imei}`;
 
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        alert('A Telegram chat window will open. Please copy and send the following message:\n\n' + message);
 
-        window.open(whatsappURL, '_blank');
+        window.open(telegramLink, '_blank');
     });
 
-    // Allow Enter key to submit code or form
+    // Allow Enter key to submit code
     codeInput.addEventListener('keypress', e => {
         if (e.key === 'Enter') {
             submitBtn.click();
@@ -389,3 +388,4 @@
 </script>
 </body>
 </html>
+
