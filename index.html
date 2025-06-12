@@ -192,15 +192,17 @@
         <button onclick="showDevicePrices('OPPO')">OPPO</button>
         <button onclick="showDevicePrices('HONOR')">HONOR</button>
         <div id="devicePrices" style="margin-top: 20px;"></div>
+        <div id="termsConditions" style="margin-top: 20px;"></div>
     </div>
 </div>
 
-<!-- Modal for Tool Selection -->
-<div id="toolModal" class="modal">
+<!-- Modal for IC Number Input -->
+<div id="icModal" class="modal">
     <div class="modal-content">
-        <span class="close" id="closeToolModal">&times;</span>
-        <h2>Select Tool</h2>
-        <div id="toolPrices"></div>
+        <span class="close" id="closeICModal">&times;</span>
+        <h2>Enter IC Number</h2>
+        <input type="text" id="icNumberInput" placeholder="Enter your IC number" />
+        <button id="submitICBtn">Submit</button>
     </div>
 </div>
 
@@ -274,18 +276,6 @@
         ]
     };
 
-    // Tool prices
-    const toolPrices = [
-        "PANDORA TOOL - 10 DAYS RM100",
-        "UNLOCKTOOL - 1 DAY RM15",
-        "RTC TOOL - 1 DAY RM15",
-        "GRIFFIN - 1 DAY RM20",
-        "DFT TOOL - 1 DAY RM25",
-        "SIGMA TOOL - 1 MONTH RM65",
-        "TSM TOOL - 1 DAY RM10",
-        "AMT TOOL - 1 DAY RM10"
-    ];
-
     // Handle form submission
     const form = document.getElementById('accessForm');
     const input = document.getElementById('accessCodeInput');
@@ -309,15 +299,8 @@
                 resultLines.push(`${code}: ${serviceMap[code]}`);
                 if (code === "111") {
                     openDeviceModal();
-                } else if (code === "07") {
-                    openToolModal();
                 } else if (code === "02") {
-                    const icNumber = prompt("Please enter your IC number:");
-                    if (icNumber) {
-                        const caseNumber = generateCaseNumber();
-                        const whatsappLink = `https://wa.me/60178040403?text=New case created with IC: ${icNumber}, Case Number: ${caseNumber}`;
-                        output.textContent = `Case Number: ${caseNumber}. Click here to contact WhatsApp: ${whatsappLink}`;
-                    }
+                    openICModal();
                 }
             } else {
                 resultLines.push(`${code}: Invalid access code`);
@@ -334,30 +317,40 @@
 
     // Show device prices based on selection
     function showDevicePrices(brand) {
-        const prices = devicePrices[brand].join('\n');
+        const prices = devicePrices[brand].join('<br>');
         document.getElementById('devicePrices').innerText = prices;
-        const whatsappLink = `https://wa.me/60178040403?text=Order for ${brand} devices: ${prices}`;
-        document.getElementById('devicePrices').innerHTML += `<br><a href="${whatsappLink}" style="color: #00ff00;">Click here to order via WhatsApp</a>`;
+        const terms = `
+            <strong>Terms & Conditions:</strong><br>
+            - HONOR and VIVO process need 1-14 days depending on available CPU to replace.<br>
+            - No refund after processing.<br>
+            - No cancellation after service in progress.
+        `;
+        document.getElementById('termsConditions').innerHTML = terms;
     }
 
-    // Open tool selection modal
-    function openToolModal() {
-        document.getElementById('toolModal').style.display = "block";
-        const toolList = toolPrices.join('<br>');
-        document.getElementById('toolPrices').innerHTML = toolList + '<br><a href="https://wa.me/60178040403" style="color: #00ff00;">Click here to order via WhatsApp</a>';
+    // Open IC number input modal
+    function openICModal() {
+        document.getElementById('icModal').style.display = "block";
     }
 
-    // Generate a random case number
-    function generateCaseNumber() {
-        return 'CASE-' + Math.floor(Math.random() * 100000);
-    }
+    // Handle IC number submission
+    document.getElementById('submitICBtn').onclick = function() {
+        const icNumber = document.getElementById('icNumberInput').value.trim();
+        if (icNumber) {
+            const whatsappLink = `https://wa.me/60178040403?text=IC Number: ${icNumber}`;
+            window.open(whatsappLink, '_blank');
+            document.getElementById('icModal').style.display = "none";
+        } else {
+            alert("Please enter your IC number.");
+        }
+    };
 
     // Close modals
     document.getElementById('closeDeviceModal').onclick = function() {
         document.getElementById('deviceModal').style.display = "none";
     }
-    document.getElementById('closeToolModal').onclick = function() {
-        document.getElementById('toolModal').style.display = "none";
+    document.getElementById('closeICModal').onclick = function() {
+        document.getElementById('icModal').style.display = "none";
     }
 
     // Matrix code rain animation on canvas
